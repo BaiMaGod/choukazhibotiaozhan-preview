@@ -1,0 +1,56 @@
+name: Deploy browser preview
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: browser-preview-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify and unpack browser build
+        run: |
+          cat bundle/part-*.bin > "${RUNNER_TEMP}/preview.tar.gz"
+          (cd "${RUNNER_TEMP}" && sha256sum --check "${GITHUB_WORKSPACE}/bundle/SHA256SUMS")
+          python3 - <<'PY'
+          import json
+          import os
+          import tarfile
+          from pathlib import Path
+          allowed = {'.js', '.css', '.html', '.txt', '.webp', '.json'}
+          with tarfile.open(Path(os.environ['RUNNER_TEMP']) / 'preview.tar.gz') as archive:
+              for entry in archive.getmembers():
+                  if entry.isdir():
+                      continue
+                  name = Path(entry.name)
+                  if not entry.isfile() or name.is_absolute() or '..' in name.parts or (
+                      name.suffix not in allowed and name.as_posix() != 'SHA256SUMS'
+                  ):
+                      raise SystemExit(f'Unexpected preview entry: {entry.name}')
+              archive.extractall('public', filter='data')
+          build = json.loads(Path('public/build-info.json').read_text())
+          assert build['target'] == 'browser-preview'
+          assert len(list(Path('public/assets/art').rglob('*.webp'))) == 147
+          assert '"requireCloud": false' in Path('public/js/generated-rules.js').read_text()
+          PY
+          (cd public && sha256sum --check --quiet SHA256SUMS)
+          test -s public/index.html
+          test -s public/libs/laya.core.js
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - name: Deploy verified preview
+        id: deploy
+        uses: actions/deploy-pages@v4
