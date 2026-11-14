@@ -1,6 +1,11 @@
 name: Deploy browser preview
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'bundle/**'
+      - '.github/workflows/deploy-preview.yml'
 
 permissions:
   contents: read
