@@ -13,6 +13,8 @@ export function createPouchView(host) {
     const front = part('prism-pouch-front', pouch);
     const lip = part('prism-pouch-lip', pouch);
     const foil = part('prism-strip', pouch);
+    const hint = part('prism-grab-hint', pouch);
+    hint.textContent = '← 撕开封口 →';
     const count = matchMedia('(pointer: coarse)').matches ? 8 : 12;
     const segments = Array.from({ length: count }, () => {
         const el = part('prism-strip-segment', foil);
@@ -30,6 +32,7 @@ export function createPouchView(host) {
     }
     function render(progress, zAngle, xAngle, clock, fall = 0) {
         const p = clamp(progress, 0, 1);
+        hint.style.opacity = p > .02 ? "0" : "1";
         const shape = tearShape(line, p, direction);
         front.style.clipPath = p > 0 ? shape.body : '';
         back.style.clipPath = p > 0 ? shape.body : '';

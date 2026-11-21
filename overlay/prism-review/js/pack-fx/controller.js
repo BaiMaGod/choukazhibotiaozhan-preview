@@ -28,11 +28,23 @@ export function createPrismPresentation(table, options = {}) {
     const setPhase = (next) => { phase = next; root.dataset.phase = next; table.dataset.fxPhase = next; };
     function ensure() { if (pouch)
         return; pouch = createPouchView(stage); particles = createParticles(root); measure(); }
-    function measure() { const r = table.getBoundingClientRect(); if (r.width > 0 && r.height > 0) {
-        width = r.width;
-        height = r.height;
-        particles?.resize(width, height);
-    } }
+    function measure() {
+        const r = table.getBoundingClientRect();
+        if (r.width > 0 && r.height > 0) {
+            width = r.width;
+            height = r.height;
+            particles?.resize(width, height);
+            const input = table.querySelector('#gesture');
+            if (input && pouch) {
+                const pw = pouch.el.offsetWidth, ph = pouch.el.offsetHeight;
+                input.style.left = `${width * .5 - pw * .5}px`;
+                input.style.right = 'auto';
+                input.style.width = `${pw}px`;
+                input.style.top = `${Math.max(0, height * .48 - ph * .5 - 5)}px`;
+                input.style.height = `${Math.max(44, ph * .18)}px`;
+            }
+        }
+    }
     const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(measure) : undefined;
     observer?.observe(table);
     function start() { if (!raf && !paused && !document.hidden && !destroyed && phase !== 'hidden') {
