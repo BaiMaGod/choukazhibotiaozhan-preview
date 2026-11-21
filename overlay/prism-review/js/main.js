@@ -1,5 +1,6 @@
 import { createPackPresentation, nextRevealSlot } from "./pack-presentation.js";
 import { createCardView, decorateResult, attachCardTilt } from "./pack-fx/card-view.js";
+import { cardVisual, pouchArt } from "./pack-fx/resources.js";
 import { RARITIES, effectiveRarity, visibleCards } from "../../js/pack.js";
 import { defaultSettings, readSettings, reachesPause } from "../../js/controls.js";
 import { DeviceClock } from "../../js/clock.js";
@@ -109,7 +110,7 @@ const presentation = createPackPresentation(element("pack-table"), {
     card: (url, rarity) => {
         const id = Object.entries(rules.art.cards).find(([, path]) => path === url)?.[0];
         const def = id && rules.themes.flatMap(theme => [...theme.cards]).find(card => card.id === id);
-        return { url, rarity, id, name: def ? def.name : undefined };
+        return cardVisual(url, rarity, id, def ? def.name : undefined);
     },
 });
 let clearDetailTilt;
@@ -255,7 +256,7 @@ function renderPack(currentPack, settled, openable, focusSlot, themeId = rules.s
     });
     slots.forEach(decorateResult);
     canTear = openable && !busy;
-    presentation.syncSealed(!currentPack ? url : undefined, themeId, canTear);
+    presentation.syncSealed(!currentPack && url ? pouchArt(url) : undefined, themeId, canTear);
     gesture.textContent = canTear ? "← 滑动撕开封口 →" : "";
     gesture.setAttribute("aria-label", "横向滑动卡包封口");
     gesture.dataset.enabled = String(canTear);
@@ -297,7 +298,7 @@ function render(focusSlot) {
     }
     primary.disabled = busy;
     if (!pack) {
-        primary.textContent = "点击撕包";
+        primary.textContent = "滑动顶部封口";
         instruction.textContent = "在卡包顶部横向滑动，撕开封口后自动翻卡。";
     }
     else if (pack.rewards) {
@@ -858,7 +859,7 @@ async function presentPack(previous, current, opened, rarity) {
     gesture.dataset.enabled = "false";
     skip.hidden = false;
     try {
-        await presentation.play(current.id, rarity ? "reveal" : "rip", url ?? "./assets/ui/card-back.webp", rarity, rarity ? slots[current.revealed - 1] : undefined, settings.reduceFlash);
+        await presentation.play(current.id, rarity ? "reveal" : "rip", !rarity && url ? pouchArt(url) : url ?? "./assets/ui/card-back.webp", rarity, rarity ? slots[current.revealed - 1] : undefined, settings.reduceFlash);
     }
     finally {
         busy = false;
@@ -881,6 +882,25 @@ function currentGamePack() {
 function sendBusiness(command) {
     void commitTeaching({ type: "business", command });
 }
+slots.forEach((slot, index) => {
+    slot.tabIndex = 0;
+    const inspect = () => {
+        if (busy)
+            return;
+        const current = isDemo ? pack : currentGamePack();
+        const card = visibleCards(current)[index];
+        if (!card)
+            return;
+        const profile = !isDemo ? teaching.business : undefined;
+        const theme = rules.themes.find(theme => theme.cards.some(item => item.id === card.id));
+        showCardDetails(card, theme?.name ?? "卡牌", profile);
+    };
+    slot.onclick = inspect;
+    slot.onkeydown = event => { if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        inspect();
+    } };
+});
 const collectionTime = new Intl.DateTimeFormat("zh-CN", {
     timeZone: "Asia/Shanghai", dateStyle: "medium", timeStyle: "short",
 });
@@ -900,7 +920,7 @@ function showCardDetails(card, themeName, profile) {
     if (path) {
         const wrapper = document.createElement("div");
         wrapper.className = "prism-detail";
-        wrapper.append(createCardView({ url: path, rarity: card.rarity, name: card.name, id: card.id }));
+        wrapper.append(createCardView(cardVisual(path, card.rarity, card.id, card.name)));
         art.after(wrapper);
         art.hidden = true;
         clearDetailTilt = attachCardTilt(wrapper);

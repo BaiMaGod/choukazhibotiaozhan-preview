@@ -23,7 +23,7 @@ export function createPouchView(host) {
         if (next === url)
             return;
         url = next;
-        const safe = `url(${JSON.stringify(next)})`;
+        const safe = `url(${JSON.stringify(new URL(next, document.baseURI).href)})`;
         pouch.style.setProperty('--pouch-art', safe);
         line = createTearLine();
         render(0, 0, 0, 0);
@@ -50,9 +50,9 @@ export function createPouchView(host) {
                 continue;
             const left = Math.max(0, lo - .15), right = Math.min(100, hi + .15);
             const points = [[left, tearYAt(line, left)], ...line.filter(q => q.x > left && q.x < right).map(q => [q.x, q.y]), [right, tearYAt(line, right)]];
-            const clip = polygon([[left, 0], [right, 0], ...points.slice().reverse()]);
-            seg.face.style.clipPath = clip;
-            seg.lining.style.clipPath = clip;
+            const flap = [[left, 0], [right, 0], ...points.slice().reverse()];
+            seg.face.style.clipPath = polygon(flap);
+            seg.lining.style.clipPath = polygon(flap.map(([x, y]) => [100 - x, y]));
         }
         let chain = '', total = 0;
         for (let n = 0, k = active; k >= 0 && k < count; n++, k -= direction) {

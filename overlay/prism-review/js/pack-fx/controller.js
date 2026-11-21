@@ -1,3 +1,4 @@
+import { ejectionFrames } from '../vendor/prism-holo-pack/orbit.js';
 import { SpringValue, stepSprings, clamp } from '../vendor/prism-holo-pack/physics.js';
 import { advanceTear, shouldCompleteOnRelease } from '../vendor/prism-holo-pack/tear-geometry.js';
 import { createPouchView } from './pouch-view.js';
@@ -21,7 +22,7 @@ export function createPrismPresentation(table, options = {}) {
     let phase = 'hidden', direction = 1, theme = '', sealedUrl = '', packId = '', skippedPack = '';
     let drag;
     let animations = [], inFlight;
-    let finish, epoch = 0, raf = 0, last = 0, time = 0, previousProgress = 0;
+    let finish, tearReady, epoch = 0, raf = 0, last = 0, time = 0, previousProgress = 0;
     let width = 360, height = 300, openingAge = 0, paused = false, destroyed = false, reduceFlash = false;
     const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
     const setPhase = (next) => { phase = next; root.dataset.phase = next; table.dataset.fxPhase = next; };
@@ -60,6 +61,9 @@ export function createPrismPresentation(table, options = {}) {
         const packWidth = pouch?.el.offsetWidth ?? width * .45, packHeight = pouch?.el.offsetHeight ?? height * .8;
         const tipX = width * .5 - packWidth * .5 + (shape?.tipX ?? 0) / 100 * packWidth;
         const tipY = height * .48 - packHeight * .5 + (shape?.tipY ?? 12) / 100 * packHeight;
+        const ejection = stage.querySelector('.prism-ejection');
+        if (ejection)
+            ejection.style.clipPath = `inset(0 0 ${Math.max(0, height - tipY - fall)}px 0)`;
         const tearing = phase === 'tearing' || phase === 'committing';
         if (tearing && dp > 0) {
             audio?.setRip(Math.pow(dp / Math.max(dt, .004) / 4, .6));
@@ -69,18 +73,23 @@ export function createPrismPresentation(table, options = {}) {
         else
             audio?.setRip(0);
         const jetStrength = reduced() || reduceFlash ? 0 : phase === 'opening' ? Math.max(0, 1 - openingAge / 1.1) : tearing ? progress.x * .7 : 0;
-        particles?.frame(dt, time, jetStrength > 0 ? { x: tipX, y: tipY, strength: jetStrength } : undefined);
+        particles?.frame(dt, time, jetStrength > 0 ? { x: tipX, y: tipY, strength: jetStrength, packWidth, progress: progress.x, direction, released: phase === 'opening' ? openingAge : -1 } : undefined);
         root.dataset.progress = progress.x.toFixed(3);
+        if (tearReady && progress.x >= .985) {
+            const done = tearReady;
+            tearReady = undefined;
+            done();
+        }
         if (phase !== 'hidden')
             start();
     }
     function releaseDestination() { inFlight?.classList.remove('card-in-flight'); inFlight = undefined; }
-    function cancelPlay() { epoch++; for (const a of animations)
-        a.cancel(); animations = []; stage.querySelectorAll('.prism-card').forEach(el => el.remove()); releaseDestination(); const done = finish; finish = undefined; done?.(); }
+    function cancelPlay() { epoch++; const ready = tearReady; tearReady = undefined; ready?.(); for (const a of animations)
+        a.cancel(); animations = []; stage.querySelectorAll('.prism-card, .prism-ejection').forEach(el => el.remove()); releaseDestination(); const done = finish; finish = undefined; done?.(); }
     function clear() { cancelPlay(); drag = undefined; audio?.dispose(); particles?.clear(); pouch?.hide(); root.hidden = true; setPhase('hidden'); stop(); table.classList.remove('prism-presenting'); }
     function settle(expected) { if (expected !== epoch)
         return; for (const a of animations)
-        a.cancel(); animations = []; stage.querySelectorAll('.prism-card').forEach(el => el.remove()); releaseDestination(); pouch?.hide(); particles?.clear(); root.hidden = true; setPhase('results'); table.classList.remove('prism-presenting'); stop(); const done = finish; finish = undefined; done?.(); }
+        a.cancel(); animations = []; stage.querySelectorAll('.prism-card, .prism-ejection').forEach(el => el.remove()); releaseDestination(); pouch?.hide(); particles?.clear(); root.hidden = true; setPhase('results'); table.classList.remove('prism-presenting'); stop(); const done = finish; finish = undefined; done?.(); }
     function completeTear() { if (phase === 'committing' || phase === 'opening' || phase === 'revealing')
         return; drag = undefined; progress.to = 1; setPhase('committing'); audio?.setRip(0); options.onOpen?.(); start(); }
     function syncSealed(url, key, enabled) {
@@ -166,6 +175,17 @@ export function createPrismPresentation(table, options = {}) {
         table.classList.add('prism-presenting');
         const promise = new Promise(resolve => { finish = resolve; });
         if (kind === 'rip') {
+            pouch.setImage(url || sealedUrl);
+            pouch.show();
+            progress.to = 1;
+            setPhase('committing');
+            start();
+            if (!reduced() && progress.x < .985)
+                await new Promise(resolve => { tearReady = resolve; });
+            if (current !== epoch) {
+                await promise;
+                return;
+            }
             setPhase('opening');
             openingAge = 0;
             pouch.setImage(url || sealedUrl);
@@ -180,18 +200,14 @@ export function createPrismPresentation(table, options = {}) {
             if (!reduced() && !soft)
                 particles?.burst(width * .5, height * .22, '#ffd77b');
             const backUrl = './assets/ui/card-back.webp';
+            const ejection = document.createElement('div');
+            ejection.className = 'prism-ejection';
+            stage.append(ejection);
             for (let i = 0; i < 5; i++) {
                 const card = createCardView({ url: backUrl, rarity: 'N' });
-                stage.append(card);
+                ejection.append(card);
                 const s = Math.min(1, (width / 6) / (height * .5 * .75)), targetX = (i - 2) * Math.min(width * .17, 80);
-                const origin = 'translate3d(-50%,12%,0) rotateY(180deg) scale(.68)';
-                animate(card, reduced() ? [{ opacity: 0 }, { opacity: 0 }] : [
-                    { transform: origin, opacity: 0 },
-                    { transform: 'translate3d(-50%,-63%,20px) rotateY(180deg) scale(.92)', opacity: 1, offset: .2 },
-                    { transform: `translate3d(calc(-50% + ${Math.sin(i * 1.2) * width * .22}px),-83%,${Math.cos(i * 1.2) * 45}px) rotateY(${180 + (i - 2) * 10}deg) rotateZ(${(i - 2) * 9}deg) scale(.85)`, opacity: 1, offset: .55 },
-                    { transform: `translate3d(calc(-50% + ${targetX}px),-50%,0) rotateY(180deg) rotateZ(${(i - 2) * 2}deg) scale(${s})`, opacity: 1, offset: .88 },
-                    { transform: `translate3d(calc(-50% + ${targetX}px),-50%,0) rotateY(180deg) scale(${s})`, opacity: 0 }
-                ], reduced() ? 180 : 1250, i * (reduced() ? 0 : 22));
+                animate(card, reduced() ? [{ opacity: 0 }, { opacity: 0 }] : ejectionFrames(i, width, height, s), reduced() ? 180 : 1400, i * (reduced() ? 0 : 22));
             }
         }
         else {

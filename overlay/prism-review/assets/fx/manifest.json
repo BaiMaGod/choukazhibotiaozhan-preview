@@ -1,0 +1,797 @@
+{
+  "status": "generated-pending-visual-review",
+  "generation": "Built-in image generator, exact supplied pack/card edit targets; atlas slicing only, no algorithmic redraw.",
+  "assets": [
+    {
+      "file": "assets/fx/packs/pack-mcj-heal-01.webp",
+      "sha256": "e957e32e2116c4581e114d0308f7179b27cbf01d5c5e9e8b13b506830240ec46",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha": true,
+      "generated_image": "exec-c6380d88-95b4-467d-a4b2-a41b38707a23.png",
+      "edit_target": "original user-supplied high-resolution pack; see asset-source-map.json"
+    },
+    {
+      "file": "assets/fx/packs/pack-rbt-night-01.webp",
+      "sha256": "4cf1a7aed0a6b9f3f547582e26fe1543378cf30574c8d66dcd13fdfb34060c26",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha": true,
+      "generated_image": "exec-f96ac8a6-d0dd-445e-84ab-5961478371d7.png",
+      "edit_target": "original user-supplied high-resolution pack; see asset-source-map.json"
+    },
+    {
+      "file": "assets/fx/packs/pack-capy-river-01.webp",
+      "sha256": "46bc8bde4ffaf4a136765d3637531a93f2f48a45cdc0e24138634d25a7fe11d6",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha": true,
+      "generated_image": "exec-1a118cf9-e503-40c1-9111-f83d4e997cd5.png",
+      "edit_target": "original user-supplied high-resolution pack; see asset-source-map.json"
+    },
+    {
+      "file": "assets/fx/packs/pack-whale-sky-01.webp",
+      "sha256": "c1fa089e66ccde1c414146578c4f213db9c8a387912cf290adaf9cb2626aebb6",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha": true,
+      "generated_image": "exec-d33a3729-f1a3-4396-adb5-60d0c5e6f5da.png",
+      "edit_target": "original user-supplied high-resolution pack; see asset-source-map.json"
+    },
+    {
+      "file": "assets/fx/packs/pack-fox-post-01.webp",
+      "sha256": "dcd4980d9c2dd5bc586905fdf9481e555d142fc2a92a88e04622042462373bf7",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha": true,
+      "generated_image": "exec-1a54c337-be44-450b-88ee-530faa3c9f4c.png",
+      "edit_target": "original user-supplied high-resolution pack; see asset-source-map.json"
+    },
+    {
+      "file": "assets/fx/packs/pack-deer-moon-01.webp",
+      "sha256": "ced1fad9887b9535ff5b9faea9ec1e53fb5e21ebfb3f39df347878f63c03b041",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha": true,
+      "generated_image": "exec-9975e246-68c9-46e7-913c-b2f14b6317c4.png",
+      "edit_target": "original user-supplied high-resolution pack; see asset-source-map.json"
+    },
+    {
+      "file": "assets/fx/packs/pack-sprite-garden-01.webp",
+      "sha256": "ddc12e428f097e33cdfa6771748bcf7a786a24423c50109197e0e6418cc4dcda",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha": true,
+      "generated_image": "exec-be02e7a3-ced8-454a-b757-d822884110c1.png",
+      "edit_target": "original user-supplied high-resolution pack; see asset-source-map.json"
+    },
+    {
+      "file": "assets/fx/layers/mcj18-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "2196ecd5bea05a86da000b06a7cd55fbde412f130d0aee0b9142e5baf5eea4e4",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-ed44fbe9-7ccd-46ec-9c2a-8cc39702b306.png",
+      "edit_target": "game/assets/art/cards/mcj18.webp"
+    },
+    {
+      "file": "assets/fx/layers/mcj18-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "1cb362cf6baaad83e337397714a9c7aed47a74211d9eee31adeb1409b6af43a4",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-ed44fbe9-7ccd-46ec-9c2a-8cc39702b306.png",
+      "edit_target": "game/assets/art/cards/mcj18.webp"
+    },
+    {
+      "file": "assets/fx/layers/mcj20-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "e703d4c7b58d306a4b527cadc46af2373cd289b92df173b362331d439393ec8b",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-16149e4a-78e2-4de1-ba1b-3068df6d101f.png",
+      "edit_target": "game/assets/art/cards/mcj20.webp"
+    },
+    {
+      "file": "assets/fx/layers/mcj20-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "092543b7bbf06780724031f7c8cf79d6271118b8b51dc054804e65da8c14d014",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-16149e4a-78e2-4de1-ba1b-3068df6d101f.png",
+      "edit_target": "game/assets/art/cards/mcj20.webp"
+    },
+    {
+      "file": "assets/fx/layers/mcj19-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "49a5e8cf66696ad6f1cd0ed924d3a4a5d99c2e08a9e33737948f01c4640904cd",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-a38321ec-2ced-42bc-9ea3-adbd03ffeeff.png",
+      "edit_target": "game/assets/art/cards/mcj19.webp"
+    },
+    {
+      "file": "assets/fx/layers/mcj19-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "1c1f460f2661b72b73cebc209edb45579ede55ef00dda0efca816728ad4934b1",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-a38321ec-2ced-42bc-9ea3-adbd03ffeeff.png",
+      "edit_target": "game/assets/art/cards/mcj19.webp"
+    },
+    {
+      "file": "assets/fx/layers/rbt18-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "4e6dfd83b12ac5d6e338dc2181fc234d23a20a86dfd9640fe5f696f4e4ca03f1",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-5ab4c226-cbc6-4fa9-98a8-8c79bf884d60.png",
+      "edit_target": "game/assets/art/cards/rbt18.webp"
+    },
+    {
+      "file": "assets/fx/layers/rbt18-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "7805880ac34cf00e58fef2cfd3f8d32e06fd2e8b23411a35fcb2f37fa6308237",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-5ab4c226-cbc6-4fa9-98a8-8c79bf884d60.png",
+      "edit_target": "game/assets/art/cards/rbt18.webp"
+    },
+    {
+      "file": "assets/fx/layers/rbt19-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "108d908debe858dcd7e5bed5104c29f0fd792aaa6525cb4163b2ddd9b14a36e8",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-11f7c277-9404-421f-8b6a-e909b23ad107.png",
+      "edit_target": "game/assets/art/cards/rbt19.webp"
+    },
+    {
+      "file": "assets/fx/layers/rbt19-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "e8ca5e36a3836f6dc1bd7e371829f7df2108265470c055151ecb355a5c79d9d4",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-11f7c277-9404-421f-8b6a-e909b23ad107.png",
+      "edit_target": "game/assets/art/cards/rbt19.webp"
+    },
+    {
+      "file": "assets/fx/layers/rbt20-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "6d12ad297ed4c526f54486caf162c6e355a6f1771bd1e4e9ed76f33c1a5cf4ce",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-626d74a9-d2e8-44dc-a495-aef3d23f832d.png",
+      "edit_target": "game/assets/art/cards/rbt20.webp"
+    },
+    {
+      "file": "assets/fx/layers/rbt20-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "77f0fd1e4535afda94a49d13a2527d8e6b7e09a1dbaf2ef3fdf56bb01f31ae20",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-626d74a9-d2e8-44dc-a495-aef3d23f832d.png",
+      "edit_target": "game/assets/art/cards/rbt20.webp"
+    },
+    {
+      "file": "assets/fx/layers/cpy18-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "222e5464250b7c109983a5755c0f2a59f3e6f0804ecb82564f45428a9c3927d7",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-281a46cf-bf4a-4eb9-a9dd-01e0eb1d94e7.png",
+      "edit_target": "game/assets/art/cards/cpy18.webp"
+    },
+    {
+      "file": "assets/fx/layers/cpy18-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "82253c296db74b3f8762d66a73e7f7b12a8d24451f1556f8c05478472ed5e8f6",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-281a46cf-bf4a-4eb9-a9dd-01e0eb1d94e7.png",
+      "edit_target": "game/assets/art/cards/cpy18.webp"
+    },
+    {
+      "file": "assets/fx/layers/cpy19-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "eeeb7e41fe3b2c4788ebce01844807fc2fe2286a190e124df61c8c8befea9d19",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-2ab2edc7-03bd-498b-9ac0-8e8d506e35b9.png",
+      "edit_target": "game/assets/art/cards/cpy19.webp"
+    },
+    {
+      "file": "assets/fx/layers/cpy19-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "2105cf68e6ca4b556ed4b75ec1899279ea11f66b16b4fab3dde4a2764d3df233",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-2ab2edc7-03bd-498b-9ac0-8e8d506e35b9.png",
+      "edit_target": "game/assets/art/cards/cpy19.webp"
+    },
+    {
+      "file": "assets/fx/layers/cpy20-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "8073f6ba365dcfc3abdc43764cf504d02315c9d24b1d28053d2bccc1655f6bcd",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-5e283415-690e-4112-a786-885637a629ab.png",
+      "edit_target": "game/assets/art/cards/cpy20.webp"
+    },
+    {
+      "file": "assets/fx/layers/cpy20-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "873ab40198be934dfdd46b81e7d3c4bfe5327a6ae51201947921a9d7ded3fe58",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-5e283415-690e-4112-a786-885637a629ab.png",
+      "edit_target": "game/assets/art/cards/cpy20.webp"
+    },
+    {
+      "file": "assets/fx/layers/whl18-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "2ff8381367bf5f7d24927d07ccbd7fc5f49cd4d0130949edae4ddc52a7cf9628",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-04c89731-096c-4ef1-9d59-abc21cf92fe3.png",
+      "edit_target": "game/assets/art/cards/whl18.webp"
+    },
+    {
+      "file": "assets/fx/layers/whl18-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "4c67b750ff6e9ddd6a6de49196c8ef5f1bc247af66d8dceeeab63c320c109d14",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-04c89731-096c-4ef1-9d59-abc21cf92fe3.png",
+      "edit_target": "game/assets/art/cards/whl18.webp"
+    },
+    {
+      "file": "assets/fx/layers/whl19-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "8e09ca435c4640223cda2b04cc1b6b8fd0cc5da611033375c992d4bae0e1db3f",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-ba7fadaa-d281-481c-90ce-96cedea7e23d.png",
+      "edit_target": "game/assets/art/cards/whl19.webp"
+    },
+    {
+      "file": "assets/fx/layers/whl19-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "96707c1c3fda9024edc72335e93556f4c4aabda5d29eeaa41337ae14aa62f2da",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-ba7fadaa-d281-481c-90ce-96cedea7e23d.png",
+      "edit_target": "game/assets/art/cards/whl19.webp"
+    },
+    {
+      "file": "assets/fx/layers/whl20-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "8f2971342d6c5be1e8019fc2dff6ca8236764b421ee3f1e35aff259b8eca5b49",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-a6a11821-685a-4800-88f4-fd4c393e7e5c.png",
+      "edit_target": "game/assets/art/cards/whl20.webp"
+    },
+    {
+      "file": "assets/fx/layers/whl20-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "ba333f2d30e6ed18fe86ca446b21b333a5f167bf61e2fb340148a54fa89eb7a8",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-a6a11821-685a-4800-88f4-fd4c393e7e5c.png",
+      "edit_target": "game/assets/art/cards/whl20.webp"
+    },
+    {
+      "file": "assets/fx/layers/fox18-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "6f2d222efc1de91f157dd84075481ad810ef8ab01091dbcaba1652e8cc6942fd",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-0fd525ac-356e-4a34-8d62-e5bc5d09e294.png",
+      "edit_target": "game/assets/art/cards/fox18.webp"
+    },
+    {
+      "file": "assets/fx/layers/fox18-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "cf14b578104b5bc41f08fe3ddd62fa05012f200a5a2ea298df9c899f51f4fd78",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-0fd525ac-356e-4a34-8d62-e5bc5d09e294.png",
+      "edit_target": "game/assets/art/cards/fox18.webp"
+    },
+    {
+      "file": "assets/fx/layers/fox19-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "2bd0b7b4b1612fcaaffcab85f513ebd9f9d1bf5ea29c2e15718b56406a76cb26",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-1a2895e0-1ad4-4904-9d2c-148a76207ead.png",
+      "edit_target": "game/assets/art/cards/fox19.webp"
+    },
+    {
+      "file": "assets/fx/layers/fox19-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "5791ac7c353ec8e6ba1cd9e91e6eb594ff78d5ad86809544a3b146acfa65d95b",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-1a2895e0-1ad4-4904-9d2c-148a76207ead.png",
+      "edit_target": "game/assets/art/cards/fox19.webp"
+    },
+    {
+      "file": "assets/fx/layers/fox20-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "49f49812a2d2a414907c0b5bce839fb5533ec42cff162bc49c492f229d6bcdf2",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-7bb830a3-045f-4668-958f-8158ea80d833.png",
+      "edit_target": "game/assets/art/cards/fox20.webp"
+    },
+    {
+      "file": "assets/fx/layers/fox20-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "677040a50a4fdad2429f15461cdb45b33e908509b54e436238c032afecddbfc8",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-7bb830a3-045f-4668-958f-8158ea80d833.png",
+      "edit_target": "game/assets/art/cards/fox20.webp"
+    },
+    {
+      "file": "assets/fx/layers/der18-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "8e6795028bb3056209c3b4b178c0ce2a6fc47af119b6f9c8ea3d5e75203e85c2",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-5acdd889-5509-441c-bb84-5bc4995d619f.png",
+      "edit_target": "game/assets/art/cards/der18.webp"
+    },
+    {
+      "file": "assets/fx/layers/der18-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "4b68139e38f5eb8f1dc9fc8745ff37756ef6d3f81a0f3aafc6a0eda1e8a91705",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-5acdd889-5509-441c-bb84-5bc4995d619f.png",
+      "edit_target": "game/assets/art/cards/der18.webp"
+    },
+    {
+      "file": "assets/fx/layers/der19-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "bca3c55bb0c1fc8c267d2a0463138388c85fef6a815ac10266decdc51e94fe47",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-ed51eca2-a194-4759-bbe4-1bd6d2fd5a01.png",
+      "edit_target": "game/assets/art/cards/der19.webp"
+    },
+    {
+      "file": "assets/fx/layers/der19-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "1f5e92f2cb543b38c33412ca4d38b4bc473942af3a0df672eace367daa62b247",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-ed51eca2-a194-4759-bbe4-1bd6d2fd5a01.png",
+      "edit_target": "game/assets/art/cards/der19.webp"
+    },
+    {
+      "file": "assets/fx/layers/der20-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "30b90176d990afd77fe75fd30507c6a3e9fb4427a4b42500864efff5654b0540",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-7a8c81aa-7248-43a2-8aba-cb370e769378.png",
+      "edit_target": "game/assets/art/cards/der20.webp"
+    },
+    {
+      "file": "assets/fx/layers/der20-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "8649216b31952bce6aa720448a2a36faaa0172ce1fc9196a026313a707af66a9",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-7a8c81aa-7248-43a2-8aba-cb370e769378.png",
+      "edit_target": "game/assets/art/cards/der20.webp"
+    },
+    {
+      "file": "assets/fx/layers/spr18-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "872ed412c78f0d80075f0023a6dc4cf814553fe1021342b819db303cf4a8cd4b",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-56eb3525-8ac3-4dc6-84cd-f2c1e776e73f.png",
+      "edit_target": "game/assets/art/cards/spr18.webp"
+    },
+    {
+      "file": "assets/fx/layers/spr18-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "50bdfa230376a9b4bb8da493cd6e09f0b5a4366138cfe34a78828a3efbe534aa",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-56eb3525-8ac3-4dc6-84cd-f2c1e776e73f.png",
+      "edit_target": "game/assets/art/cards/spr18.webp"
+    },
+    {
+      "file": "assets/fx/layers/spr19-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "9dd0b9528f5f458f6ff4c239a9bf4d53f92ec850daabf024870fd82ecabe6245",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-99c500e4-6529-4b41-83be-bbebee47007f.png",
+      "edit_target": "game/assets/art/cards/spr19.webp"
+    },
+    {
+      "file": "assets/fx/layers/spr19-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "28e7b0086822200c869263cd3088749f5fa394595d336122dd57b779ebde6bb0",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-99c500e4-6529-4b41-83be-bbebee47007f.png",
+      "edit_target": "game/assets/art/cards/spr19.webp"
+    },
+    {
+      "file": "assets/fx/layers/spr20-background.webp",
+      "crop": [
+        0,
+        0,
+        768,
+        1024
+      ],
+      "sha256": "394fe722b97d120ac2d51f83a2aedae8286f6a5ed68416caf67e853acaa979ef",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-62a65f8b-699f-4142-aa10-5a41c70e4a22.png",
+      "edit_target": "game/assets/art/cards/spr20.webp"
+    },
+    {
+      "file": "assets/fx/layers/spr20-subject.webp",
+      "crop": [
+        768,
+        0,
+        1536,
+        1024
+      ],
+      "sha256": "f88506e3b1d489ec7a64b234db4aa936cb57186a8e34f7a9751be583734677fc",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-62a65f8b-699f-4142-aa10-5a41c70e4a22.png",
+      "edit_target": "game/assets/art/cards/spr20.webp"
+    }
+  ]
+}

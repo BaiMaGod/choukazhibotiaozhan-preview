@@ -58,3 +58,12 @@
 
 .prism-fx[data-paused="true"] * { animation-play-state:paused!important; }
 .card-in-flight > * { visibility:hidden; }
+.prism-pouch-back { mask-image:var(--pouch-art); mask-size:100% 100%; }
+.prism-pouch::before { left:7%; }
+.prism-pouch::after { right:7%; }
+.shell[data-screen='live'] #pack-table[data-fx-phase='committing'],
+.shell[data-screen='free'] #pack-table[data-fx-phase='committing'],
+.shell[data-screen='live'] #pack-table[data-fx-phase='opening'],
+.shell[data-screen='free'] #pack-table[data-fx-phase='opening'] { height:calc(var(--u) * 65); }
+
+.prism-ejection { position:absolute; inset:0; transform-style:preserve-3d; pointer-events:none; }
