@@ -85,6 +85,7 @@ let scene;
 let pack = null;
 let teaching;
 let canTear = false;
+let nextTeachingPreview = false;
 let busy = false;
 let ready = false;
 let audio;
@@ -363,6 +364,7 @@ function open(tool) {
         return sendBusiness({ type: "open-order-pack", revision: business.revision, seed, tool });
     const broadcast = teaching.broadcast;
     if (broadcast) {
+        nextTeachingPreview = false;
         void commitTeaching({ type: "open", broadcastId: broadcast.id, index: broadcast.packs.length, seed });
     }
 }
@@ -373,6 +375,15 @@ primary.onclick = () => {
     }
     if (busy || nextRevealSlot(isDemo ? pack : currentGamePack()) !== null)
         return;
+    if (!isDemo && !teaching.business) {
+        const view = teachingView(teaching);
+        if (view.phase === "live" && !view.shipment && view.pack?.settledAt != null &&
+            view.completed < teachingRarities.length && view.completed === view.opened) {
+            nextTeachingPreview = true;
+            renderTeaching();
+            return;
+        }
+    }
     if (!isDemo)
         return teaching.business ? businessPrimary(teaching.business) : teachingPrimary();
     if (!pack)
@@ -449,7 +460,7 @@ function renderTeaching() {
     element("pack-table").hidden = !inPack;
     element("slots").hidden = !inPack;
     tools.hidden = true;
-    renderPack(inPack ? view.pack : null, settledPack, readyToOpen && !view.pack);
+    renderPack(inPack ? view.pack : null, settledPack, readyToOpen && (!view.pack || nextTeachingPreview));
     element("pack-title").textContent = `教学第 ${Math.max(1, view.opened)} 包`;
     settlement.hidden = !inPack || !settledPack;
     rewards.replaceChildren();
@@ -486,7 +497,7 @@ function renderTeaching() {
         instruction.textContent = `三包已完成，发货收 ${teachingOrder.saleGold} 金币并登记客户礼物。`;
     }
     else if (readyToOpen) {
-        primary.textContent = `滑动卡包封口 · 第 ${view.opened + 1} 包`;
+        primary.textContent = `${view.pack && !nextTeachingPreview ? "准备下一包" : "滑动卡包封口"} · 第 ${view.opened + 1} 包`;
         instruction.textContent = "首次教学采用保底，后续自然抽卡无教学保底。教学期间不能用券。";
     }
     else if (view.pack) {
