@@ -1,5 +1,5 @@
 /** PRISM's steerable 96-vertex foil edge, adapted to container-local coordinates. MIT. */
-import { clamp } from './physics.js';
+import { clamp } from './physics.js?v=0a0578e3';
 export const TEAR_SEGMENTS = 96;
 const mix = (a, b, random) => a + (b - a) * random();
 export function createTearLine(random = Math.random) {

@@ -1,6 +1,6 @@
-import { createPackPresentation, nextRevealSlot } from "./pack-presentation.js";
-import { createCardView, decorateResult, attachCardTilt, prepareCardVisual, warmCardVisual } from "./pack-fx/card-view.js";
-import { cardVisual, pouchArt } from "./pack-fx/resources.js";
+import { createPackPresentation, nextRevealSlot } from "./pack-presentation.js?v=0a0578e3";
+import { createCardView, decorateResult, attachCardTilt, prepareCardVisual, warmCardVisual } from "./pack-fx/card-view.js?v=0a0578e3";
+import { cardVisual, pouchArt } from "./pack-fx/resources.js?v=0a0578e3";
 import { RARITIES, effectiveRarity, visibleCards } from "../../js/pack.js";
 import { defaultSettings, readSettings, reachesPause } from "../../js/controls.js";
 import { DeviceClock } from "../../js/clock.js";

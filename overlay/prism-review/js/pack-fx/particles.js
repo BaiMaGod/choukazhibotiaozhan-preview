@@ -1,4 +1,4 @@
-import { createLightJet } from '../vendor/prism-holo-pack/light-jet.js';
+import { createLightJet } from '../vendor/prism-holo-pack/light-jet.js?v=0a0578e3';
 /** PRISM-style local sparks, wave ribbons and concentric rare-card rings. */
 export function createParticles(host) {
     const canvas = document.createElement('canvas');
