@@ -2,7 +2,7 @@
  * Local coordinates and original game result slots replace viewport fan coordinates.
  * Sampling once lets the browser compositor run the path without per-frame DOM reads.
  */
-import { clamp } from './physics.js?v=9ea24cd6';
+import { clamp } from './physics.js?v=fccaace3';
 const smoothStep = (a, b, v) => { const t = clamp((v - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
 export function ejectionFrames(index, width, height, scale) {
     const targetX = (index - 2) * Math.min(width * .17, 80), duration = 1.4, orbitStart = .18;

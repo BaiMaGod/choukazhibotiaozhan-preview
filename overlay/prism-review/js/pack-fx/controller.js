@@ -1,10 +1,11 @@
-import { ejectionFrames } from '../vendor/prism-holo-pack/orbit.js?v=9ea24cd6';
-import { SpringValue, stepSprings, clamp } from '../vendor/prism-holo-pack/physics.js?v=9ea24cd6';
-import { advanceTear, shouldCompleteOnRelease } from '../vendor/prism-holo-pack/tear-geometry.js?v=9ea24cd6';
-import { createPouchView } from './pouch-view.js?v=9ea24cd6';
-import { createCardView, prepareCardVisual } from './card-view.js?v=9ea24cd6';
-import { createParticles } from './particles.js?v=9ea24cd6';
-import { createFoilAudio } from './audio.js?v=9ea24cd6';
+import { ejectionFrames } from '../vendor/prism-holo-pack/orbit.js?v=fccaace3';
+import { SpringValue, stepSprings, clamp } from '../vendor/prism-holo-pack/physics.js?v=fccaace3';
+import { advanceTear, shouldCompleteOnRelease } from '../vendor/prism-holo-pack/tear-geometry.js?v=fccaace3';
+import { createPouchView } from './pouch-view.js?v=fccaace3';
+import { createCardView, prepareCardVisual } from './card-view.js?v=fccaace3';
+import { createParticles } from './particles.js?v=fccaace3';
+import { createFoilAudio } from './audio.js?v=fccaace3';
+import { cardBackArt } from './resources.js?v=fccaace3';
 export const revealDuration = { N: 720, R: 800, SR: 1100, SSR: 1600, UR: 2100 };
 export function createPrismPresentation(table, options = {}) {
     const root = document.createElement('div');
@@ -214,7 +215,7 @@ export function createPrismPresentation(table, options = {}) {
             options.onSound?.('open');
             if (!reduced() && !soft)
                 particles?.burst(width * .5, height * .22, '#ffd77b');
-            const backUrl = './assets/ui/card-back.webp';
+            const backUrl = cardBackArt;
             const ejection = document.createElement('div');
             ejection.className = 'prism-ejection';
             stage.append(ejection);
@@ -235,7 +236,7 @@ export function createPrismPresentation(table, options = {}) {
             root.dataset.rarity = rarity;
             let visual = options.card?.(url, rarity) ?? { url, rarity };
             if (visual.subject && visual.background) {
-                const waiting = createCardView({ url: './assets/ui/card-back.webp', rarity: 'N' });
+                const waiting = createCardView({ url: cardBackArt, rarity: 'N' });
                 waiting.style.transform = 'translate(-50%,-50%) rotateY(180deg)';
                 stage.append(waiting);
                 visual = await prepareCardVisual(visual);

@@ -1,6 +1,6 @@
 {
   "target": "browser-preview",
-  "source_commit": "9ea24cd6cf1399cbe910b128af15d2ab2fd99b20",
+  "source_commit": "fccaace3d83e86813995353e523e8c6730ebaa34",
   "status": "development-visual-review-pending",
-  "preview_adapter": "v4-card-face-visibility"
+  "preview_adapter": "v5-hd-card-back"
 }

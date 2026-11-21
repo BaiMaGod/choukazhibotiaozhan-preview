@@ -792,6 +792,28 @@
       "alpha": true,
       "generated_image": "exec-62a65f8b-699f-4142-aa10-5a41c70e4a22.png",
       "edit_target": "game/assets/art/cards/spr20.webp"
+    },
+    {
+      "file": "assets/fx/card-back.webp",
+      "sha256": "66ac4e480ad1b5d9f9c2b2f16b01a2753bcc6eeee8f67af20d62507a6c17925b",
+      "size": [
+        768,
+        1024
+      ],
+      "alpha": true,
+      "generated_image": "exec-9f3741ab-0861-48aa-9a00-b228f06fc28a.png",
+      "edit_target": "game/assets/ui/card-back.webp; original crown/navy/gold identity",
+      "source_pixels": [
+        1086,
+        1448
+      ],
+      "crop": [
+        50,
+        0,
+        1036,
+        1432
+      ],
+      "export": "Trim alpha bounds and normalize to 3:4 card UV; no redraw outside image generation"
     }
   ]
 }

@@ -24,11 +24,11 @@
 .prism-card { --card-metal:#d2ab6b; --prism-light:#fff2ce; position:absolute; left:50%; top:50%; height:76%; width:auto; aspect-ratio:3/4; transform-style:preserve-3d; transform:translate(-50%,-50%); border-radius:5%; will-change:transform; }
 .prism-card::before { content:''; position:absolute; inset:0; border-radius:inherit; background:var(--card-metal); transform:translateZ(-1px); box-shadow:1px 1px 0 #5d432e,2px 2px 0 #e4d7ac,3px 3px 0 #5d432e; }
 .prism-card-back,.prism-card-face { position:absolute; inset:0; border-radius:inherit; backface-visibility:hidden; -webkit-backface-visibility:hidden; }
-.prism-card-back { transform:rotateY(180deg) translateZ(1px); background:url('../assets/ui/card-back.webp') center/100% 100%; box-shadow:0 0 10px #ad7cff88,inset 0 0 0 1px #f4d6a6; }
+.prism-card-back { transform:rotateY(180deg) translateZ(1px); background:url('./assets/fx/card-back.webp') center/100% 100%; box-shadow:0 0 10px #ad7cff88,inset 0 0 0 1px #f4d6a6; }
 .prism-card-face { transform:translateZ(2px); background:#271b32; box-shadow:inset 0 0 0 1px var(--card-metal),0 4px 13px #190b2b66; transform-style:preserve-3d; }
 .prism-card-face,.prism-card-face * { backface-visibility:hidden; -webkit-backface-visibility:hidden; }
 .prism-card::before { backface-visibility:hidden; -webkit-backface-visibility:hidden; }
-.prism-card-face { background:#271b32 url('../assets/ui/card-back.webp') center/100% 100%; }
+.prism-card-face { background:#271b32 url('./assets/fx/card-back.webp') center/100% 100%; }
 .prism-card-face:not(.prism-image-ready) :is(.prism-holo,.prism-glare,.prism-clearcoat,.prism-card-subject) { visibility:hidden; }
 .prism-card-art { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:inherit; }
 .prism-holo,.prism-glare,.prism-clearcoat { position:absolute; inset:0; border-radius:inherit; pointer-events:none; }

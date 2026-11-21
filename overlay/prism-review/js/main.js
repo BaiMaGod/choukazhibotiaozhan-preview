@@ -1,6 +1,6 @@
-import { createPackPresentation, nextRevealSlot } from "./pack-presentation.js?v=9ea24cd6";
-import { createCardView, decorateResult, attachCardTilt, prepareCardVisual, warmCardVisual } from "./pack-fx/card-view.js?v=9ea24cd6";
-import { cardVisual, pouchArt } from "./pack-fx/resources.js?v=9ea24cd6";
+import { createPackPresentation, nextRevealSlot } from "./pack-presentation.js?v=fccaace3";
+import { createCardView, decorateResult, attachCardTilt, prepareCardVisual, warmCardVisual } from "./pack-fx/card-view.js?v=fccaace3";
+import { cardVisual, pouchArt, cardBackArt } from "./pack-fx/resources.js?v=fccaace3";
 import { RARITIES, effectiveRarity, visibleCards } from "../../js/pack.js";
 import { defaultSettings, readSettings, reachesPause } from "../../js/controls.js";
 import { DeviceClock } from "../../js/clock.js";
@@ -878,7 +878,7 @@ async function presentPack(previous, current, opened, rarity) {
     gesture.dataset.enabled = "false";
     skip.hidden = false;
     try {
-        await presentation.play(current.id, rarity ? "reveal" : "rip", !rarity && url ? pouchArt(url) : url ?? "./assets/ui/card-back.webp", rarity, rarity ? slots[current.revealed - 1] : undefined, settings.reduceFlash);
+        await presentation.play(current.id, rarity ? "reveal" : "rip", !rarity && url ? pouchArt(url) : url ?? cardBackArt, rarity, rarity ? slots[current.revealed - 1] : undefined, settings.reduceFlash);
     }
     finally {
         busy = false;
