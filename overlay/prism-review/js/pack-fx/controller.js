@@ -73,9 +73,6 @@ export function createPrismPresentation(table, options = {}) {
         const packWidth = pouch?.el.offsetWidth ?? width * .45, packHeight = pouch?.el.offsetHeight ?? height * .8;
         const tipX = width * .5 - packWidth * .5 + (shape?.tipX ?? 0) / 100 * packWidth;
         const tipY = height * .48 - packHeight * .5 + (shape?.tipY ?? 12) / 100 * packHeight;
-        const ejection = stage.querySelector('.prism-ejection');
-        if (ejection)
-            ejection.style.clipPath = `inset(0 0 ${Math.max(0, height - tipY - fall)}px 0)`;
         const tearing = phase === 'tearing' || phase === 'committing';
         if (tearing && dp > 0) {
             audio?.setRip(Math.pow(dp / Math.max(dt, .004) / 4, .6));
@@ -219,7 +216,7 @@ export function createPrismPresentation(table, options = {}) {
             for (let i = 0; i < 5; i++) {
                 const card = createCardView({ url: backUrl, rarity: 'N' });
                 ejection.append(card);
-                const s = Math.min(1, (width / 6) / (height * .5 * .75)), targetX = (i - 2) * Math.min(width * .17, 80);
+                const s = Math.min(1, (width / 6) / (height * .5 * .75));
                 animate(card, reduced() ? [{ opacity: 0 }, { opacity: 0 }] : ejectionFrames(i, width, height, s), reduced() ? 180 : 1400, i * (reduced() ? 0 : 22));
             }
         }

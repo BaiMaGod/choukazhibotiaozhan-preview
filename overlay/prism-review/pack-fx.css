@@ -51,6 +51,7 @@
 .prism-detail { position:relative; width:min(70vw,330px,46svh); aspect-ratio:3/4; margin:14px auto; perspective:1100px; touch-action:pan-y; }
 .prism-detail .prism-card { inset:0; width:100%; height:100%; transform:rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg)); transition:transform .15s ease-out; pointer-events:auto; }
 .prism-detail .prism-card-caption { font-size:14px; }
+.prism-card-caption { transform:translateZ(36px); }
 .prism-cue { position:absolute; width:1px; height:1px; pointer-events:none; }
 .soft-light .prism-holo { opacity:.16!important; }
 .soft-light .prism-clearcoat { background:none; }
@@ -66,7 +67,9 @@
 .shell[data-screen='live'] #pack-table[data-fx-phase='opening'],
 .shell[data-screen='free'] #pack-table[data-fx-phase='opening'] { height:calc(var(--u) * 65); }
 
-.prism-ejection { position:absolute; inset:0; transform-style:preserve-3d; pointer-events:none; }
+.prism-ejection { position:absolute; inset:0; z-index:1; transform-style:preserve-3d; pointer-events:none; }
+.prism-fx[data-phase='opening'] .prism-pouch { z-index:2; }
+.prism-fx { overflow:hidden; }
 .prism-pouch-front,.prism-strip-face,.prism-strip-lining { mask-image:var(--pouch-art); mask-size:100% 100%; }
 .shell #gesture[data-enabled='true'] { background:none; border:0; color:transparent; text-shadow:none; }
 .prism-grab-hint { position:absolute; left:13%; right:13%; top:3%; z-index:7; text-align:center; color:#fffbe8; font-size:clamp(9px,2.2vw,13px); line-height:1.1; letter-spacing:.08em; text-shadow:0 1px 3px #51311f; pointer-events:none; transition:opacity .15s; }

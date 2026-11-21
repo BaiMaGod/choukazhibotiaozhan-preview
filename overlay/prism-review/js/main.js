@@ -2030,7 +2030,7 @@ async function start() {
         element("edition").textContent = "01 / 01";
         element("pack-title").textContent = "猫猫来信 · 样包 01";
         element("footer-note").hidden = false;
-        element("footer-note").textContent = "固定示例卡序与占位素材 · 本地自动保存";
+        element("footer-note").textContent = "试玩进度自动保存";
         ready = true;
         render();
         scheduleAuto();
