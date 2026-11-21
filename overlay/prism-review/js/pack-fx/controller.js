@@ -130,6 +130,7 @@ export function createPrismPresentation(table, options = {}) {
         }
         root.hidden = false;
         table.classList.add('prism-presenting');
+        measure();
         start();
     }
     function pointerDown(e) { if (!['sealed', 'tearing'].includes(phase) || drag || e.button !== 0)
