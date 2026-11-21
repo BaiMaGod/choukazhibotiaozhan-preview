@@ -1,5 +1,5 @@
-import { clamp } from '../vendor/prism-holo-pack/physics.js?v=6e6c95b0-r2';
-import { createTearLine, polygon, tearShape, tearYAt, steerRemainingTear } from '../vendor/prism-holo-pack/tear-geometry.js?v=6e6c95b0-r2';
+import { clamp } from '../vendor/prism-holo-pack/physics.js?v=b15ac23b';
+import { createTearLine, polygon, tearShape, tearYAt, steerRemainingTear } from '../vendor/prism-holo-pack/tear-geometry.js?v=b15ac23b';
 function part(name, host) {
     const el = document.createElement('div');
     el.className = name;

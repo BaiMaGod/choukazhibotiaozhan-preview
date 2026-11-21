@@ -1,6 +1,6 @@
 {
   "target": "browser-preview",
-  "source_commit": "6e6c95b0a899a38841313fe85534a1bdf4721573",
+  "source_commit": "b15ac23be76aecbf038254abbd6e38dab4f30f47",
   "status": "development-visual-review-pending",
-  "preview_adapter": "r2-correct-pouch-path"
+  "preview_adapter": "v3-bounded-seam"
 }

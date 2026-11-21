@@ -1,10 +1,10 @@
-import { ejectionFrames } from '../vendor/prism-holo-pack/orbit.js?v=6e6c95b0-r2';
-import { SpringValue, stepSprings, clamp } from '../vendor/prism-holo-pack/physics.js?v=6e6c95b0-r2';
-import { advanceTear, shouldCompleteOnRelease } from '../vendor/prism-holo-pack/tear-geometry.js?v=6e6c95b0-r2';
-import { createPouchView } from './pouch-view.js?v=6e6c95b0-r2';
-import { createCardView, prepareCardVisual } from './card-view.js?v=6e6c95b0-r2';
-import { createParticles } from './particles.js?v=6e6c95b0-r2';
-import { createFoilAudio } from './audio.js?v=6e6c95b0-r2';
+import { ejectionFrames } from '../vendor/prism-holo-pack/orbit.js?v=b15ac23b';
+import { SpringValue, stepSprings, clamp } from '../vendor/prism-holo-pack/physics.js?v=b15ac23b';
+import { advanceTear, shouldCompleteOnRelease } from '../vendor/prism-holo-pack/tear-geometry.js?v=b15ac23b';
+import { createPouchView } from './pouch-view.js?v=b15ac23b';
+import { createCardView, prepareCardVisual } from './card-view.js?v=b15ac23b';
+import { createParticles } from './particles.js?v=b15ac23b';
+import { createFoilAudio } from './audio.js?v=b15ac23b';
 export const revealDuration = { N: 720, R: 800, SR: 1100, SSR: 1600, UR: 2100 };
 export function createPrismPresentation(table, options = {}) {
     const root = document.createElement('div');
@@ -23,7 +23,7 @@ export function createPrismPresentation(table, options = {}) {
     let drag;
     let animations = [], inFlight;
     let finish, tearReady, epoch = 0, raf = 0, last = 0, time = 0, previousProgress = 0;
-    let width = 360, height = 300, openingAge = 0, paused = false, destroyed = false, reduceFlash = false;
+    let width = 360, height = 300, openingAge = 0, seamAge = 0, paused = false, destroyed = false, reduceFlash = false;
     const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
     const setPhase = (next) => { phase = next; root.dataset.phase = next; table.dataset.fxPhase = next; };
     function ensure() { if (pouch)
@@ -61,6 +61,8 @@ export function createPrismPresentation(table, options = {}) {
         last = now;
         time += dt;
         stepSprings([progress, zAngle, xAngle], dt);
+        if (phase === 'committing')
+            seamAge += elapsed;
         const dp = Math.max(0, progress.x - previousProgress);
         previousProgress = progress.x;
         let fall = 0;
@@ -84,7 +86,8 @@ export function createPrismPresentation(table, options = {}) {
         const jetStrength = reduced() || reduceFlash ? 0 : phase === 'opening' ? Math.max(0, 1 - openingAge / 1.1) : tearing ? progress.x * .7 : 0;
         particles?.frame(dt, time, jetStrength > 0 ? { x: tipX, y: tipY, strength: jetStrength, packWidth, progress: progress.x, direction, released: phase === 'opening' ? openingAge : -1 } : undefined);
         root.dataset.progress = progress.x.toFixed(3);
-        if (tearReady && progress.x >= .985) {
+        if (tearReady && (progress.x >= .985 || seamAge >= .35)) {
+            progress.reset(1);
             const done = tearReady;
             tearReady = undefined;
             done();
@@ -188,7 +191,9 @@ export function createPrismPresentation(table, options = {}) {
             pouch.setImage(url || sealedUrl);
             pouch.show();
             progress.to = 1;
+            seamAge = 0;
             setPhase('committing');
+            measure();
             start();
             if (!reduced() && progress.x < .985)
                 await new Promise(resolve => { tearReady = resolve; });
@@ -222,6 +227,7 @@ export function createPrismPresentation(table, options = {}) {
         }
         else {
             setPhase('revealing');
+            measure();
             pouch?.hide();
             inFlight = slot;
             slot?.classList.add('card-in-flight');
