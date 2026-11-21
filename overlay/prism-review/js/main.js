@@ -1,6 +1,6 @@
-import { createPackPresentation, nextRevealSlot } from "./pack-presentation.js?v=46ab8b57";
-import { createCardView, decorateResult, attachCardTilt, prepareCardVisual, warmCardVisual } from "./pack-fx/card-view.js?v=46ab8b57";
-import { cardVisual, pouchArt } from "./pack-fx/resources.js?v=46ab8b57";
+import { createPackPresentation, nextRevealSlot } from "./pack-presentation.js?v=6e6c95b0";
+import { createCardView, decorateResult, attachCardTilt, prepareCardVisual, warmCardVisual } from "./pack-fx/card-view.js?v=6e6c95b0";
+import { cardVisual, pouchArt } from "./pack-fx/resources.js?v=6e6c95b0";
 import { RARITIES, effectiveRarity, visibleCards } from "../../js/pack.js";
 import { defaultSettings, readSettings, reachesPause } from "../../js/controls.js";
 import { DeviceClock } from "../../js/clock.js";
@@ -185,8 +185,10 @@ function saveSettings() {
 }
 function renderPack(currentPack, settled, openable, focusSlot, themeId = rules.starter.id) {
     // A completed previous pack is not the unopened next pack.
-    if (openable)
+    if (openable) {
         currentPack = null;
+        settled = false;
+    }
     const cards = visibleCards(currentPack);
     const current = cards[focusSlot ?? cards.length - 1];
     const art = element("approved-art");
@@ -461,8 +463,8 @@ function renderTeaching() {
     element("slots").hidden = !inPack;
     tools.hidden = true;
     renderPack(inPack ? view.pack : null, settledPack, readyToOpen && (!view.pack || nextTeachingPreview));
-    element("pack-title").textContent = `教学第 ${Math.max(1, view.opened)} 包`;
-    settlement.hidden = !inPack || !settledPack;
+    element("pack-title").textContent = `教学第 ${Math.max(1, view.opened + Number(nextTeachingPreview))} 包`;
+    settlement.hidden = !inPack || !settledPack || nextTeachingPreview;
     rewards.replaceChildren();
     if (!settlement.hidden && view.pack) {
         const reward = view.pack.reward;
