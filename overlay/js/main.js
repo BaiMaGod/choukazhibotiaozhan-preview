@@ -166,6 +166,9 @@ function saveSettings() {
     syncMusic();
 }
 function renderPack(currentPack, settled, openable, focusSlot, themeId = rules.starter.id) {
+    // A completed previous pack is not the unopened next pack.
+    if (openable)
+        currentPack = null;
     const cards = visibleCards(currentPack);
     const current = cards[focusSlot ?? cards.length - 1];
     const art = element("approved-art");
@@ -196,6 +199,17 @@ function renderPack(currentPack, settled, openable, focusSlot, themeId = rules.s
     rarity.dataset.rarity = current?.rarity ?? "";
     element("card-name").textContent = current?.name ?? (currentPack ? "依次翻开 5 张卡" : themeFor(themeId)?.name ?? "卡包");
     const table = element("pack-table");
+    let seal = table.querySelector(".pack-seal");
+    if (!seal) {
+        seal = document.createElement("img");
+        seal.className = "pack-seal";
+        seal.alt = "";
+        table.append(seal);
+    }
+    seal.hidden = !!currentPack || !url;
+    if (url && !currentPack && seal.getAttribute("src") !== url)
+        seal.src = url;
+    table.style.removeProperty("--rip-progress");
     table.dataset.packState = !currentPack ? "sealed" : cards.length ? "revealed" : "open";
     const featuredSlot = cards.reduce((last, card, index) => {
         const featured = last < 0 ? undefined : cards[last].rarity;
@@ -224,6 +238,8 @@ function renderPack(currentPack, settled, openable, focusSlot, themeId = rules.s
         slot.setAttribute("aria-label", card ? `第 ${index + 1} 张，${card.name}，${card.rarity}` : `第 ${index + 1} 张，未揭晓`);
     });
     canTear = openable && !busy;
+    gesture.textContent = canTear ? "← 滑动撕开封口 →" : "";
+    gesture.setAttribute("aria-label", "横向滑动卡包封口");
     gesture.dataset.enabled = String(canTear);
 }
 function render(focusSlot) {
@@ -264,7 +280,7 @@ function render(focusSlot) {
     primary.disabled = busy;
     if (!pack) {
         primary.textContent = "点击撕包";
-        instruction.textContent = "横向拖动包装封口，或点击按钮拆封。";
+        instruction.textContent = "在卡包顶部横向滑动，撕开封口后自动翻卡。";
     }
     else if (pack.rewards) {
         primary.textContent = "再试一次";
@@ -331,12 +347,16 @@ function open(tool) {
     }
 }
 primary.onclick = () => {
+    if (canTear) {
+        instruction.textContent = "请在卡包顶部横向滑动撕开封口。";
+        return;
+    }
     if (busy || nextRevealSlot(isDemo ? pack : currentGamePack()) !== null)
         return;
     if (!isDemo)
         return teaching.business ? businessPrimary(teaching.business) : teachingPrimary();
     if (!pack)
-        return open();
+        return;
     if (pack.rewards)
         return void commit({ type: "reset", id: pack.id });
     if (pack.revealed === 5)
@@ -446,7 +466,7 @@ function renderTeaching() {
         instruction.textContent = `三包已完成，发货收 ${teachingOrder.saleGold} 金币并登记客户礼物。`;
     }
     else if (readyToOpen) {
-        primary.textContent = `撕开第 ${view.opened + 1} 包`;
+        primary.textContent = `滑动卡包封口 · 第 ${view.opened + 1} 包`;
         instruction.textContent = "首次教学采用保底，后续自然抽卡无教学保底。教学期间不能用券。";
     }
     else if (view.pack) {
@@ -677,8 +697,9 @@ function teachingPrimary() {
             void commitTeaching({ type: "stop", broadcastId });
         else if (view.completed === teachingRarities.length)
             void commitTeaching({ type: "ship", broadcastId });
-        else if (view.completed === view.opened)
-            open();
+        else if (view.completed === view.opened) {
+            instruction.textContent = "请在卡包顶部横向滑动撕开封口。";
+        }
         else if (view.pack)
             void commitTeaching({ type: "reveal", broadcastId, packId: view.pack.id, slot: view.pack.revealed });
     }
@@ -1498,7 +1519,7 @@ function renderBusiness(profile) {
         element("pack-title").textContent = themeFor(free.themeId).name;
         element("free-progress").textContent = `已入藏 ${free.completed}/${free.quantity} 包 · 今日已结算 ${teaching.daily.packIds.length} 包`;
         primary.disabled = busy || (!!free.exiting && !revealing);
-        primary.textContent = free.exiting && !revealing ? "已入藏，即将返回" : complete ? "继续拆卡" : revealing ? `自动翻卡 ${pack.revealed} / 5` : `撕开第 ${free.completed + 1} 包`;
+        primary.textContent = free.exiting && !revealing ? "已入藏，即将返回" : complete ? "继续拆卡" : revealing ? `自动翻卡 ${pack.revealed} / 5` : `滑动卡包封口 · 第 ${free.completed + 1} 包`;
         element("exit-free").disabled = !!free.exiting;
         instruction.textContent = free.exiting ? (revealing ? "正在揭完已锁包，入藏后自动退出，其余未拆包保留。" : "本包已入藏，其余库存已保留。")
             : complete ? "继续拆卡会继承当前会话的金包接力和 UR 余辉。" : "揭完五张后自动入藏。";
@@ -1520,7 +1541,7 @@ function renderBusiness(profile) {
         instruction.textContent = "升品只作用于本包，关闭窗口后结算卡牌、热度和奖励。";
     }
     else if (canOpen) {
-        primary.textContent = `撕开第 ${task.completed + 1} 包`;
+        primary.textContent = `滑动卡包封口 · 第 ${task.completed + 1} 包`;
         instruction.textContent = "正式订单使用自然抽卡概率，锁包后可以刷新续拆。";
     }
     else if (opened) {
@@ -1540,7 +1561,8 @@ function businessPrimary(profile) {
             return openGrowth("free");
         if (pack && pack.revealed < 5)
             return sendBusiness({ type: "reveal-free", revision, packId: pack.id, slot: pack.revealed });
-        return open();
+        instruction.textContent = "请在卡包顶部横向滑动撕开封口。";
+        return;
     }
     if (!live) {
         showStartConfirm(profile.stock, "带入全部未拆库存。");
@@ -1559,7 +1581,7 @@ function businessPrimary(profile) {
     if (current && current.revealed < current.cards.length) {
         return sendBusiness({ type: "reveal-order-card", revision, packId: current.id, slot: current.revealed });
     }
-    open();
+    instruction.textContent = "请在卡包顶部横向滑动撕开封口。";
 }
 function milestoneButtons(profile, tiers, count, claimed, themeId) {
     return tiers.map(([threshold, amount]) => {
@@ -1595,10 +1617,10 @@ function autoStep() {
             return null;
         if (task.pack?.pending && task.pack.revealed === 5 && !settings.skipTools)
             return "tools";
-        return () => businessPrimary(profile);
+        return () => task.pack?.pending || (pack && nextRevealSlot(pack) !== null) ? businessPrimary(profile) : open();
     }
     const view = teachingView(teaching);
-    return view.phase === "live" && !view.shipment && view.completed < teachingRarities.length ? () => teachingPrimary() : null;
+    return view.phase === "live" && !view.shipment && view.completed < teachingRarities.length ? () => view.completed === view.opened ? open() : teachingPrimary() : null;
 }
 function refreshPlayControls() {
     const active = liveRunning() || !!teaching.business?.free;
@@ -1850,6 +1872,7 @@ gesture.onpointermove = event => {
         return;
     const progress = Math.min(1, Math.abs(event.clientX - drag.x) / (gesture.clientWidth * .36));
     const art = element("approved-art");
+    element("pack-table").style.setProperty("--rip-progress", String(progress));
     if (!art.hidden && art.complete && art.naturalWidth)
         art.style.setProperty("--tear", String(progress));
     else
@@ -1866,6 +1889,7 @@ function stopDrag(event) {
     if (canTear && !busy) {
         const art = element("approved-art");
         art.style.removeProperty("--tear");
+        element("pack-table").style.removeProperty("--rip-progress");
         scene.draw(undefined, false, 0, !art.hidden && art.complete && art.naturalWidth > 0);
     }
 }

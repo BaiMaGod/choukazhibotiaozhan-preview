@@ -1497,3 +1497,13 @@ dialog::backdrop { background: #211321c9; }
 .home-display-grades span:nth-child(4) { left: 71.1%; top: 57.05%; transform: rotate(8deg); }
 .home-display-grades span:nth-child(5) { left: 7.7%; top: 61.25%; transform: rotate(-14deg); }
 
+
+/* Unopened packs must remain distinct from the completed previous pack. */
+.shell[data-screen="live"] #pack-table[data-pack-state="sealed"],
+.shell[data-screen="free"] #pack-table[data-pack-state="sealed"] { height: calc(var(--u) * 65); }
+.shell #pack-table[data-pack-state="sealed"] #slots { visibility: hidden; }
+.shell #pack-table[data-pack-state="sealed"] #approved-art { top: 48%; height: 83%; z-index: 2; opacity: 1; }
+.shell #gesture[data-enabled="true"] { inset: 4% 20% auto; height: 27%; z-index: 4; display: flex; align-items: flex-end; justify-content: center; color: #fff2cb; font-size: 12px; text-shadow: 0 1px 4px #21112d; background: linear-gradient(transparent 55%,#27132a99); border-radius: 8px; touch-action: none; }
+
+.shell #pack-table .pack-seal { position: absolute; pointer-events: none; left: 50%; top: 48%; height: 83%; width: auto; aspect-ratio: 3/4; object-fit: contain; clip-path: inset(0 0 84%); z-index: 3; transform: translate(calc(-50% + var(--rip-progress,0) * 32px),calc(-50% - var(--rip-progress,0) * 24px)) rotate(calc(var(--rip-progress,0) * 9deg)); }
+.shell #pack-table[style*="--rip-progress"] #approved-art { clip-path: inset(16% 0 0); }

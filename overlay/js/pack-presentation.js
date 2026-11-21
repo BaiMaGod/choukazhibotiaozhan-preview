@@ -1,3 +1,4 @@
+import { createRipTimeline } from "./vendor/card-pack-animations/ripTimeline.js";
 // Presentation only: callers persist each reveal through the existing transaction.
 export const revealDuration = { N: 720, R: 800, SR: 1100, SSR: 1600, UR: 2100 };
 export function nextRevealSlot(pack) {
@@ -14,9 +15,12 @@ export function createPackPresentation(table) {
     let destination;
     let skippedPack = "";
     let generation = 0;
+    let rip;
     const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
     function clear() {
         generation++;
+        rip?.destroy();
+        rip = undefined;
         animations.forEach(animation => animation.cancel());
         animations = [];
         destination?.classList.remove("card-in-flight");
@@ -45,18 +49,28 @@ export function createPackPresentation(table) {
         const duration = reduced() ? 180 : kind === "rip" ? 650 : revealDuration[rarity];
         const options = { duration, fill: "both", easing: "cubic-bezier(.2,.7,.2,1)" };
         if (kind === "rip") {
-            const body = image(url, "opening-wrapper wrapper-body");
-            const seal = image(url, "opening-wrapper wrapper-seal");
-            animations.push(body.animate(reduced() ? [{ opacity: 1 }, { opacity: 0 }] : [
-                { transform: "translate(-50%,-50%) rotate(0deg)", opacity: 1 },
-                { transform: "translate(-50%,-45%) rotate(-3deg)", opacity: 1, offset: .35 },
-                { transform: "translate(-50%,35%) rotate(-9deg)", opacity: 0 },
-            ], options));
-            animations.push(seal.animate(reduced() ? [{ opacity: 1 }, { opacity: 0 }] : [
-                { transform: "translate(-50%,-50%)", opacity: 1 },
-                { transform: "translate(20%,-110%) rotate(24deg)", opacity: .9, offset: .5 },
-                { transform: "translate(75%,-160%) rotate(45deg)", opacity: 0 },
-            ], options));
+            if (!reduced()) {
+                const wrapper = document.createElement("div");
+                wrapper.className = "upstream-pack";
+                layer.append(wrapper);
+                const slices = Array.from({ length: 48 }, (_, index) => {
+                    const slice = document.createElement("div");
+                    slice.className = "upstream-pack-slice";
+                    slice.style.top = `${index * 100 / 48}%`;
+                    slice.style.backgroundImage = `url("${url}")`;
+                    slice.style.backgroundPosition = `center ${index * 100 / 47}%`;
+                    wrapper.append(slice);
+                    return slice;
+                });
+                await new Promise(resolve => {
+                    finish = resolve;
+                    rip = createRipTimeline(gsap, { slices, wrapper }, { autoRipDelay: 2147483647, onComplete: clear });
+                    rip.triggerRip();
+                });
+                return;
+            }
+            const body = image(url, "opening-wrapper");
+            animations.push(body.animate([{ opacity: 1 }, { opacity: 0 }], options));
         }
         else {
             destination = slot;

@@ -193,3 +193,6 @@ dialog p:not(.kicker) { font-size: 13px; line-height: 1.55; }
 #daily-claims, #play-controls { margin-block: 8px; }
 #open-settings { margin-left: 4px; }
 
+
+.upstream-pack { position: absolute; left: 50%; top: 5%; width: auto; height: 90%; aspect-ratio: 3/4; margin-left: 0; transform: translateX(-50%); perspective: 800px; }
+.upstream-pack-slice { position: absolute; left: 0; width: 100%; height: calc(100% / 48 + 1px); background-size: 100% 4800%; transform-style: preserve-3d; }
