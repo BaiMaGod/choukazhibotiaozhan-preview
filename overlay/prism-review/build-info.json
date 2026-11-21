@@ -1,5 +1,6 @@
 {
   "target": "browser-preview",
   "source_commit": "6e6c95b0a899a38841313fe85534a1bdf4721573",
-  "status": "development-visual-review-pending"
+  "status": "development-visual-review-pending",
+  "preview_adapter": "r2-correct-pouch-path"
 }
