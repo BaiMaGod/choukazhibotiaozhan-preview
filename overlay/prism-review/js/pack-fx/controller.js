@@ -1,10 +1,10 @@
-import { ejectionFrames } from '../vendor/prism-holo-pack/orbit.js?v=0a0578e3';
-import { SpringValue, stepSprings, clamp } from '../vendor/prism-holo-pack/physics.js?v=0a0578e3';
-import { advanceTear, shouldCompleteOnRelease } from '../vendor/prism-holo-pack/tear-geometry.js?v=0a0578e3';
-import { createPouchView } from './pouch-view.js?v=0a0578e3';
-import { createCardView, prepareCardVisual } from './card-view.js?v=0a0578e3';
-import { createParticles } from './particles.js?v=0a0578e3';
-import { createFoilAudio } from './audio.js?v=0a0578e3';
+import { ejectionFrames } from '../vendor/prism-holo-pack/orbit.js?v=46ab8b57';
+import { SpringValue, stepSprings, clamp } from '../vendor/prism-holo-pack/physics.js?v=46ab8b57';
+import { advanceTear, shouldCompleteOnRelease } from '../vendor/prism-holo-pack/tear-geometry.js?v=46ab8b57';
+import { createPouchView } from './pouch-view.js?v=46ab8b57';
+import { createCardView, prepareCardVisual } from './card-view.js?v=46ab8b57';
+import { createParticles } from './particles.js?v=46ab8b57';
+import { createFoilAudio } from './audio.js?v=46ab8b57';
 export const revealDuration = { N: 720, R: 800, SR: 1100, SSR: 1600, UR: 2100 };
 export function createPrismPresentation(table, options = {}) {
     const root = document.createElement('div');
@@ -272,17 +272,17 @@ export function createPrismPresentation(table, options = {}) {
         await promise;
     }
     function setPaused(value) { if (value === paused)
-        return; paused = value; root.dataset.paused = String(value); if (value) {
+        return; paused = value; root.dataset.paused = String(value || document.hidden); if (value) {
         stop();
         for (const a of animations)
             a.pause();
     }
-    else {
+    else if (!document.hidden) {
         for (const a of animations)
             a.play();
         start();
     } }
-    const visibility = () => { if (document.hidden) {
+    const visibility = () => { root.dataset.paused = String(paused || document.hidden); if (document.hidden) {
         stop();
         for (const a of animations)
             a.pause();

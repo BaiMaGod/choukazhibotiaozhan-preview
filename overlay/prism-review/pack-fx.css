@@ -73,6 +73,8 @@
 .prism-ejection { position:absolute; inset:0; z-index:1; transform-style:preserve-3d; pointer-events:none; }
 .prism-fx[data-phase='opening'] .prism-pouch { z-index:2; }
 .prism-fx { overflow:hidden; }
+#pack-table[data-fx-phase='committing'] #slots,
+#pack-table[data-fx-phase='opening'] #slots { visibility:hidden; }
 .prism-pouch-front,.prism-strip-face,.prism-strip-lining { mask-image:var(--pouch-art); mask-size:100% 100%; }
 .shell #gesture[data-enabled='true'] { background:none; border:0; color:transparent; text-shadow:none; }
 .prism-grab-hint { position:absolute; left:13%; right:13%; top:3%; z-index:7; text-align:center; color:#fffbe8; font-size:clamp(9px,2.2vw,13px); line-height:1.1; letter-spacing:.08em; text-shadow:0 1px 3px #51311f; pointer-events:none; transition:opacity .15s; }

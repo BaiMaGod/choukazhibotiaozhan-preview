@@ -1,5 +1,5 @@
 /** Foil crackle synthesis adapted from PRISM sound.js (MIT). Uses the host AudioContext. */
-import { clamp } from '../vendor/prism-holo-pack/physics.js?v=0a0578e3';
+import { clamp } from '../vendor/prism-holo-pack/physics.js?v=46ab8b57';
 export function createFoilAudio(access) {
     let context;
     let source;
