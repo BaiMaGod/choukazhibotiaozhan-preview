@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'bundle/**'
+      - 'overlay/**'
       - '.github/workflows/deploy-preview.yml'
 
 permissions:
@@ -52,6 +53,23 @@ jobs:
           (cd public && sha256sum --check --quiet SHA256SUMS)
           test -s public/index.html
           test -s public/libs/laya.core.js
+      - name: Apply verified auto-reveal update
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, shutil
+          from pathlib import Path
+          manifest = json.loads(Path('overlay/manifest.json').read_text())
+          for name, digest in manifest['files'].items():
+              source = Path('overlay') / name
+              assert hashlib.sha256(source.read_bytes()).hexdigest() == digest
+              target = Path('public') / name
+              target.parent.mkdir(parents=True, exist_ok=True)
+              shutil.copyfile(source, target)
+          Path('public/build-info.json').write_text(json.dumps({'target':'browser-preview','source_branch':'main','source_commit':manifest['source_commit']}))
+          files = sorted(p for p in Path('public').rglob('*') if p.is_file() and p.name != 'SHA256SUMS')
+          Path('public/SHA256SUMS').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.relative_to('public').as_posix() + '\n' for p in files))
+          PY
+          (cd public && sha256sum --check --quiet SHA256SUMS)
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
