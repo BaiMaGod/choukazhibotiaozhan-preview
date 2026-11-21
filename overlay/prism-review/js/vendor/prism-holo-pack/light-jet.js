@@ -1,5 +1,5 @@
 /** PRISM pointAlongEdge / 32 adjacent wave ribbons, ported from SVG to local Canvas2D. MIT. */
-import { SpringValue, stepSprings, clamp } from './physics.js?v=b15ac23b';
+import { SpringValue, stepSprings, clamp } from './physics.js?v=9ea24cd6';
 const palette = ['#ff3d6e', '#ff8a3d', '#ffd34d', '#4fd9a0', '#4fb2ff', '#8b6cff', '#ff5cc8'];
 export function createLightJet() {
     const growth = Array.from({ length: 32 }, () => new SpringValue(0, .4, .3));

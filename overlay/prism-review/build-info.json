@@ -1,6 +1,6 @@
 {
   "target": "browser-preview",
-  "source_commit": "b15ac23be76aecbf038254abbd6e38dab4f30f47",
+  "source_commit": "9ea24cd6cf1399cbe910b128af15d2ab2fd99b20",
   "status": "development-visual-review-pending",
-  "preview_adapter": "v3-bounded-seam"
+  "preview_adapter": "v4-card-face-visibility"
 }

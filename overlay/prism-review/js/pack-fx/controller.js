@@ -1,10 +1,10 @@
-import { ejectionFrames } from '../vendor/prism-holo-pack/orbit.js?v=b15ac23b';
-import { SpringValue, stepSprings, clamp } from '../vendor/prism-holo-pack/physics.js?v=b15ac23b';
-import { advanceTear, shouldCompleteOnRelease } from '../vendor/prism-holo-pack/tear-geometry.js?v=b15ac23b';
-import { createPouchView } from './pouch-view.js?v=b15ac23b';
-import { createCardView, prepareCardVisual } from './card-view.js?v=b15ac23b';
-import { createParticles } from './particles.js?v=b15ac23b';
-import { createFoilAudio } from './audio.js?v=b15ac23b';
+import { ejectionFrames } from '../vendor/prism-holo-pack/orbit.js?v=9ea24cd6';
+import { SpringValue, stepSprings, clamp } from '../vendor/prism-holo-pack/physics.js?v=9ea24cd6';
+import { advanceTear, shouldCompleteOnRelease } from '../vendor/prism-holo-pack/tear-geometry.js?v=9ea24cd6';
+import { createPouchView } from './pouch-view.js?v=9ea24cd6';
+import { createCardView, prepareCardVisual } from './card-view.js?v=9ea24cd6';
+import { createParticles } from './particles.js?v=9ea24cd6';
+import { createFoilAudio } from './audio.js?v=9ea24cd6';
 export const revealDuration = { N: 720, R: 800, SR: 1100, SSR: 1600, UR: 2100 };
 export function createPrismPresentation(table, options = {}) {
     const root = document.createElement('div');

@@ -26,6 +26,10 @@
 .prism-card-back,.prism-card-face { position:absolute; inset:0; border-radius:inherit; backface-visibility:hidden; -webkit-backface-visibility:hidden; }
 .prism-card-back { transform:rotateY(180deg) translateZ(1px); background:url('../assets/ui/card-back.webp') center/100% 100%; box-shadow:0 0 10px #ad7cff88,inset 0 0 0 1px #f4d6a6; }
 .prism-card-face { transform:translateZ(2px); background:#271b32; box-shadow:inset 0 0 0 1px var(--card-metal),0 4px 13px #190b2b66; transform-style:preserve-3d; }
+.prism-card-face,.prism-card-face * { backface-visibility:hidden; -webkit-backface-visibility:hidden; }
+.prism-card::before { backface-visibility:hidden; -webkit-backface-visibility:hidden; }
+.prism-card-face { background:#271b32 url('../assets/ui/card-back.webp') center/100% 100%; }
+.prism-card-face:not(.prism-image-ready) :is(.prism-holo,.prism-glare,.prism-clearcoat,.prism-card-subject) { visibility:hidden; }
 .prism-card-art { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:inherit; }
 .prism-holo,.prism-glare,.prism-clearcoat { position:absolute; inset:0; border-radius:inherit; pointer-events:none; }
 .prism-holo { z-index:2; inset:2% 2% 14%; opacity:.35; background:repeating-linear-gradient(112deg,#ff75a8 0%,#ffd166 5%,#9eff87 10%,#66e3ff 15%,#9c8aff 20%,#ff75a8 25%); background-size:400% 400%; background-position:var(--foil-x) var(--foil-y); mix-blend-mode:color-dodge; mask-image:linear-gradient(#000 76%,transparent); }

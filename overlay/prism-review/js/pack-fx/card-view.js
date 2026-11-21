@@ -36,7 +36,14 @@ export function createCardView(card) {
     const art = document.createElement('img');
     art.className = 'prism-card-art';
     art.alt = '';
+    art.onload = () => { face.classList.add('prism-image-ready'); };
+    art.onerror = () => { if (art.getAttribute('src') !== card.url) {
+        el.querySelector('.prism-card-subject')?.remove();
+        art.src = card.url;
+    } };
     art.src = card.background ?? card.url;
+    if (art.complete && art.naturalWidth > 0)
+        face.classList.add('prism-image-ready');
     face.append(art);
     for (const kind of ['holo', 'glare', 'clearcoat']) {
         const layer = document.createElement('i');
