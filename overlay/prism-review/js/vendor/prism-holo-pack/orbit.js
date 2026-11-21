@@ -6,7 +6,7 @@ import { clamp } from './physics.js';
 const smoothStep = (a, b, v) => { const t = clamp((v - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
 export function ejectionFrames(index, width, height, scale) {
     const targetX = (index - 2) * Math.min(width * .17, 80), duration = 1.4, orbitStart = .18;
-    const startY = -height * .12, ejectVy = -height * 1.8, ringAngle = -index * 2 * Math.PI / 5, endAngle = Math.PI / 2 - (index - 2) * .55;
+    const ejectVy = -height * 1.8, startY = height * .35 + ejectVy * orbitStart, ringAngle = -index * 2 * Math.PI / 5, endAngle = Math.PI / 2 - (index - 2) * .55;
     const radius = Math.min(width * .33, 430);
     const out = [];
     for (let frame = 0; frame <= 84; frame++) {

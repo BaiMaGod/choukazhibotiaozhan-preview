@@ -1,5 +1,5 @@
 import { createPackPresentation, nextRevealSlot } from "./pack-presentation.js";
-import { createCardView, decorateResult, attachCardTilt } from "./pack-fx/card-view.js";
+import { createCardView, decorateResult, attachCardTilt, prepareCardVisual, warmCardVisual } from "./pack-fx/card-view.js";
 import { cardVisual, pouchArt } from "./pack-fx/resources.js";
 import { RARITIES, effectiveRarity, visibleCards } from "../../js/pack.js";
 import { defaultSettings, readSettings, reachesPause } from "../../js/controls.js";
@@ -848,6 +848,12 @@ async function commitTeaching(action) {
 async function presentPack(previous, current, opened, rarity) {
     if (!current || (!rarity && !(opened && current.id !== previous?.id)))
         return;
+    if (opened)
+        for (const card of current.cards) {
+            const path = rules.art.cards[card.id];
+            if (path)
+                void warmCardVisual(cardVisual(path, card.rarity, card.id, card.name));
+        }
     const cards = visibleCards(current);
     const card = cards[cards.length - 1];
     const theme = isDemo ? rules.starter.id : teaching.business?.free?.themeId ?? teaching.business?.live?.task?.order.themeId ?? rules.starter.id;
@@ -920,7 +926,13 @@ function showCardDetails(card, themeName, profile) {
     if (path) {
         const wrapper = document.createElement("div");
         wrapper.className = "prism-detail";
-        wrapper.append(createCardView(cardVisual(path, card.rarity, card.id, card.name)));
+        const visual = cardVisual(path, card.rarity, card.id, card.name);
+        wrapper.append(createCardView({ ...visual, background: undefined, subject: undefined }));
+        if (visual.subject)
+            void prepareCardVisual(visual).then(ready => {
+                if (wrapper.isConnected && ready.subject)
+                    wrapper.replaceChildren(createCardView(ready));
+            });
         art.after(wrapper);
         art.hidden = true;
         clearDetailTilt = attachCardTilt(wrapper);

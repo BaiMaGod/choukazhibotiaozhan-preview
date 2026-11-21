@@ -1,3 +1,30 @@
+const imageReady = new Map();
+function loadImage(url) {
+    let pending = imageReady.get(url);
+    if (!pending) {
+        pending = new Promise(resolve => { const image = new Image(); image.onload = () => { if (image.decode)
+            void image.decode().then(() => resolve(true), () => resolve(false));
+        else
+            resolve(true); }; image.onerror = () => resolve(false); image.src = url; });
+        imageReady.set(url, pending);
+    }
+    return pending;
+}
+export function warmCardVisual(card) {
+    if (typeof Image === 'undefined')
+        return Promise.resolve(false);
+    return Promise.all([card.background, card.subject].filter((url) => !!url).map(loadImage)).then(results => results.every(Boolean));
+}
+/** Start with a complete flat card if its two registered layers cannot be decoded in time. */
+export async function prepareCardVisual(card) {
+    if (!card.background || !card.subject || typeof Image === 'undefined')
+        return card;
+    let timer;
+    const ready = await Promise.race([warmCardVisual(card), new Promise(resolve => { timer = setTimeout(() => resolve(false), 1200); })]);
+    if (timer !== undefined)
+        clearTimeout(timer);
+    return ready ? card : { ...card, background: undefined, subject: undefined };
+}
 export function createCardView(card) {
     const el = document.createElement('div');
     el.className = 'prism-card';

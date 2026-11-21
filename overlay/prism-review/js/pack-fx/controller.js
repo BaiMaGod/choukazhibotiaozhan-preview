@@ -2,7 +2,7 @@ import { ejectionFrames } from '../vendor/prism-holo-pack/orbit.js';
 import { SpringValue, stepSprings, clamp } from '../vendor/prism-holo-pack/physics.js';
 import { advanceTear, shouldCompleteOnRelease } from '../vendor/prism-holo-pack/tear-geometry.js';
 import { createPouchView } from './pouch-view.js';
-import { createCardView } from './card-view.js';
+import { createCardView, prepareCardVisual } from './card-view.js';
 import { createParticles } from './particles.js';
 import { createFoilAudio } from './audio.js';
 export const revealDuration = { N: 720, R: 800, SR: 1100, SSR: 1600, UR: 2100 };
@@ -57,7 +57,7 @@ export function createPrismPresentation(table, options = {}) {
         raf = 0;
         if (paused || document.hidden || destroyed)
             return;
-        const dt = Math.min(.05, Math.max(0, (now - last) / 1000));
+        const elapsed = Math.max(0, (now - last) / 1000), dt = Math.min(.05, elapsed);
         last = now;
         time += dt;
         stepSprings([progress, zAngle, xAngle], dt);
@@ -65,7 +65,7 @@ export function createPrismPresentation(table, options = {}) {
         previousProgress = progress.x;
         let fall = 0;
         if (phase === 'opening') {
-            openingAge += dt;
+            openingAge += elapsed;
             const t = Math.max(0, openingAge - .08);
             fall = t * height * .65 + t * t * height * 2;
         }
@@ -92,7 +92,7 @@ export function createPrismPresentation(table, options = {}) {
         if (phase !== 'hidden')
             start();
     }
-    function releaseDestination() { inFlight?.classList.remove('card-in-flight'); inFlight = undefined; }
+    function releaseDestination() { inFlight?.classList.remove('card-in-flight'); inFlight = undefined; delete table.dataset.fxReveal; }
     function cancelPlay() { epoch++; const ready = tearReady; tearReady = undefined; ready?.(); for (const a of animations)
         a.cancel(); animations = []; stage.querySelectorAll('.prism-card, .prism-ejection').forEach(el => el.remove()); releaseDestination(); const done = finish; finish = undefined; done?.(); }
     function clear() { cancelPlay(); drag = undefined; audio?.dispose(); particles?.clear(); pouch?.hide(); root.hidden = true; setPhase('hidden'); stop(); table.classList.remove('prism-presenting'); }
@@ -225,7 +225,20 @@ export function createPrismPresentation(table, options = {}) {
             pouch?.hide();
             inFlight = slot;
             slot?.classList.add('card-in-flight');
-            const visual = options.card?.(url, rarity) ?? { url, rarity };
+            table.dataset.fxReveal = 'back';
+            root.dataset.rarity = rarity;
+            let visual = options.card?.(url, rarity) ?? { url, rarity };
+            if (visual.subject && visual.background) {
+                const waiting = createCardView({ url: './assets/ui/card-back.webp', rarity: 'N' });
+                waiting.style.transform = 'translate(-50%,-50%) rotateY(180deg)';
+                stage.append(waiting);
+                visual = await prepareCardVisual(visual);
+                waiting.remove();
+                if (current !== epoch) {
+                    await promise;
+                    return;
+                }
+            }
             const card = createCardView(visual);
             stage.append(card);
             root.dataset.rarity = rarity;
@@ -248,7 +261,7 @@ export function createPrismPresentation(table, options = {}) {
             stage.append(cue);
             const cueAnimation = animate(cue, [{ opacity: 0 }, { opacity: 0 }], reduced() ? 0 : revealDuration[rarity] * .32);
             void cueAnimation.finished.then(() => { if (epoch !== current)
-                return; options.onSound?.('reveal', rarity); card.classList.add('prism-front-visible'); if (!reduced() && !soft && rarity !== 'N' && rarity !== 'R')
+                return; table.dataset.fxReveal = 'front'; options.onSound?.('reveal', rarity); card.classList.add('prism-front-visible'); if (!reduced() && !soft && rarity !== 'N' && rarity !== 'R')
                 particles?.burst(width * .5, height * .45, rarity === 'UR' ? '#baacff' : '#ffd77b'); }).catch(() => { }).finally(() => cue.remove());
         }
         if (paused || document.hidden)
