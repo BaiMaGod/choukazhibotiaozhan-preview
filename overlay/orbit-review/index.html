@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <base href="../">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#291420">
+  <title>抽卡直播挑战</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./room.css">
+  <link rel="stylesheet" href="./summary.css">
+  <link rel="stylesheet" href="./shop.css">
+  <script defer src="./libs/laya.core.js"></script>
+  <script defer src="./libs/laya.webgl_2D.js"></script>
+  <script src="./libs/gsap.min.js"></script>
+  <script type="module" src="./prism-review/js/main-orbit-v2.js?v=3f0d295d"></script>
+  <link rel="stylesheet" href="./talents.css">
+  <link rel="stylesheet" href="./prism-review/pack-fx-orbit-v2.css?v=3f0d295d">
+</head>
+<body>
+  <main class="shell">
+    <div class="summary-foreground" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <header class="masthead">
+      <div class="host-chip">
+        <img src="./assets/ui/avatar.webp" width="104" height="104" alt="">
+        <div><b>猫猫主播</b><small id="mode-label">首次教学</small><small id="edition"></small></div>
+      </div>
+      <dl id="profile" class="profile" hidden>
+        <div><dt>金币</dt><dd id="coins">—</dd></div>
+        <div><dt>粉丝</dt><dd id="fans">—</dd></div>
+        <div><dt>体力</dt><dd id="stamina">—</dd></div>
+        <div><dt>未拆库存</dt><dd id="inventory">—</dd></div>
+      </dl>
+      <button class="quiet home-mail" type="button" aria-label="邮件暂未开放" disabled><img src="./assets/ui/home-mail.webp" alt=""></button>
+      <button id="open-settings" class="quiet" type="button" aria-label="设置"><span aria-hidden="true">⚙</span><img class="home-settings-art" src="./assets/ui/home-settings.webp" alt=""></button>
+      <button id="sound" class="quiet sound" type="button" aria-pressed="true">音效开</button>
+    </header>
+    <nav class="home-shortcuts" aria-label="首页快捷入口">
+      <button id="open-check-in" class="quiet" type="button" disabled><img src="./assets/ui/home-check.webp" alt="">签到</button>
+      <button id="open-daily" class="quiet" type="button" disabled><img src="./assets/ui/home-tasks.webp" alt="">活动</button>
+      <button id="open-benefits" class="quiet" type="button" disabled><img src="./assets/ui/home-welfare.webp" alt="">福利</button>
+    </nav>
+    <img class="home-neon-sign" src="./assets/ui/home-neon-sign.webp" alt="抽卡直播间，挑战每张都是SSR" width="1200" height="468">
+    <div class="stage-hero">
+      <div class="stage-title">
+        <span class="stage-ornament" aria-hidden="true">✦ ♛ ✦</span>
+        <h1 id="scene-title">抽卡直播间</h1>
+        <p id="scene-subtitle">挑战每张都是 SSR</p>
+      </div>
+      <div class="home-display-grades" aria-hidden="true"><span>SSR</span><span>SSR</span><span>SSR</span><span>SSR</span><span>SSR</span></div>
+      <aside class="home-backdrop-detail" aria-hidden="true">
+        <img src="./assets/ui/home-studio-props.webp" alt="" width="505" height="864">
+        <span>待开播</span>
+        <span class="home-side-hearts">♡<br>♥</span>
+      </aside>
+      <div class="summary-confetti" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <img class="summary-neon" src="./assets/ui/summary-neon-v2.webp" alt="本场直播圆满结束，感谢大家的陪伴" width="1536" height="1024">
+      <div class="summary-thanks">
+        <span class="summary-heart" aria-hidden="true">谢谢大家<br>下次见 ♡</span>
+        <span class="summary-paper" aria-hidden="true">和大家一起<br>收集了好多<br>闪闪发光的回忆</span>
+        <dl class="summary-chat" aria-label="直播互动回顾">
+          <div><dt>本场留言</dt><dd id="summary-comments"></dd></div>
+          <div><dt>收到礼物</dt><dd id="summary-gifts"></dd></div>
+        </dl>
+      </div>
+      <div id="live-hud" class="live-hud" hidden>
+        <div class="live-indicator"><b>● LIVE</b><span id="live-audience"></span></div>
+        <div class="live-meters"><span aria-hidden="true">🔥</span><span id="live-heat"></span></div>
+        <div class="live-gift-ledger">
+          <b>本场礼物</b>
+          <dl>
+            <div><dt>已收</dt><dd id="live-gift-count"></dd></div>
+            <div><dt>估值</dt><dd id="live-gift-total"></dd></div>
+          </dl>
+        </div>
+      </div>
+      <div id="gift-banner" role="status" hidden>
+        <span id="gift-banner-art" class="gift-art" aria-hidden="true"></span>
+        <span class="gift-copy"><b id="gift-banner-source"></b><small id="gift-banner-name"></small></span>
+        <strong id="gift-banner-count"></strong>
+      </div>
+    </div>
+    <div class="live-panels">
+    <section id="lesson" class="lesson" aria-label="首次教学订单" hidden>
+      <p class="kicker">当前订单 <span id="lesson-progress"></span></p>
+      <div class="live-order-card">
+        <img id="lesson-pack-art" alt="" hidden>
+        <h2>出金挑战</h2>
+      </div>
+      <div class="lesson-goals">
+        <span id="lesson-main-goal"></span><span id="lesson-bonus-goal"></span>
+      </div>
+      <progress id="lesson-pack-progress" aria-label="教学订单已结算卡包"></progress>
+      <p id="lesson-terms" class="muted"></p>
+      <p id="live-stats" class="muted"></p>
+    </section>
+    <section id="business-live" class="lesson" aria-label="正式直播" hidden>
+      <p class="kicker">当前订单</p>
+      <h2 id="business-title"></h2>
+      <p id="business-stock"></p>
+      <p id="business-stats" class="muted"></p>
+      <details><summary>热度和来访明细</summary><p id="live-source-list"></p></details>
+      <p id="challenge-progress" hidden></p>
+      <p id="challenge-result" role="status" hidden></p>
+    </section>
+    <section id="live-interactions" class="lesson" aria-label="直播互动" hidden>
+      <div class="live-interaction-tabs" role="group" aria-label="直播间动态">
+        <button class="quiet" type="button" aria-pressed="true" aria-controls="live-activity">互动</button>
+        <button class="quiet" type="button" aria-pressed="false" aria-controls="live-moments">高能时刻</button>
+        <button class="quiet" type="button" aria-pressed="false" aria-controls="live-data">数据</button>
+      </div>
+      <div id="live-activity" class="live-activity">
+        <p><span aria-hidden="true">✦</span><span>观众评论 <b id="live-comments"></b></span></p>
+        <p><span aria-hidden="true">✧</span><span>观众来访 <b id="live-visits"></b></span></p>
+        <p><span aria-hidden="true">♥</span><span>粉丝变化 <b id="live-fan-change"></b></span></p>
+        <p><span aria-hidden="true">✦</span><span>本场礼物 <b id="live-gift-activity"></b></span></p>
+      </div>
+      <div id="live-moments" class="live-moments" hidden></div>
+      <dl id="live-data" class="interaction-stats" hidden>
+        <div><dt>在线</dt><dd id="live-online"></dd></div>
+        <div><dt>热度</dt><dd id="live-heat-data"></dd></div>
+        <div><dt>礼物毛额</dt><dd id="live-gross"></dd></div>
+      </dl>
+    </section>
+    </div>
+    <section id="pack-table" class="table" aria-label="拆卡桌">
+      <div id="table-art" class="art" aria-hidden="true"></div>
+      <img id="approved-art" class="approved-art" alt="" hidden>
+      <div class="table-top"><span id="pack-title">猫猫来信</span><span id="pack-state">准备中</span></div>
+      <div id="gesture" class="gesture" aria-hidden="true"></div>
+      <button id="skip" type="button" class="quiet skip" hidden>跳过本包动画</button>
+      <div class="caption" aria-live="polite">
+        <span id="rarity" class="rarity" hidden></span>
+        <strong id="card-name">妙脆角猫</strong>
+      </div>
+      <span id="live-rarity-sticker" aria-hidden="true" hidden></span>
+      <ol id="slots" class="slots" aria-label="本包已揭卡牌">
+        <li><span>01</span><strong>?</strong></li>
+        <li><span>02</span><strong>?</strong></li>
+        <li><span>03</span><strong>?</strong></li>
+        <li><span>04</span><strong>?</strong></li>
+        <li><span>05</span><strong>?</strong></li>
+      </ol>
+    </section>
+    <section id="receipt" class="lesson receipt" aria-label="结算账本" hidden>
+      <div class="receipt-ledger">
+        <header class="receipt-heading">
+          <h2 id="receipt-title"></h2>
+          <p class="kicker" id="receipt-kicker"></p>
+        </header>
+        <dl id="receipt-rows"></dl>
+        <details id="receipt-details" hidden><summary>查看本场明细</summary><dl id="receipt-detail-rows"></dl></details>
+      </div>
+      <section id="receipt-highlights" class="receipt-highlights" aria-label="本场收益" hidden></section>
+      <section id="receipt-cards" class="receipt-cards" aria-label="本场稀有卡与套组" hidden></section>
+      <p class="muted" id="receipt-note"></p>
+      <button id="continue-live" type="button" class="quiet" hidden>继续接单</button>
+    </section>
+    <section id="candidate-panel" class="lesson" aria-label="正式订单候选" hidden>
+      <h2>订单与挑战</h2>
+      <p id="candidate-message"></p>
+      <div id="candidate-list" class="shop-list"></div>
+    </section>
+    <section class="controls" aria-label="直播操作">
+      <div id="play-controls" class="shop-controls" hidden>
+        <button id="auto-pack" class="quiet" type="button" aria-pressed="false">自动拆卡</button>
+        <button id="pause-play" class="quiet" type="button">暂停</button>
+        <button id="show-odds" class="quiet" type="button">本包概率</button>
+      </div>
+      <p id="instruction" class="instruction" role="status">正在准备试拆桌…</p>
+      <p id="save-warning" role="status" hidden>当前存档读取失败，已恢复上一份完整存档。</p>
+      <p id="clock-warning" role="status" hidden>检测到设备时间变化，暂缓发放新日奖励和恢复体力。</p>
+      <section id="tools" class="panel" aria-label="升品道具" hidden>
+        <h2><span id="tool-title">本包道具</span> <small id="coupon-count"></small></h2>
+        <div id="upgrade-options" class="options"></div>
+      </section>
+      <section id="settlement" class="panel" aria-label="本包奖励" hidden>
+        <h2>本包奖励 <small id="reward-count"></small></h2>
+        <ul id="rewards" class="rewards"></ul>
+      </section>
+      <div id="error" class="error" role="alert" hidden>
+        <span id="error-message"></span><button id="retry" type="button" class="quiet">重试</button>
+      </div>
+    </section>
+    <nav id="live-tools-bar" aria-label="直播快捷操作" hidden>
+      <button id="live-orders" class="quiet" type="button"><span aria-hidden="true"></span>订单</button>
+      <button id="live-items" class="quiet" type="button"><span aria-hidden="true"></span>道具</button>
+      <button id="live-effects" class="quiet" type="button"><span aria-hidden="true"></span>增益</button>
+      <button id="live-odds" class="quiet" type="button"><span aria-hidden="true"></span>概率</button>
+      <button id="live-settings" class="quiet" type="button"><span aria-hidden="true"></span>设置</button>
+    </nav>
+    <div id="action-bar" class="action-bar">
+      <div id="live-pack-overview" hidden>
+        <img id="live-pack-art" alt="" hidden>
+        <div><b id="live-pack-name"></b><small id="live-pack-progress"></small></div>
+      </div>
+      <button id="primary" class="primary" type="button" disabled>准备中</button>
+      <div id="live-auto-anchor" hidden></div>
+      <button id="restart-live" class="quiet" type="button" hidden>再来一场</button>
+    </div>
+    <nav class="home-nav" aria-label="局外功能">
+      <button id="open-shop" class="room-tile tile-shop" type="button"><span>卡包商店</span></button>
+      <button id="open-talents" class="room-tile tile-talents" type="button"><span>天赋树</span></button>
+      <div id="archive" hidden><button id="open-archive" class="room-tile tile-archive" type="button"><span>图鉴</span></button></div>
+      <button id="open-collection" class="room-tile tile-collection" type="button"><span>我的收藏卡架</span></button>
+      <button id="open-free" class="room-tile tile-free" type="button"><span>局外自由拆卡</span></button>
+    </nav>
+    <section id="free-session" class="lesson" hidden>
+      <h2>自由拆卡</h2>
+      <p id="free-progress"></p>
+      <button id="exit-free" type="button" class="quiet">退出自由拆卡</button>
+    </section>
+    <dialog id="home-check-in" class="market home-dialog" aria-labelledby="check-in-title">
+      <div class="market-header">
+        <h2 id="check-in-title">签到</h2>
+        <form method="dialog"><button type="submit" class="quiet">关闭</button></form>
+      </div>
+      <button id="sign-in" type="button" class="quiet">签到</button>
+    </dialog>
+    <dialog id="home-daily" class="market home-dialog" aria-labelledby="daily-title">
+      <div class="market-header">
+        <h2 id="daily-title">每日拆包任务</h2>
+        <form method="dialog"><button type="submit" class="quiet">关闭</button></form>
+      </div>
+      <p id="daily-progress" role="status"></p>
+      <div id="daily-claims" class="shop-controls"></div>
+    </dialog>
+    <dialog id="home-benefits" class="market home-dialog" aria-labelledby="benefits-title">
+      <div class="market-header">
+        <h2 id="benefits-title">福利</h2>
+        <form method="dialog"><button type="submit" class="quiet">关闭</button></form>
+      </div>
+      <p id="benefits-empty" hidden>当前没有可领取的平台福利。</p>
+    </dialog>
+    <dialog id="play-pause" class="market" aria-labelledby="pause-title">
+      <h2 id="pause-title">已暂停</h2>
+      <p id="pause-message"></p>
+      <div class="shop-controls">
+        <form method="dialog"><button type="submit" class="quiet">继续</button></form>
+        <button id="pause-settings" type="button" class="quiet">设置</button>
+        <button id="pause-stop" type="button" class="quiet">结束直播</button>
+      </div>
+    </dialog>
+    <dialog id="play-settings" class="market" aria-labelledby="settings-title">
+      <div class="market-header"><h2 id="settings-title">游玩设置</h2>
+        <form method="dialog"><button type="submit" class="quiet">关闭设置</button></form>
+      </div>
+      <div id="settings-list" class="settings-list"></div>
+    </dialog>
+    <dialog id="odds-dialog" class="market" aria-labelledby="odds-title">
+      <div class="market-header"><h2 id="odds-title">掉率与增益</h2>
+        <form method="dialog"><button type="submit" class="quiet">关闭概率</button></form>
+      </div>
+      <div id="odds-list" class="shop-list"></div>
+    </dialog>
+    <dialog id="growth" class="market room-page" aria-labelledby="growth-title">
+      <div class="market-header"><h2 id="growth-title"></h2>
+        <form method="dialog"><button type="submit" class="quiet">关闭</button></form>
+      </div>
+      <div id="growth-list" class="shop-list"></div>
+    </dialog>
+    <dialog id="archive-dialog" class="market room-page" data-room="archive" aria-labelledby="archive-heading">
+      <div class="market-header"><h2 id="archive-heading">图鉴</h2>
+        <form method="dialog"><button type="submit" class="quiet">关闭图鉴</button></form>
+      </div>
+      <p class="muted archive-note"></p>
+      <p id="archive-empty" hidden>还没有见过卡牌，拆完一包后就能在这里查看。</p>
+      <div id="archive-filters"></div>
+      <ul id="archive-cards" class="collection-grid"></ul>
+      <section id="archive-preview" class="lesson" aria-label="图鉴卡牌详情"></section>
+    </dialog>
+    <dialog id="card-detail" class="market" aria-labelledby="card-detail-title">
+      <div class="market-header"><h2 id="card-detail-title"></h2>
+        <form method="dialog"><button type="submit" class="quiet">关闭卡牌详情</button></form>
+      </div>
+      <img id="card-detail-art" class="card-grade-frame" width="228" height="304" alt="" hidden>
+      <p id="card-detail-status"></p>
+      <p id="card-detail-legacy" class="muted" hidden></p>
+      <ol id="card-detail-copies" reversed></ol>
+      <button id="card-detail-more" class="quiet" type="button" hidden>查看更早的藏品</button>
+    </dialog>
+    <dialog id="market" class="market room-page" data-room="shop" aria-labelledby="market-title">
+      <div class="market-header">
+        <div class="shop-heading"><h2 id="market-title"><img src="./assets/ui/shop-neon-title.webp" alt="卡包商店"></h2><p id="market-balance"></p></div>
+        <img class="shop-mascot" src="./assets/ui/shop-mascot-sign.webp" alt="白猫举牌：收集美好的每一张卡片">
+        <form method="dialog"><button type="submit" class="quiet shop-close" aria-label="关闭商店">‹ 返回</button></form>
+      </div>
+      <div id="market-list" class="shop-list"></div>
+    </dialog>
+    <dialog id="start-confirm" class="room-page" data-room="prep" aria-labelledby="start-title">
+      <form method="dialog">
+        <div class="page-hero">
+          <h2 id="start-title">库存与开播准备</h2>
+          <p>✦ 本场将使用全部库存 ✦</p>
+        </div>
+        <section class="inventory-panel" aria-label="卡包库存一览">
+          <h3>卡包库存一览</h3>
+          <div id="prep-inventory" class="inventory-grid"></div>
+        </section>
+        <div class="prep-lower">
+          <div class="prep-decoration" aria-hidden="true"></div>
+          <div class="prep-summary lesson">
+            <h3>本场将使用全部库存</h3>
+            <div class="prep-totals">
+              <div><small>总卡包数量</small><b id="prep-count"></b></div>
+              <div><small>开播体力</small><b id="prep-stamina"></b></div>
+            </div>
+            <p id="start-stock"></p>
+            <p id="start-rules"></p>
+          </div>
+        </div>
+        <div class="dialog-actions">
+          <button class="quiet" value="cancel" autofocus>取消</button>
+          <button id="confirm-start" class="primary" value="start">确认开播</button>
+        </div>
+      </form>
+    </dialog>
+    <section id="platform-status" class="lesson" hidden>
+      <p id="platform-note" role="status"></p>
+      <button id="reward-ad" class="quiet" hidden type="button"></button>
+      <button id="reward-share" class="quiet" hidden type="button"></button>
+      <button id="platform-share" class="quiet" hidden type="button">分享游戏</button>
+      <p id="reward-note" role="status"></p>
+      <button id="platform-retry" class="quiet" hidden type="button">重试云档</button>
+      <button id="platform-takeover" class="quiet" hidden type="button">在此设备继续</button>
+    </section>
+    <footer id="footer-note" hidden></footer>
+  </main>
+</body>
+</html>
