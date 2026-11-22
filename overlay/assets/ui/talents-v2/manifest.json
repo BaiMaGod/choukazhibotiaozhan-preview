@@ -1,0 +1,1299 @@
+{
+  "original_sha256": "3ffb90d66fb76f19c1d53354ce1ec824cc19224b37c4292588361722ee7b9136",
+  "original_pixels": [
+    1254,
+    1254
+  ],
+  "assets": [
+    {
+      "path": "game/assets/ui/talents-v2/draw-header.webp",
+      "source": "approved-original",
+      "crop": [
+        0,
+        0,
+        418,
+        207
+      ],
+      "pixels": [
+        418,
+        207
+      ],
+      "sha256": "bd411f0b02792723408d350ba194e0d28ed38c2cfb87d85d3a7f6e1ff185e228"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/draw-title.webp",
+      "source": "approved-original",
+      "crop": [
+        166,
+        22,
+        285,
+        86
+      ],
+      "pixels": [
+        119,
+        64
+      ],
+      "sha256": "1e419f23b3f6512ebf5d28e123e41c89a58b84540a9b321ddb58244f9b8f86b9"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/draw-return.webp",
+      "source": "approved-original",
+      "crop": [
+        289,
+        8,
+        411,
+        54
+      ],
+      "pixels": [
+        122,
+        46
+      ],
+      "sha256": "af67c4a181319ea396f137a72c46d894e1d082b84dbf720cbb314d7853279f98"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/draw-back.webp",
+      "source": "approved-original",
+      "crop": [
+        9,
+        7,
+        52,
+        46
+      ],
+      "pixels": [
+        43,
+        39
+      ],
+      "sha256": "3489b48845dcad7bc5883a5357cae09727b0d639ee3f5b53ce461c788aefc67d"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/draw-node-0.webp",
+      "source": "approved-original",
+      "crop": [
+        166,
+        172,
+        254,
+        260
+      ],
+      "pixels": [
+        88,
+        88
+      ],
+      "sha256": "a927af457e4f5799a6f5ed59bf621a372fac581390985814c608b667b944b898"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/draw-node-1.webp",
+      "source": "approved-original",
+      "crop": [
+        72,
+        234,
+        132,
+        294
+      ],
+      "pixels": [
+        60,
+        60
+      ],
+      "sha256": "3aa0514e28f0f4aae4d29b335d021bd226f01c428151cb6486410e375264060d"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/draw-node-2.webp",
+      "source": "approved-original",
+      "crop": [
+        295,
+        234,
+        355,
+        294
+      ],
+      "pixels": [
+        60,
+        60
+      ],
+      "sha256": "f66f924a325cc1d0d36de1648b76dc4719b7f5c795b0e36e0f7a801f87243187"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/draw-node-3.webp",
+      "source": "approved-original",
+      "crop": [
+        41,
+        311,
+        99,
+        369
+      ],
+      "pixels": [
+        58,
+        58
+      ],
+      "sha256": "ba1983849c53f1f00339ff14bdd1ab38fb12beb8e97214076b1c6f160aab8b65"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/draw-node-4.webp",
+      "source": "approved-original",
+      "crop": [
+        126,
+        303,
+        180,
+        357
+      ],
+      "pixels": [
+        54,
+        54
+      ],
+      "sha256": "aa4d8e80848f8878f78084aaa2247ab2606e45a84e16e3087b91fe43c31ff738"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/draw-node-5.webp",
+      "source": "approved-original",
+      "crop": [
+        249,
+        303,
+        303,
+        357
+      ],
+      "pixels": [
+        54,
+        54
+      ],
+      "sha256": "1b8b3319667cb53eb558553d0c0230a9ee9822f0939b7a655639d31f8becb080"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/draw-node-6.webp",
+      "source": "approved-original",
+      "crop": [
+        327,
+        311,
+        385,
+        369
+      ],
+      "pixels": [
+        58,
+        58
+      ],
+      "sha256": "14d27f3abc79f62187dc38e11dc67a94147b56637d72f86d36f9d47552eb677a"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/draw-node-7.webp",
+      "source": "approved-original",
+      "crop": [
+        117,
+        378,
+        171,
+        432
+      ],
+      "pixels": [
+        54,
+        54
+      ],
+      "sha256": "0e631bf48fe394211de1e7355484d6a9c855de89ebc09fce2f70d6ef30588320"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/draw-node-8.webp",
+      "source": "approved-original",
+      "crop": [
+        254,
+        376,
+        312,
+        434
+      ],
+      "pixels": [
+        58,
+        58
+      ],
+      "sha256": "9b9d71c936a08c13bf6f155828e4c5bd36c7c2cd782741884bd36f82268bde80"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/order-header.webp",
+      "source": "approved-original",
+      "crop": [
+        418,
+        0,
+        836,
+        207
+      ],
+      "pixels": [
+        418,
+        207
+      ],
+      "sha256": "afc1ba476ba18c6836c6215933c84fcd7b86c6f710cbb75b2cb481139b2ddac2"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/order-title.webp",
+      "source": "approved-original",
+      "crop": [
+        584,
+        22,
+        703,
+        86
+      ],
+      "pixels": [
+        119,
+        64
+      ],
+      "sha256": "b365654e4590f1062d8c37b715d1e1fffbf8a98162fc5def645baebab8c81ad8"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/order-return.webp",
+      "source": "approved-original",
+      "crop": [
+        707,
+        8,
+        829,
+        54
+      ],
+      "pixels": [
+        122,
+        46
+      ],
+      "sha256": "85dd488100be9402ea19bf345da65970fa580978e3272490f93c4df39a8af268"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/order-back.webp",
+      "source": "approved-original",
+      "crop": [
+        427,
+        7,
+        470,
+        46
+      ],
+      "pixels": [
+        43,
+        39
+      ],
+      "sha256": "d467e26dfb16601accde315ded7a2f8698928e3eec72682c2c96d7c3f6eefb56"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/order-node-0.webp",
+      "source": "approved-original",
+      "crop": [
+        584,
+        172,
+        672,
+        260
+      ],
+      "pixels": [
+        88,
+        88
+      ],
+      "sha256": "019100cb6a1f075cdb58c513a1a69b5334ddb8fe636a854f33edb4050f85a941"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/order-node-1.webp",
+      "source": "approved-original",
+      "crop": [
+        490,
+        234,
+        550,
+        294
+      ],
+      "pixels": [
+        60,
+        60
+      ],
+      "sha256": "ec04745e814025d8db631d7d4f7098257f378b6ca98411ffe5bd415f0251c682"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/order-node-2.webp",
+      "source": "approved-original",
+      "crop": [
+        713,
+        234,
+        773,
+        294
+      ],
+      "pixels": [
+        60,
+        60
+      ],
+      "sha256": "65d1b95db03927869df806f40484fe8b47ec8bd693e02e5aa96902c44f76b3c1"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/order-node-3.webp",
+      "source": "approved-original",
+      "crop": [
+        459,
+        311,
+        517,
+        369
+      ],
+      "pixels": [
+        58,
+        58
+      ],
+      "sha256": "55c1938fb4972cfac321bcba135401c995e1ac8418360f1886c4493b1c13382c"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/order-node-4.webp",
+      "source": "approved-original",
+      "crop": [
+        544,
+        303,
+        598,
+        357
+      ],
+      "pixels": [
+        54,
+        54
+      ],
+      "sha256": "422bb5ffe6c23539013cbc4ebb21041561a71d5ed6d0ab98447c96db73f5d951"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/order-node-5.webp",
+      "source": "approved-original",
+      "crop": [
+        667,
+        303,
+        721,
+        357
+      ],
+      "pixels": [
+        54,
+        54
+      ],
+      "sha256": "88e3797a2f39f187f0c7b73d659416f47666eebc516fa18d7e913e209e363368"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/order-node-6.webp",
+      "source": "approved-original",
+      "crop": [
+        745,
+        311,
+        803,
+        369
+      ],
+      "pixels": [
+        58,
+        58
+      ],
+      "sha256": "d813e1a2849ba291a49b754a55b2d2590e1211f2fcbbd1124be55ab64d5e6e4c"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/order-node-7.webp",
+      "source": "approved-original",
+      "crop": [
+        535,
+        378,
+        589,
+        432
+      ],
+      "pixels": [
+        54,
+        54
+      ],
+      "sha256": "7eb86dcaa07bae6935e26a13050d89d1896c6292330c048ac0bc3d150332e438"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/order-node-8.webp",
+      "source": "approved-original",
+      "crop": [
+        672,
+        376,
+        730,
+        434
+      ],
+      "pixels": [
+        58,
+        58
+      ],
+      "sha256": "dfff2580c8ab41bd0e2216c83079725d45c7a14588a4c11889f9767413706e74"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/gift-header.webp",
+      "source": "approved-original",
+      "crop": [
+        836,
+        0,
+        1254,
+        207
+      ],
+      "pixels": [
+        418,
+        207
+      ],
+      "sha256": "3674163909a2fa3f3905ce696cf73b4d472c09e6fd03937dfd438289467e610c"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/gift-title.webp",
+      "source": "approved-original",
+      "crop": [
+        1002,
+        22,
+        1121,
+        86
+      ],
+      "pixels": [
+        119,
+        64
+      ],
+      "sha256": "9dadf792b871ceb7b16fb9b75066de8f814d4634345de14f57115128d70f47d6"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/gift-return.webp",
+      "source": "approved-original",
+      "crop": [
+        1125,
+        8,
+        1247,
+        54
+      ],
+      "pixels": [
+        122,
+        46
+      ],
+      "sha256": "92a7465acd177678cd1b96084202fbd38363603cb660d3225fd672414b805b40"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/gift-back.webp",
+      "source": "approved-original",
+      "crop": [
+        845,
+        7,
+        888,
+        46
+      ],
+      "pixels": [
+        43,
+        39
+      ],
+      "sha256": "b61672ccd8bb9c54d7432239cf36ca818300391a83fb2a8e7eff5ae2fd8c6051"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/gift-node-0.webp",
+      "source": "approved-original",
+      "crop": [
+        1002,
+        172,
+        1090,
+        260
+      ],
+      "pixels": [
+        88,
+        88
+      ],
+      "sha256": "010275c151fc8c37a90609ab141ee48a23960b81e90291480d7145446bbb3ae6"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/gift-node-1.webp",
+      "source": "approved-original",
+      "crop": [
+        908,
+        234,
+        968,
+        294
+      ],
+      "pixels": [
+        60,
+        60
+      ],
+      "sha256": "f0e3c234ca94aa554d6c76bde84e6491dddec241c2ad81071fe9f55558987552"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/gift-node-2.webp",
+      "source": "approved-original",
+      "crop": [
+        1131,
+        234,
+        1191,
+        294
+      ],
+      "pixels": [
+        60,
+        60
+      ],
+      "sha256": "f3854c9937182cae88894493e4422d12fc5445c36afac9a7055b0bb0321224c8"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/gift-node-3.webp",
+      "source": "approved-original",
+      "crop": [
+        877,
+        311,
+        935,
+        369
+      ],
+      "pixels": [
+        58,
+        58
+      ],
+      "sha256": "2084b32683c40058a02c017fce900c84bcb8028c2a4ef2cfb193d0d65987c773"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/gift-node-4.webp",
+      "source": "approved-original",
+      "crop": [
+        962,
+        303,
+        1016,
+        357
+      ],
+      "pixels": [
+        54,
+        54
+      ],
+      "sha256": "95c6c7c6bac18d22262798eef2402882f69d205dc684917bd40b1cfce8c0caeb"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/gift-node-5.webp",
+      "source": "approved-original",
+      "crop": [
+        1085,
+        303,
+        1139,
+        357
+      ],
+      "pixels": [
+        54,
+        54
+      ],
+      "sha256": "bff0c72529fae9d80661bac94cb6c5bf4de2ddfac8bcb9436f2f4481a7d02a89"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/gift-node-6.webp",
+      "source": "approved-original",
+      "crop": [
+        1163,
+        311,
+        1221,
+        369
+      ],
+      "pixels": [
+        58,
+        58
+      ],
+      "sha256": "131ed95207ec80f28575df18089da1edf325f87e29e7aadf5fc52affa9622882"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/gift-node-7.webp",
+      "source": "approved-original",
+      "crop": [
+        953,
+        378,
+        1007,
+        432
+      ],
+      "pixels": [
+        54,
+        54
+      ],
+      "sha256": "7f31330105d7f1102f9b3ccd348959245ad18bb4507ae54b8545880a4c4dc482"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/gift-node-8.webp",
+      "source": "approved-original",
+      "crop": [
+        1090,
+        376,
+        1148,
+        434
+      ],
+      "pixels": [
+        58,
+        58
+      ],
+      "sha256": "89929f91a221d768cfd679c8e16e33f09b2e97afdca6d67e8c7a71a3f176eb47"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/challenge-header.webp",
+      "source": "approved-original",
+      "crop": [
+        0,
+        635,
+        418,
+        834
+      ],
+      "pixels": [
+        418,
+        199
+      ],
+      "sha256": "36ee5d2da4023d070e34790644f70cd08242607d41cb5d133909af7b69171722"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/challenge-title.webp",
+      "source": "approved-original",
+      "crop": [
+        166,
+        649,
+        285,
+        713
+      ],
+      "pixels": [
+        119,
+        64
+      ],
+      "sha256": "96ec4d20494d88b9c5b7bb919d689d05be30d210fbf50866bdacb8e0150c092b"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/challenge-return.webp",
+      "source": "approved-original",
+      "crop": [
+        289,
+        635,
+        411,
+        681
+      ],
+      "pixels": [
+        122,
+        46
+      ],
+      "sha256": "6c3ee91557ca7369fd2656af5a67715ad13e4d5bf00361cfd3b5569b0e4a5484"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/challenge-back.webp",
+      "source": "approved-original",
+      "crop": [
+        9,
+        634,
+        52,
+        673
+      ],
+      "pixels": [
+        43,
+        39
+      ],
+      "sha256": "ae13f4e912bd17b8a5df6abcdde926d8eca53e9c8f85bc6c0cb867653dabf1b3"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/challenge-node-0.webp",
+      "source": "approved-original",
+      "crop": [
+        166,
+        799,
+        254,
+        887
+      ],
+      "pixels": [
+        88,
+        88
+      ],
+      "sha256": "a26ba8998f6a5db9ac867cb596549dcf73a9ec2a2599e8e684cd9d367c40ba18"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/challenge-node-1.webp",
+      "source": "approved-original",
+      "crop": [
+        72,
+        861,
+        132,
+        921
+      ],
+      "pixels": [
+        60,
+        60
+      ],
+      "sha256": "451fc850eeb4ad9744e0bacd40661ea08e05eaf7be18580131e49b5e9d9db279"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/challenge-node-2.webp",
+      "source": "approved-original",
+      "crop": [
+        295,
+        861,
+        355,
+        921
+      ],
+      "pixels": [
+        60,
+        60
+      ],
+      "sha256": "5205fafb4d30e73fe74d3961cacdd9711243cb5f974021c299d6521c11b26dbe"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/challenge-node-3.webp",
+      "source": "approved-original",
+      "crop": [
+        41,
+        938,
+        99,
+        996
+      ],
+      "pixels": [
+        58,
+        58
+      ],
+      "sha256": "0308cd81c8c1b8f087db1e8f7ff7384ffed8a1e88b32ae1a74fcf2a4f0181206"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/challenge-node-4.webp",
+      "source": "approved-original",
+      "crop": [
+        126,
+        930,
+        180,
+        984
+      ],
+      "pixels": [
+        54,
+        54
+      ],
+      "sha256": "c72b61f91a43c8b06db4830882e752f5387a2aacf7820947e55cb112478fbc54"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/challenge-node-5.webp",
+      "source": "approved-original",
+      "crop": [
+        249,
+        930,
+        303,
+        984
+      ],
+      "pixels": [
+        54,
+        54
+      ],
+      "sha256": "4735da7ceb4eaa5ec1686191111454180a553ce20e969022a11fc1b49985014f"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/challenge-node-6.webp",
+      "source": "approved-original",
+      "crop": [
+        327,
+        938,
+        385,
+        996
+      ],
+      "pixels": [
+        58,
+        58
+      ],
+      "sha256": "eff44c8e5dbe5145472bce2193da167e2daa22fc6b45d1f3dadd721381eba2dc"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/challenge-node-7.webp",
+      "source": "approved-original",
+      "crop": [
+        117,
+        1005,
+        171,
+        1059
+      ],
+      "pixels": [
+        54,
+        54
+      ],
+      "sha256": "4e4b137b3236f7a899f6810acae6dea6d5d8fb5b3543ef02fc4e4714a37ad79e"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/challenge-node-8.webp",
+      "source": "approved-original",
+      "crop": [
+        254,
+        1003,
+        312,
+        1061
+      ],
+      "pixels": [
+        58,
+        58
+      ],
+      "sha256": "f7d3235985c4f5d98893bdf9b406aec3626e9c93093fea176c7a890e72681de1"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/tool-header.webp",
+      "source": "approved-original",
+      "crop": [
+        418,
+        635,
+        836,
+        834
+      ],
+      "pixels": [
+        418,
+        199
+      ],
+      "sha256": "9d54cdca1a1c610fdd07bd5ca25287b38e0bd756854d255e88a06a73d05132b0"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/tool-title.webp",
+      "source": "approved-original",
+      "crop": [
+        584,
+        649,
+        703,
+        713
+      ],
+      "pixels": [
+        119,
+        64
+      ],
+      "sha256": "370fba33d50d152288dfd384cc0a91ae7a8427850224e80143f1a765291c493c"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/tool-return.webp",
+      "source": "approved-original",
+      "crop": [
+        707,
+        635,
+        829,
+        681
+      ],
+      "pixels": [
+        122,
+        46
+      ],
+      "sha256": "f4dece2d612a4efce5b544a9d804c84eda991eea8130bab36686ba26c686ac7e"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/tool-back.webp",
+      "source": "approved-original",
+      "crop": [
+        427,
+        634,
+        470,
+        673
+      ],
+      "pixels": [
+        43,
+        39
+      ],
+      "sha256": "6df7a5a53e90c185e2e5912e780ab47fa179b58a0022e2809b3a7b39b77668e4"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/tool-node-0.webp",
+      "source": "approved-original",
+      "crop": [
+        584,
+        799,
+        672,
+        887
+      ],
+      "pixels": [
+        88,
+        88
+      ],
+      "sha256": "6665407ba55a6694cae17ad4b2ed4a826169571f86153ef16d76086c2b3db7ab"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/tool-node-1.webp",
+      "source": "approved-original",
+      "crop": [
+        490,
+        861,
+        550,
+        921
+      ],
+      "pixels": [
+        60,
+        60
+      ],
+      "sha256": "7f5672714edbc953ae57c92c630d23820a7212aa1cec209e0ce32c7a7234fd5f"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/tool-node-2.webp",
+      "source": "approved-original",
+      "crop": [
+        713,
+        861,
+        773,
+        921
+      ],
+      "pixels": [
+        60,
+        60
+      ],
+      "sha256": "d9d1bd28f6bf2bb7d480d2f4130ab62f0ee98c9f33abd4a5426e02b163518c21"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/tool-node-3.webp",
+      "source": "approved-original",
+      "crop": [
+        459,
+        938,
+        517,
+        996
+      ],
+      "pixels": [
+        58,
+        58
+      ],
+      "sha256": "6e61c4d9b2ff1b1173b47c8472f583c264a9b894fcb9832f644d72da01b6550d"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/tool-node-4.webp",
+      "source": "approved-original",
+      "crop": [
+        544,
+        930,
+        598,
+        984
+      ],
+      "pixels": [
+        54,
+        54
+      ],
+      "sha256": "425222844a691fc3463d410ca5b7f1dc3ac3cf4c5496005ca367ac8c3f1b8b48"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/tool-node-5.webp",
+      "source": "approved-original",
+      "crop": [
+        667,
+        930,
+        721,
+        984
+      ],
+      "pixels": [
+        54,
+        54
+      ],
+      "sha256": "b3c40cdc69861e5e74ae3ed3f2006f16dfdac033173d1c165bbd4f624bd185e6"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/tool-node-6.webp",
+      "source": "approved-original",
+      "crop": [
+        745,
+        938,
+        803,
+        996
+      ],
+      "pixels": [
+        58,
+        58
+      ],
+      "sha256": "75beae0574baa7df362ffa29e00fbc2d840453daf2a5b01eed76ba99f96d73f5"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/tool-node-7.webp",
+      "source": "approved-original",
+      "crop": [
+        535,
+        1005,
+        589,
+        1059
+      ],
+      "pixels": [
+        54,
+        54
+      ],
+      "sha256": "df812606ddc55ea8c3424ed667d96779acc372173c47ff3eba625f9a88f3c5ff"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/tool-node-8.webp",
+      "source": "approved-original",
+      "crop": [
+        672,
+        1003,
+        730,
+        1061
+      ],
+      "pixels": [
+        58,
+        58
+      ],
+      "sha256": "50e763eb12936bd9f946d2caae3cc52f56579f365b8d69048e07ddcbf0a75a07"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/heat-header.webp",
+      "source": "approved-original",
+      "crop": [
+        836,
+        635,
+        1254,
+        834
+      ],
+      "pixels": [
+        418,
+        199
+      ],
+      "sha256": "9d29e152f8cf1e4201e0b7b25dec40303f74eb30c304f35b0da331646a4017e1"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/heat-title.webp",
+      "source": "approved-original",
+      "crop": [
+        1002,
+        649,
+        1121,
+        713
+      ],
+      "pixels": [
+        119,
+        64
+      ],
+      "sha256": "6973cc44dde1f118565c2e724f30544639303c8cbe9f5fc084c1119f72aaf1d4"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/heat-return.webp",
+      "source": "approved-original",
+      "crop": [
+        1125,
+        635,
+        1247,
+        681
+      ],
+      "pixels": [
+        122,
+        46
+      ],
+      "sha256": "d2516d149e186770ff84ca50f8a63318e73ad1fc6da8502a5a39016ef81f0a6c"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/heat-back.webp",
+      "source": "approved-original",
+      "crop": [
+        845,
+        634,
+        888,
+        673
+      ],
+      "pixels": [
+        43,
+        39
+      ],
+      "sha256": "d9db76b9a952d149ecd431fe0985c3af8d80b2e4f007f5a96220e8a5c58193f0"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/heat-node-0.webp",
+      "source": "approved-original",
+      "crop": [
+        1002,
+        799,
+        1090,
+        887
+      ],
+      "pixels": [
+        88,
+        88
+      ],
+      "sha256": "4a857500ded571410b4cd1095cbc624f9dd4a8a005a2f8284f3665519c286db0"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/heat-node-1.webp",
+      "source": "approved-original",
+      "crop": [
+        908,
+        861,
+        968,
+        921
+      ],
+      "pixels": [
+        60,
+        60
+      ],
+      "sha256": "444fe2f87399a2571250717b7256701dbb8af09eb96e2af6c472794c3b59cd1b"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/heat-node-2.webp",
+      "source": "approved-original",
+      "crop": [
+        1131,
+        861,
+        1191,
+        921
+      ],
+      "pixels": [
+        60,
+        60
+      ],
+      "sha256": "7f24090be8b2b4a519dccf8617fe9ae1f8f408bbcc2b5e8a7d91bd603c167fc9"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/heat-node-3.webp",
+      "source": "approved-original",
+      "crop": [
+        877,
+        938,
+        935,
+        996
+      ],
+      "pixels": [
+        58,
+        58
+      ],
+      "sha256": "d2907b0486e43aa34e947c8e5a2aebcca476af492c16e144018b62256537333f"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/heat-node-4.webp",
+      "source": "approved-original",
+      "crop": [
+        962,
+        930,
+        1016,
+        984
+      ],
+      "pixels": [
+        54,
+        54
+      ],
+      "sha256": "6c5619ea12136d615f0c87a220642edf53df75a0bf7929da385bd4c50c253eba"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/heat-node-5.webp",
+      "source": "approved-original",
+      "crop": [
+        1085,
+        930,
+        1139,
+        984
+      ],
+      "pixels": [
+        54,
+        54
+      ],
+      "sha256": "ce4404b13c602759ec310770a2668e665ce9b5c5aad2d59c33264b308edbd5ed"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/heat-node-6.webp",
+      "source": "approved-original",
+      "crop": [
+        1163,
+        938,
+        1221,
+        996
+      ],
+      "pixels": [
+        58,
+        58
+      ],
+      "sha256": "e09adb6d02c51802eac07126096520042ae9bd6abcae28843e93825dee89a431"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/heat-node-7.webp",
+      "source": "approved-original",
+      "crop": [
+        953,
+        1005,
+        1007,
+        1059
+      ],
+      "pixels": [
+        54,
+        54
+      ],
+      "sha256": "111684e0a9d674ca822a6b3e0602391a49c34f3bbb121aef21b29c829759fda0"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/heat-node-8.webp",
+      "source": "approved-original",
+      "crop": [
+        1090,
+        1003,
+        1148,
+        1061
+      ],
+      "pixels": [
+        58,
+        58
+      ],
+      "sha256": "12bc06b3d61252b1537b80d7f1d20e5a267ede5f4b7f1f6de94cce28bcd6cc0e"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/draw-tab.webp",
+      "source": "approved-original",
+      "crop": [
+        14,
+        560,
+        73,
+        624
+      ],
+      "pixels": [
+        59,
+        64
+      ],
+      "sha256": "ef66589b66ad0e9420243a7c540a58058a019e5faa40f47b6fd23b9a3443d405"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/order-tab.webp",
+      "source": "approved-original",
+      "crop": [
+        80,
+        560,
+        139,
+        624
+      ],
+      "pixels": [
+        59,
+        64
+      ],
+      "sha256": "6908491ebd11ef448f2d6a164b074d106d71c3d0c58b28151cb47aae10ce993c"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/gift-tab.webp",
+      "source": "approved-original",
+      "crop": [
+        146,
+        560,
+        205,
+        624
+      ],
+      "pixels": [
+        59,
+        64
+      ],
+      "sha256": "dd152c12a84ad29818cd2f6f2cd5ebafc44f3c64f7153f0eaf5eb8a282f356ec"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/challenge-tab.webp",
+      "source": "approved-original",
+      "crop": [
+        213,
+        560,
+        272,
+        624
+      ],
+      "pixels": [
+        59,
+        64
+      ],
+      "sha256": "38b0e8732ca7df49fb1a8a50a78f72d256b7c078ff434f7de5bb9655ec4f022e"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/tool-tab.webp",
+      "source": "approved-original",
+      "crop": [
+        279,
+        560,
+        338,
+        624
+      ],
+      "pixels": [
+        59,
+        64
+      ],
+      "sha256": "cff67fe4dda90c6289a28806130afe013c3c02e616af8836e209366990ec683b"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/heat-tab.webp",
+      "source": "approved-original",
+      "crop": [
+        345,
+        560,
+        404,
+        624
+      ],
+      "pixels": [
+        59,
+        64
+      ],
+      "sha256": "b281ef3aaf86749ba6949fcc5888610b3f08a93ea16faf792fae177344555893"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/tree.webp",
+      "source": "imagegen:exec-f8cd5464-9752-4866-a454-278fd3f51289.png",
+      "crop": null,
+      "pixels": [
+        1610,
+        977
+      ],
+      "sha256": "cb675a20015becedd4845f958c7cf4b2e5fb3884d98a90e636019ed47e7288ed"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/detail.webp",
+      "source": "imagegen:exec-6d891255-f539-419e-96a7-dbde06bfdaa5.png",
+      "crop": null,
+      "pixels": [
+        2070,
+        760
+      ],
+      "sha256": "b66be911ae85d5b471b56d0c078aee6f359a1f0c5e4461d2cc41fc7242c750e4"
+    },
+    {
+      "path": "game/assets/ui/talents-v2/upgrade.webp",
+      "source": "imagegen:exec-6d891255-f539-419e-96a7-dbde06bfdaa5.png",
+      "crop": null,
+      "pixels": [
+        497,
+        209
+      ],
+      "sha256": "6f991b2c160655f1e6508c75ae30672df96ee51f11bd09ac88b79b4287e8f7b2"
+    }
+  ]
+}

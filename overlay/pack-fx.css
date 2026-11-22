@@ -1,0 +1,116 @@
+/* PRISM material rendering, adapted from SimpleMkt MIT 5a94862. */
+.prism-fx { --foil-x:50%; --foil-y:40%; --prism-light:#ffd77b; position:absolute; inset:0; z-index:5; perspective:1100px; pointer-events:none; overflow:visible; contain:layout style; }
+.prism-fx[hidden], .prism-fx [hidden] { display:none!important; }
+.prism-stage { position:absolute; inset:0; perspective:1100px; transform-style:preserve-3d; }
+.prism-particles { position:absolute; inset:0; width:100%; height:100%; z-index:8; pointer-events:none; }
+.prism-pouch { position:absolute; left:50%; top:48%; height:83%; aspect-ratio:2/3; transform-style:preserve-3d; transform:translate(-50%,-50%); filter:drop-shadow(0 9px 9px #19091677); }
+.prism-pouch::before,.prism-pouch::after { content:''; position:absolute; inset:10% auto 10% 0; width:6px; background:linear-gradient(90deg,#806354,#fff0b6 35%,#9f754f 70%,#392934); transform:rotateY(-65deg); transform-origin:left; }
+.prism-pouch::after { left:auto; right:0; transform:rotateY(65deg); transform-origin:right; }
+.prism-pouch-front,.prism-pouch-back,.prism-pouch-lip { position:absolute; inset:0; border-radius:2%; background-image:var(--pouch-art); background-position:center; background-size:100% 100%; backface-visibility:hidden; }
+.prism-pouch-front { transform:translateZ(1px); }
+.prism-pouch-front::before { content:''; position:absolute; inset:0; background:linear-gradient(108deg,transparent 18%,#fff9dd44 26%,transparent 31%,transparent 67%,#fff9dd66 71%,transparent 76%); background-position:var(--foil-x) 0; background-size:180% 100%; mix-blend-mode:screen; border-radius:inherit; }
+.prism-pouch-front::after { content:''; position:absolute; inset:0; border-radius:inherit; box-shadow:inset 2px 0 2px #fff8d477,inset -3px 0 5px #26142966; background:linear-gradient(90deg,#fff2c233,transparent 8% 91%,#2b142b55); }
+.prism-pouch-back { background-image:linear-gradient(110deg,#f7ecc9,#6b6069 12%,#fbf1d8 24%,#958b93 47%,#e6dccd 65%,#6b6274); transform:translateZ(-3px); }
+.prism-pouch-lip { background:linear-gradient(90deg,#fffef3,#ffd66b 25%,#ffffff 45%,#9bdcfa 75%,#fdf5df); transform:translateZ(2px); }
+.prism-strip { position:absolute; inset:0; transform-style:preserve-3d; z-index:5; }
+.prism-strip-segment { position:absolute; inset:0; transform-style:preserve-3d; }
+.prism-strip-face,.prism-strip-lining { position:absolute; inset:0; backface-visibility:hidden; background-image:var(--pouch-art); background-size:100% 100%; }
+.prism-strip-face { transform:translateZ(.5px); }
+.prism-strip-face::after,.prism-strip-lining::after { content:''; position:absolute; inset:0; background:#000; opacity:var(--curl-shade,0); }
+.prism-strip-lining { transform:translateZ(-.5px) rotateY(180deg); background:repeating-linear-gradient(90deg,#fff5d6 0%,#a29b9d 3%,#fcf8ec 6%,#858296 9%,#faf5e6 12%); }
+.prism-ground { position:absolute; top:94%; left:50%; width:50%; height:8%; border-radius:50%; background:radial-gradient(closest-side,#1b0c1bd0,transparent); transform:translate(-50%,-50%); }
+.prism-strip-flying { animation:prism-strip-flight .8s cubic-bezier(.12,.3,.5,1) both; }
+@keyframes prism-strip-flight { to { transform:translate3d(calc(var(--strip-dir,1) * 180px),-160px,30px) rotateZ(calc(var(--strip-dir,1) * 75deg)) rotateX(100deg); opacity:0; } }
+.prism-card { --card-metal:#d2ab6b; --prism-light:#fff2ce; position:absolute; left:50%; top:50%; height:76%; width:auto; aspect-ratio:3/4; transform-style:preserve-3d; transform:translate(-50%,-50%); border-radius:5%; will-change:transform; }
+.prism-card::before { content:''; position:absolute; inset:0; border-radius:inherit; background:var(--card-metal); transform:translateZ(-1px); box-shadow:1px 1px 0 #5d432e,2px 2px 0 #e4d7ac,3px 3px 0 #5d432e; }
+.prism-card-back,.prism-card-face { position:absolute; inset:0; border-radius:inherit; backface-visibility:hidden; -webkit-backface-visibility:hidden; }
+.prism-card-back { transform:rotateY(180deg) translateZ(1px); background:url('./assets/fx/card-back.webp') center/100% 100%; box-shadow:0 0 10px #ad7cff88,inset 0 0 0 1px #f4d6a6; }
+.prism-card-face { transform:translateZ(2px); background:#271b32; box-shadow:inset 0 0 0 1px var(--card-metal),0 4px 13px #190b2b66; transform-style:preserve-3d; }
+.prism-card-face,.prism-card-face * { backface-visibility:hidden; -webkit-backface-visibility:hidden; }
+.prism-card::before { backface-visibility:hidden; -webkit-backface-visibility:hidden; }
+.prism-card-face { background:#271b32 url('./assets/fx/card-back.webp') center/100% 100%; }
+.prism-card-face:not(.prism-image-ready) :is(.prism-holo,.prism-glare,.prism-clearcoat,.prism-card-subject) { visibility:hidden; }
+.prism-card-art { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:inherit; }
+.prism-holo,.prism-glare,.prism-clearcoat { position:absolute; inset:0; border-radius:inherit; pointer-events:none; }
+.prism-holo { z-index:2; inset:2% 2% 14%; opacity:.35; background:repeating-linear-gradient(112deg,#ff75a8 0%,#ffd166 5%,#9eff87 10%,#66e3ff 15%,#9c8aff 20%,#ff75a8 25%); background-size:400% 400%; background-position:var(--foil-x) var(--foil-y); mix-blend-mode:color-dodge; mask-image:linear-gradient(#000 76%,transparent); }
+.prism-holo::after { content:''; position:absolute; inset:0; background-image:radial-gradient(#ffffff 10%,transparent 20%); background-size:5px 5px; mix-blend-mode:overlay; opacity:.25; }
+.prism-glare { z-index:3; opacity:.45; background:radial-gradient(farthest-corner circle at var(--foil-x) var(--foil-y),#fff8 0%,#fff1 38%,#0003 85%); mix-blend-mode:overlay; }
+.prism-clearcoat { z-index:4; box-shadow:inset 0 0 0 1px #fff6,inset 0 2px 2px #ffff,inset 0 -2px 4px #0004; background:linear-gradient(112deg,transparent 39%,#fff5 40%,#fff1 47%,transparent 48%); background-size:240% 100%; background-position:var(--foil-x) 0; }
+.prism-card[data-rarity='N'] .prism-holo { opacity:.1; }
+.prism-card[data-rarity='R'] .prism-holo { opacity:.2; }
+.prism-card[data-rarity='SR'] { --card-metal:#d6adff; --prism-light:#ca9dff; }
+.prism-card[data-rarity='SSR'] { --card-metal:#ffe092; --prism-light:#ffd77b; }
+.prism-card[data-rarity='UR'] { --card-metal:#d3c6ff; --prism-light:#c4b4ff; }
+.prism-card[data-rarity='SSR'] .prism-holo,.prism-card[data-rarity='UR'] .prism-holo { opacity:.57; background-image:repeating-conic-gradient(from 12deg at 50% 37%,#fff6 0deg 2deg,transparent 3deg 12deg),repeating-linear-gradient(112deg,#ff75a8 0%,#ffd166 5%,#9eff87 10%,#66e3ff 15%,#9c8aff 20%,#ff75a8 25%); }
+.prism-card[data-rarity='UR'] .prism-holo { background-size:210% 210%,400% 400%; }
+.prism-card-caption { position:absolute; z-index:6; left:3%; right:3%; bottom:2%; padding:3% 4%; display:flex; justify-content:space-between; gap:4px; border-radius:5px; background:#24162fea; border:1px solid var(--card-metal); color:#fff2d4; font-size:clamp(10px,1.6vw,19px); line-height:1.2; transform:translateZ(3px); }
+.prism-card-caption b { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.prism-card-subject { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; pointer-events:none; transform:translateZ(20px); filter:drop-shadow(0 4px 5px #17082255); opacity:0; transition:opacity .12s,transform .5s; }
+.prism-front-visible .prism-card-subject,.prism-detail .prism-card-subject { opacity:1; transform:translateZ(27px); }
+.prism-result { position:relative; }
+.prism-result-foil { position:absolute; inset:4% 3% 20%; pointer-events:none; border-radius:5%; background:linear-gradient(113deg,transparent 15%,#fff3 25%,transparent 33%,transparent 68%,#c4aaff33 77%,transparent 85%); opacity:.25; }
+.prism-result[data-rarity='SSR'] .prism-result-foil,.prism-result[data-rarity='UR'] .prism-result-foil { opacity:.65; }
+.prism-presenting #approved-art,.prism-presenting .pack-seal { visibility:hidden!important; }
+.prism-presenting .caption { visibility:hidden; }
+.prism-detail { position:relative; width:min(70vw,330px,46svh); aspect-ratio:3/4; margin:14px auto; perspective:1100px; touch-action:pan-y; }
+.prism-detail .prism-card { inset:0; width:100%; height:100%; transform:rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg)); transition:transform .15s ease-out; pointer-events:auto; }
+.prism-detail .prism-card-caption { font-size:14px; }
+.prism-card-caption { transform:translateZ(36px); }
+.prism-cue { position:absolute; width:1px; height:1px; pointer-events:none; }
+.soft-light .prism-holo { opacity:.16!important; }
+.soft-light .prism-clearcoat { background:none; }
+@media(prefers-reduced-motion:reduce){.prism-strip-flying{animation:none;opacity:0}.prism-card{will-change:auto}.prism-detail .prism-card{transition:none}}
+
+.prism-fx[data-paused="true"] * { animation-play-state:paused!important; }
+.card-in-flight > * { visibility:hidden; }
+.card-in-flight { visibility:hidden; }
+.shell[data-screen='live'] #pack-table[data-fx-reveal='back']::after,
+#pack-table[data-fx-reveal='back'] #live-rarity-sticker { visibility:hidden; }
+.prism-pouch-back { mask-image:var(--pouch-art); mask-size:100% 100%; }
+.prism-pouch::before { left:7%; }
+.prism-pouch::after { right:7%; }
+.shell[data-screen='live'] #pack-table[data-fx-phase='committing'],
+.shell[data-screen='free'] #pack-table[data-fx-phase='committing'],
+.shell[data-screen='live'] #pack-table[data-fx-phase='opening'],
+.shell[data-screen='free'] #pack-table[data-fx-phase='opening'] { height:calc(var(--u) * 65); }
+
+.prism-ejection { position:absolute; inset:0; z-index:1; transform-style:preserve-3d; pointer-events:none; }
+.prism-fx[data-phase='opening'] .prism-pouch { z-index:2; }
+.prism-fx { overflow:hidden; }
+#pack-table[data-fx-phase='committing'] #slots,
+#pack-table[data-fx-phase='opening'] #slots { visibility:hidden; }
+.prism-pouch-front,.prism-strip-face,.prism-strip-lining { mask-image:var(--pouch-art); mask-size:100% 100%; }
+.shell #gesture[data-enabled='true'] { background:none; border:0; color:transparent; text-shadow:none; }
+.prism-grab-hint { position:absolute; left:13%; right:13%; top:3%; z-index:7; text-align:center; color:#fffbe8; font-size:clamp(9px,2.2vw,13px); line-height:1.1; letter-spacing:.08em; text-shadow:0 1px 3px #51311f; pointer-events:none; transition:opacity .15s; }
+
+/* Only cards that have completed their central reveal occupy the result row. */
+#pack-table #slots li[data-card=""],#pack-table #slots li:not([data-card]) { visibility:hidden; pointer-events:none; }
+#pack-table[data-fx-phase='revealing'] #slots li.card-in-flight { visibility:hidden; }
+/* Keep one stage geometry from pouch opening through central reveal and landing. */
+.shell[data-screen='live'] #pack-table[data-fx-phase='awaiting'],
+.shell[data-screen='free'] #pack-table[data-fx-phase='awaiting'],
+.shell[data-screen='live'] #pack-table[data-fx-phase='revealing'],
+.shell[data-screen='free'] #pack-table[data-fx-phase='revealing'] { height:calc(var(--u) * 65); }
+
+.shell[data-screen='live'] #pack-table[data-fx-sequence='orbit'],
+.shell[data-screen='free'] #pack-table[data-fx-sequence='orbit'] { height:calc(var(--u) * 65); }
+
+.shell #pack-table[data-fx-sequence='orbit'] #slots { inset:auto 4% 2%; height:auto; align-items:end; }
+.shell #pack-table[data-fx-sequence='orbit'] #slots li { height:auto; aspect-ratio:3/4; transform:none; }
+.shell #pack-table[data-fx-sequence='orbit'] #slots li img { animation:none; object-fit:contain; }
+
+/* Flight is in the game viewport, not clipped to the little table rectangle. */
+.prism-flight { position:fixed; inset:0; z-index:80; pointer-events:none; perspective:1100px; }
+.prism-flight[hidden] { display:none!important; }
+.prism-flight-card { left:0; top:0; }
+.prism-flight[data-paused='true'] * { animation-play-state:paused!important; }
+.shell #slots li.prism-has-landed > :is(img,.prism-result-foil) { visibility:hidden; }
+.shell #slots li .prism-card.prism-landed { left:0; top:0; position:absolute; border-radius:inherit; transform:none; will-change:auto; }
+.prism-landed .prism-card-caption { display:none; }
+/* Result-slot image rules must not hide the persistent card's own art. */
+.shell #pack-table #slots li .prism-landed img { display:block; }
+/* Explicit sides also prevent mirrored faces when a browser flattens a layer. */
+.prism-flight-card[data-side='back'] .prism-card-face,
+.prism-flight-card[data-side='front'] .prism-card-back { visibility:hidden; }
+.shell #pack-table[data-fx-sequence='orbit'] :is(#approved-art,.caption,#live-rarity-sticker) { visibility:hidden; }
+.shell #pack-table[data-fx-sequence='orbit'] #slots li.prism-has-landed > strong { position:absolute; z-index:4; left:0; right:0; bottom:0; background:#23142bd9; color:#fff0d3; font-size:10px; line-height:1.3; }

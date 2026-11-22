@@ -1,4 +1,6 @@
 import { createPackPresentation, nextRevealSlot } from "./pack-presentation.js";
+import { createCardView, decorateResult, attachCardTilt, prepareCardVisual, warmCardVisual } from "./pack-fx/card-view.js";
+import { cardVisual, pouchArt, cardBackArt } from "./pack-fx/resources.js";
 import { RARITIES, effectiveRarity, visibleCards } from "./pack.js";
 import { defaultSettings, readSettings, reachesPause } from "./controls.js";
 import { DeviceClock } from "./clock.js";
@@ -21,6 +23,8 @@ const shell = document.querySelector(".shell");
 const liveInteractionTabs = Array.from(document.querySelectorAll(".live-interaction-tabs button"));
 function showScreen(screen) {
     if (shell.dataset.screen !== screen) {
+        if (screen === "home" || screen === "summary")
+            presentation.clear();
         shell.dataset.screen = screen;
         shell.scrollTop = 0;
         const autoButton = element("auto-pack");
@@ -81,6 +85,7 @@ let scene;
 let pack = null;
 let teaching;
 let canTear = false;
+let nextTeachingPreview = false;
 let busy = false;
 let ready = false;
 let audio;
@@ -96,7 +101,20 @@ const archiveMenu = element("archive-dialog");
 const cardDetails = element("card-detail");
 let auto = false;
 let autoTimer = 0;
-const presentation = createPackPresentation(element("pack-table"));
+const presentation = createPackPresentation(element("pack-table"), {
+    onOpen: () => { if (ready && canTear && !busy)
+        open();
+    else
+        presentation.failOpen(); },
+    audio: { context: () => audio, enabled: () => settings.packSound },
+    onSound: (kind, rarity) => playSound(kind, rarity),
+    card: (url, rarity) => {
+        const id = Object.entries(rules.art.cards).find(([, path]) => path === url)?.[0];
+        const def = id && rules.themes.flatMap(theme => [...theme.cards]).find(card => card.id === id);
+        return cardVisual(url, rarity, id, def ? def.name : undefined);
+    },
+});
+let clearDetailTilt;
 let revealDue = 0;
 let musicTimer = 0;
 let musicIndex = 0;
@@ -167,8 +185,10 @@ function saveSettings() {
 }
 function renderPack(currentPack, settled, openable, focusSlot, themeId = rules.starter.id) {
     // A completed previous pack is not the unopened next pack.
-    if (openable)
+    if (openable) {
         currentPack = null;
+        settled = false;
+    }
     const cards = visibleCards(currentPack);
     const current = cards[focusSlot ?? cards.length - 1];
     const art = element("approved-art");
@@ -191,7 +211,7 @@ function renderPack(currentPack, settled, openable, focusSlot, themeId = rules.s
     art.hidden = !url;
     if (url && art.getAttribute("src") !== url)
         art.src = url;
-    scene.draw(current?.rarity, !!currentPack, 0, (!isDemo && !!currentPack) || (!!url && art.complete && art.naturalWidth > 0));
+    scene.draw(current?.rarity, !!currentPack, 0, !!currentPack || (!!url && art.complete && art.naturalWidth > 0));
     element("pack-state").textContent = settled ? "已结算" : currentPack ? `已揭 ${currentPack.revealed} / 5` : "未拆封";
     const rarity = element("rarity");
     rarity.hidden = !current;
@@ -237,7 +257,9 @@ function renderPack(currentPack, settled, openable, focusSlot, themeId = rules.s
         }
         slot.setAttribute("aria-label", card ? `第 ${index + 1} 张，${card.name}，${card.rarity}` : `第 ${index + 1} 张，未揭晓`);
     });
+    slots.forEach(decorateResult);
     canTear = openable && !busy;
+    presentation.syncSealed(!currentPack && url ? pouchArt(url) : undefined, themeId, canTear);
     gesture.textContent = canTear ? "← 滑动撕开封口 →" : "";
     gesture.setAttribute("aria-label", "横向滑动卡包封口");
     gesture.dataset.enabled = String(canTear);
@@ -279,7 +301,7 @@ function render(focusSlot) {
     }
     primary.disabled = busy;
     if (!pack) {
-        primary.textContent = "点击撕包";
+        primary.textContent = "滑动顶部封口";
         instruction.textContent = "在卡包顶部横向滑动，撕开封口后自动翻卡。";
     }
     else if (pack.rewards) {
@@ -322,12 +344,13 @@ async function commit(action) {
         render(upgraded ? action.slot : undefined);
         await presentPack(previous, pack, action.type === "open", rarity);
         scheduleAuto();
-        if (revealed || upgraded || (!previous && pack) || (!previous?.rewards && pack?.rewards)) {
+        if (upgraded || (!previous?.rewards && pack?.rewards)) {
             playSound(action.type, rarity);
         }
     }
     catch (error) {
         busy = false;
+        presentation.failOpen();
         render();
         showError(error);
     }
@@ -343,6 +366,7 @@ function open(tool) {
         return sendBusiness({ type: "open-order-pack", revision: business.revision, seed, tool });
     const broadcast = teaching.broadcast;
     if (broadcast) {
+        nextTeachingPreview = false;
         void commitTeaching({ type: "open", broadcastId: broadcast.id, index: broadcast.packs.length, seed });
     }
 }
@@ -353,6 +377,15 @@ primary.onclick = () => {
     }
     if (busy || nextRevealSlot(isDemo ? pack : currentGamePack()) !== null)
         return;
+    if (!isDemo && !teaching.business) {
+        const view = teachingView(teaching);
+        if (view.phase === "live" && !view.shipment && view.pack?.settledAt != null &&
+            view.completed < teachingRarities.length && view.completed === view.opened) {
+            nextTeachingPreview = true;
+            renderTeaching();
+            return;
+        }
+    }
     if (!isDemo)
         return teaching.business ? businessPrimary(teaching.business) : teachingPrimary();
     if (!pack)
@@ -429,9 +462,9 @@ function renderTeaching() {
     element("pack-table").hidden = !inPack;
     element("slots").hidden = !inPack;
     tools.hidden = true;
-    renderPack(inPack ? view.pack : null, settledPack, readyToOpen && !view.pack);
-    element("pack-title").textContent = `教学第 ${Math.max(1, view.opened)} 包`;
-    settlement.hidden = !inPack || !settledPack;
+    renderPack(inPack ? view.pack : null, settledPack, readyToOpen && (!view.pack || nextTeachingPreview));
+    element("pack-title").textContent = `教学第 ${Math.max(1, view.opened + Number(nextTeachingPreview))} 包`;
+    settlement.hidden = !inPack || !settledPack || nextTeachingPreview;
     rewards.replaceChildren();
     if (!settlement.hidden && view.pack) {
         const reward = view.pack.reward;
@@ -466,7 +499,7 @@ function renderTeaching() {
         instruction.textContent = `三包已完成，发货收 ${teachingOrder.saleGold} 金币并登记客户礼物。`;
     }
     else if (readyToOpen) {
-        primary.textContent = `滑动卡包封口 · 第 ${view.opened + 1} 包`;
+        primary.textContent = `${view.pack && !nextTeachingPreview ? "准备下一包" : "滑动卡包封口"} · 第 ${view.opened + 1} 包`;
         instruction.textContent = "首次教学采用保底，后续自然抽卡无教学保底。教学期间不能用券。";
     }
     else if (view.pack) {
@@ -778,6 +811,7 @@ async function commitTeaching(action) {
     }
     catch (error) {
         busy = false;
+        presentation.failOpen();
         if (requireCloud && error instanceof PlatformFailure)
             blockCloud(error);
         else {
@@ -803,8 +837,6 @@ async function commitTeaching(action) {
     const rarity = revealed && current?.id === previous?.id && current?.revealed !== previous?.revealed
         ? current?.cards[event.slot]?.rarity : undefined;
     await presentPack(previous, current, opened, rarity);
-    if (rarity || (opened && current?.id !== previous?.id))
-        playSound(opened ? "open" : "reveal", rarity);
     if (auto && rarity && reachesPause(rarity, settings.pauseAt) && !teaching.business?.free?.exiting) {
         auto = false;
         instruction.textContent = `本包将自动翻完；揭到 ${rarity}，已关闭自动拆下一包。`;
@@ -829,6 +861,12 @@ async function commitTeaching(action) {
 async function presentPack(previous, current, opened, rarity) {
     if (!current || (!rarity && !(opened && current.id !== previous?.id)))
         return;
+    if (opened)
+        for (const card of current.cards) {
+            const path = rules.art.cards[card.id];
+            if (path)
+                void warmCardVisual(cardVisual(path, card.rarity, card.id, card.name));
+        }
     const cards = visibleCards(current);
     const card = cards[cards.length - 1];
     const theme = isDemo ? rules.starter.id : teaching.business?.free?.themeId ?? teaching.business?.live?.task?.order.themeId ?? rules.starter.id;
@@ -840,7 +878,7 @@ async function presentPack(previous, current, opened, rarity) {
     gesture.dataset.enabled = "false";
     skip.hidden = false;
     try {
-        await presentation.play(current.id, rarity ? "reveal" : "rip", url ?? "./assets/ui/card-back.webp", rarity, rarity ? slots[current.revealed - 1] : undefined, settings.reduceFlash);
+        await presentation.play(current.id, rarity ? "reveal" : "rip", !rarity && url ? pouchArt(url) : url ?? cardBackArt, rarity, rarity ? slots[current.revealed - 1] : undefined, settings.reduceFlash);
     }
     finally {
         busy = false;
@@ -863,6 +901,25 @@ function currentGamePack() {
 function sendBusiness(command) {
     void commitTeaching({ type: "business", command });
 }
+slots.forEach((slot, index) => {
+    slot.tabIndex = 0;
+    const inspect = () => {
+        if (busy)
+            return;
+        const current = isDemo ? pack : currentGamePack();
+        const card = visibleCards(current)[index];
+        if (!card)
+            return;
+        const profile = !isDemo ? teaching.business : undefined;
+        const theme = rules.themes.find(theme => theme.cards.some(item => item.id === card.id));
+        showCardDetails(card, theme?.name ?? "卡牌", profile);
+    };
+    slot.onclick = inspect;
+    slot.onkeydown = event => { if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        inspect();
+    } };
+});
 const collectionTime = new Intl.DateTimeFormat("zh-CN", {
     timeZone: "Asia/Shanghai", dateStyle: "medium", timeStyle: "short",
 });
@@ -877,6 +934,22 @@ function showCardDetails(card, themeName, profile) {
         art.src = path;
     else
         art.removeAttribute("src");
+    clearDetailTilt?.();
+    cardDetails.querySelector(".prism-detail")?.remove();
+    if (path) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "prism-detail";
+        const visual = cardVisual(path, card.rarity, card.id, card.name);
+        wrapper.append(createCardView({ ...visual, background: undefined, subject: undefined }));
+        if (visual.subject)
+            void prepareCardVisual(visual).then(ready => {
+                if (wrapper.isConnected && ready.subject)
+                    wrapper.replaceChildren(createCardView(ready));
+            });
+        art.after(wrapper);
+        art.hidden = true;
+        clearDetailTilt = attachCardTilt(wrapper);
+    }
     const count = profile?.owned?.[card.id] ?? 0;
     const copies = profile?.collectionCopies?.[card.id] ?? [];
     element("card-detail-status").textContent = profile
@@ -906,6 +979,7 @@ function showCardDetails(card, themeName, profile) {
     showCardPanel(cardDetails);
 }
 function showCardPanel(dialog) {
+    presentation.setPaused(true);
     clearTimeout(autoTimer);
     if (!history.state?.ssrLive)
         history.pushState({ ssrLive: true }, "");
@@ -1638,6 +1712,7 @@ function refreshPlayControls() {
         history.pushState({ ssrLive: true }, "");
 }
 function scheduleAuto() {
+    presentation.setPaused(!!document.querySelector("dialog[open]"));
     clearTimeout(autoTimer);
     if (!ready)
         return;
@@ -1691,6 +1766,7 @@ function scheduleAuto() {
 }
 element("auto-pack").onclick = () => { auto = !auto; scheduleAuto(); };
 function showPause() {
+    presentation.setPaused(true);
     if (!ready || isDemo || !teaching || !(liveRunning() || teaching.business?.free) || pauseMenu.open)
         return;
     clearTimeout(autoTimer);
@@ -1712,6 +1788,7 @@ element("pause-stop").onclick = () => {
         teachingPrimary();
 };
 function showSettings() {
+    presentation.setPaused(true);
     if (settingsMenu.open)
         return;
     clearTimeout(autoTimer);
@@ -1777,7 +1854,7 @@ oddsMenu.onclose = scheduleAuto;
 growth.onclose = scheduleAuto;
 market.onclose = scheduleAuto;
 archiveMenu.onclose = scheduleAuto;
-cardDetails.onclose = scheduleAuto;
+cardDetails.onclose = () => { clearDetailTilt?.(); clearDetailTilt = undefined; scheduleAuto(); };
 document.addEventListener("visibilitychange", () => {
     scheduleAuto();
     syncMusic();
@@ -1860,42 +1937,21 @@ function updateTeachingClock() {
     else
         renderStamina(now);
 }
-let drag = null;
 gesture.onpointerdown = event => {
-    if (!ready || !canTear || busy || drag || event.button !== 0)
+    if (!ready || !canTear || busy)
         return;
-    drag = { id: event.pointerId, x: event.clientX };
-    gesture.setPointerCapture(event.pointerId);
+    unlockSound();
+    if (presentation.pointerDown(event))
+        gesture.setPointerCapture(event.pointerId);
 };
 gesture.onpointermove = event => {
-    if (drag?.id !== event.pointerId || !canTear || busy)
+    if (!ready || !canTear || busy)
         return;
-    const progress = Math.min(1, Math.abs(event.clientX - drag.x) / (gesture.clientWidth * .36));
-    const art = element("approved-art");
-    element("pack-table").style.setProperty("--rip-progress", String(progress));
-    if (!art.hidden && art.complete && art.naturalWidth)
-        art.style.setProperty("--tear", String(progress));
-    else
-        scene.draw(undefined, false, progress);
-    if (progress === 1) {
-        drag = null;
-        open();
-    }
+    presentation.pointerMove(event);
 };
-function stopDrag(event) {
-    if (drag?.id !== event.pointerId)
-        return;
-    drag = null;
-    if (canTear && !busy) {
-        const art = element("approved-art");
-        art.style.removeProperty("--tear");
-        element("pack-table").style.removeProperty("--rip-progress");
-        scene.draw(undefined, false, 0, !art.hidden && art.complete && art.naturalWidth > 0);
-    }
-}
-gesture.onpointerup = stopDrag;
-gesture.onpointercancel = stopDrag;
-gesture.onlostpointercapture = stopDrag;
+gesture.onpointerup = event => presentation.pointerEnd(event);
+gesture.onpointercancel = event => presentation.pointerEnd(event, true);
+gesture.onlostpointercapture = event => presentation.pointerEnd(event, true);
 sound.onclick = () => {
     settings.packSound = settings.rewardSound = !(settings.packSound || settings.rewardSound);
     saveSettings();
@@ -1999,7 +2055,7 @@ async function start() {
         element("edition").textContent = "01 / 01";
         element("pack-title").textContent = "猫猫来信 · 样包 01";
         element("footer-note").hidden = false;
-        element("footer-note").textContent = "固定示例卡序与占位素材 · 本地自动保存";
+        element("footer-note").textContent = "试玩进度自动保存";
         ready = true;
         render();
         scheduleAuto();

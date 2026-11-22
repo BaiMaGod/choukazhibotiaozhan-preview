@@ -1,0 +1,176 @@
+/* Shop reference restoration. All selectors scoped to this dialog. */
+#market {
+    background: url('./assets/ui/shop-room.webp') center top / 100% 100% no-repeat #321e26;
+    scrollbar-width: none; padding: env(safe-area-inset-top,0px) calc(var(--u)*2.5) max(calc(var(--u)*5),env(safe-area-inset-bottom));
+}
+#market::-webkit-scrollbar, #market .room-tabs::-webkit-scrollbar { display:none; }
+#market::before { display:none; }
+#market .market-header { height:calc(var(--u)*34); min-height:0; padding:0; margin:0 calc(var(--u)*-2.5); background:none; display:block; }
+#market .shop-heading { position:absolute; left:calc(var(--u)*1.2); top:calc(var(--u)*12.5); width:calc(var(--u)*51); z-index:1; }
+#market #market-title { margin:0; line-height:0; }
+#market #market-title img { width:100%; height:auto; }
+#market #market-balance { position:absolute; top:calc(var(--u)*19.2); left:calc(var(--u)*2.2); width:calc(var(--u)*56); margin:0; font-size:calc(var(--u)*1.45); text-shadow:0 1px 2px #281015; color:#ffdfb5; }
+#market .shop-mascot { position:absolute; width:calc(var(--u)*46); height:calc(var(--u)*25); object-fit:contain; right:calc(var(--u)*.4); bottom:calc(var(--u)*.4); }
+#market .market-header form { position:absolute; top:calc(var(--u)*10.8); right:calc(var(--u)*1.5); z-index:3; }
+#market .market-header .shop-close { min-height:0; padding:.25em .55em; font-size:calc(var(--u)*1.6); background:#38202bc9; border-color:#b27f50; }
+#market .shop-list { gap:calc(var(--u)*1.55); }
+#market .shop-navigation { position:relative; }
+#market .shop-theme-tabs { display:grid; grid-template-columns:1.15fr repeat(7,1fr); padding:0 calc(var(--u)*.3); gap:0; min-height:calc(var(--u)*7.8); border:1px solid #d7a568; border-radius:calc(var(--u)*1.8); background:linear-gradient(#543632ed,#21141bee); box-shadow:inset 0 0 0 1px #fbc88866,0 2px 9px #150b15; overflow:visible; }
+#market .shop-theme-tabs button { font-size:calc(var(--u)*1.85); line-height:1.3; font-weight:650; min-width:0; min-height:0; white-space:normal; padding:calc(var(--u)*.8) calc(var(--u)*.15); border:0; border-radius:0; box-shadow:none; background:none; color:#ebd2dd; text-shadow:0 1px 3px #160b13; position:relative; }
+#market .shop-theme-tabs button+button::before { content:''; position:absolute; left:0; top:20%; height:60%; border-left:1px solid #b9856f80; }
+#market .shop-theme-tabs button[aria-pressed=true] { background:var(--pink); border:1px solid #ffdcac; border-radius:calc(var(--u)*1); color:#fff5e9; box-shadow:inset 0 1px 3px #ffdbed,0 0 9px #ff6d94; }
+#market .shop-page-switch { position:absolute; right:calc(var(--u)*1); bottom:calc(var(--u)*-3.2); z-index:4; gap:calc(var(--u)*.4); padding:0; overflow:visible; }
+#market .shop-page-switch button { min-height:0; padding:.05em .45em; font-size:calc(var(--u)*1.5); background:#382027e8; border:1px solid #c59a65; border-radius:999px; }
+#market .shop-shelves { gap:calc(var(--u)*1.55); padding:calc(var(--u)*.4) calc(var(--u)*1.3) 0; }
+#market .shop-product { padding:0; gap:0; height:calc(var(--u)*39.7); border-radius:calc(var(--u)*1.4); background:linear-gradient(#432d2bda,#241719f5); border:1px solid #bf8753; box-shadow:inset 0 0 0 2px #ffd99725,0 3px 8px #190b15; overflow:visible; }
+#market .shop-product[aria-pressed=true] { border-color:#ffdc8a; box-shadow:inset 0 0 0 2px #ffedbd,0 0 4px #fff3c7,0 0 13px #ffb636,0 0 22px #ffbc5266; background:linear-gradient(#6a4229d4,#2e1c20f5); }
+#market .shop-display { height:calc(var(--u)*30.1); border-radius:calc(var(--u)*1.3) calc(var(--u)*1.3) 0 0; background:radial-gradient(ellipse at 30% 67%,#db8d4966,transparent 65%),url('./assets/ui/shop-room.webp') 45% 20% / 230% auto; border:0; border-bottom:calc(var(--u)*.65) ridge #bc8651; box-shadow:inset 0 -6px 12px #26120e; }
+#market .shop-display::before { content:'✧'; font-size:calc(var(--u)*5); top:calc(var(--u)*2); right:calc(var(--u)*6); z-index:4; color:#ffe9c8; text-shadow:0 0 5px #fff7ce,0 0 10px #ffb52f; }
+#market .shop-display::after { content:'✦'; font-size:calc(var(--u)*3); position:absolute; left:calc(var(--u)*2); bottom:calc(var(--u)*5); color:#ffe7a1; text-shadow:0 0 9px #ffd554; }
+#market .shop-pack-wrap { position:absolute; width:calc(var(--u)*20); height:calc(var(--u)*29); bottom:calc(var(--u)*.1); left:calc(var(--u)*6.5); z-index:3; transform:rotate(-5deg); filter:drop-shadow(2px 4px 4px #1a0a12); }
+#market .shop-pack-wrap img.shop-pack-art { left:7%; top:9%; bottom:auto; width:86%; height:82%; object-fit:cover; border-radius:0; box-shadow:none; filter:none; }
+#market .shop-pack-wrap img.shop-foil { inset:0; width:100%; height:100%; object-fit:fill; filter:none; box-shadow:none; }
+#market .shop-pack-name { position:absolute; bottom:11%; left:9%; width:82%; padding:.18em 0; color:#fff4c5; background:linear-gradient(90deg,#52335fa6,#9c548fd4,#52335fa6); font-size:calc(var(--u)*2.1); font-weight:900; text-align:center; text-shadow:0 1px 2px #25122e; border-block:1px solid #f5d7a591; }
+#market .shop-display .shop-example { left:55%; bottom:5%; width:calc(var(--u)*13); height:calc(var(--u)*20); object-fit:cover; transform:rotate(10deg); z-index:2; border:calc(var(--u)*.25) solid #f3cf90; border-radius:calc(var(--u)*.5); box-shadow:0 0 4px #ffcfbd8c; }
+#market .shop-display .shop-example:nth-of-type(2) { left:64%; bottom:7%; transform:rotate(19deg); z-index:1; }
+#market .shop-display .shop-example:nth-of-type(3) { left:2%; bottom:3%; height:calc(var(--u)*16); width:calc(var(--u)*11); transform:rotate(-13deg); z-index:1; }
+#market .shop-product strong { margin:calc(var(--u)*.9) calc(var(--u)*1.2) 0; padding-right:calc(var(--u)*.4); font-size:calc(var(--u)*2.55); line-height:1.15; color:#fff1df; letter-spacing:-.04em; }
+#market .shop-product small { margin:0 calc(var(--u)*1.2) calc(var(--u)*1); padding-right:calc(var(--u)*13); font-size:calc(var(--u)*1.85); color:#efccb5; line-height:1.3; }
+#market .shop-product b { right:calc(var(--u)*1.3); bottom:calc(var(--u)*1); min-width:calc(var(--u)*12); display:flex; gap:.25em; justify-content:center; align-items:center; font-size:calc(var(--u)*2.7); padding:.17em .5em; border:1px solid #ffc777; background:var(--pink); box-shadow:inset 0 1px 2px #ffe6e5,0 0 7px #e74b8e8c; }
+#market .shop-coin { display:inline-block; width:1em; height:1em; flex:0 0 auto; background:url('./assets/ui/home-coin-counter.webp') 0 center / auto 100%; border-radius:50%; }
+#market .shop-badge { position:absolute; top:calc(var(--u)*.6); left:calc(var(--u)*-.9); z-index:5; transform:rotate(-12deg); background:linear-gradient(#ff809a,#b21f4e); border:1px solid #ffe0aa; border-radius:calc(var(--u)*.4); padding:.1em .4em; font-size:calc(var(--u)*2.6); font-weight:800; box-shadow:0 0 3px #ffd484; }
+#market .shop-product[data-locked=true] .shop-example { filter:grayscale(.75) brightness(.7); }
+#market .shop-product[data-locked=true] .shop-pack-wrap { filter:saturate(.78) brightness(.8) drop-shadow(2px 3px 3px #120b18); }
+#market .shop-product[data-locked=true] b { background:linear-gradient(#736b7f,#393340); box-shadow:inset 0 1px 3px #f9e1c059; color:#d1bdc2; }
+#market .shop-lock { position:absolute; right:calc(var(--u)*.8); top:calc(var(--u)*15); width:calc(var(--u)*17); padding:calc(var(--u)*.6); display:grid; gap:.15em; text-align:center; z-index:4; border:1px solid #bba6ad; border-radius:calc(var(--u)*1); color:#fff3e8; background:#241621d4; font-size:calc(var(--u)*1.85); }
+#market .shop-lock-icon { font-size:calc(var(--u)*3.5); line-height:1; }
+#market .shop-lock::before { content:''; position:absolute; width:calc(var(--u)*44); height:calc(var(--u)*1.4); left:calc(var(--u)*-24); top:45%; transform:rotate(24deg); border-block:2px solid #a58b64; background:repeating-linear-gradient(90deg,transparent 0 6px,#d3b27e 6px 8px,transparent 8px 12px); box-shadow:0 2px 3px #120c1c; z-index:-1; }
+#market .shop-odds { position:relative; min-height:calc(var(--u)*26.8); padding:calc(var(--u)*1.4); display:grid; grid-template-columns:36% minmax(0,1fr); gap:calc(var(--u)*1.4); border:1px solid #e8bc70; border-radius:calc(var(--u)*1.7); background:radial-gradient(ellipse at 60% 0,#a86c98a3,#41294fed 70%); box-shadow:inset 0 0 0 2px #eab36c63,0 0 7px #f6be8459; margin-top:calc(var(--u)*1.5); }
+#market .shop-odds::after { content:''; position:absolute; inset:calc(var(--u)*-3.8) calc(var(--u)*-.2) calc(var(--u)*-.1); background:url('./assets/ui/shop-odds-trim.webp') center / 100% 100% no-repeat; pointer-events:none; }
+#market .shop-odds-art { border-radius:calc(var(--u)*1); height:calc(var(--u)*23.7); object-fit:cover; }
+#market .shop-odds-art[data-pack] { object-fit:contain; }
+#market .shop-odds h3 { font-size:calc(var(--u)*3); margin:0 0 calc(var(--u)*.7); color:#fff2dd; line-height:1.15; }
+#market .shop-odds-label { font-size:calc(var(--u)*1.7); margin:0 0 calc(var(--u)*.8); color:#f4d1b9; }
+#market .odds-rates { gap:calc(var(--u)*.65); padding:calc(var(--u)*.8); border-radius:calc(var(--u)*1.2); background:#f4cbd6; border:1px solid #ffe0c3; }
+#market .odds-rates .rarity { border-radius:calc(var(--u)*.7); padding:calc(var(--u)*.8) 0 calc(var(--u)*.6); font-size:calc(var(--u)*2.7); font-weight:800; color:#fff; text-shadow:0 1px 2px #482135; background:linear-gradient(#c7b7cb,#8e799d); }
+#market .odds-rates .rarity[data-rarity=R] { background:linear-gradient(#83d9fc,#5398e5); }
+#market .odds-rates .rarity[data-rarity=SR] { background:linear-gradient(#ca90ff,#a361e2); }
+#market .odds-rates .rarity[data-rarity=SSR] { background:linear-gradient(#ffcf66,#ee9d28); }
+#market .odds-rates .rarity[data-rarity=UR] { background:linear-gradient(#ff8cd0,#e4509a); }
+#market .odds-rates b { font-size:calc(var(--u)*1.9); font-weight:600; margin-top:calc(var(--u)*.45); color:#422340; text-shadow:none; }
+#market .shop-odds details { font-size:calc(var(--u)*1.8); margin-top:calc(var(--u)*.65); }
+#market .shop-odds summary { cursor:pointer; color:#ffe5c8; }
+#market .shop-odds details[open] p { font-size:calc(var(--u)*2); line-height:1.6; max-height:calc(var(--u)*26); overflow:auto; }
+#market .shop-purchase { display:grid; grid-template-columns:38% 1fr 1fr; gap:calc(var(--u)*.7); padding:calc(var(--u)*1.3) calc(var(--u)*1.7) calc(var(--u)*1); border:1px solid #cd9b60; border-radius:calc(var(--u)*1.4); min-height:calc(var(--u)*15.4); background:linear-gradient(125deg,#53362fef,#2c1d24ed); box-shadow:inset 0 0 0 1px #ffe0a344; }
+#market .shop-quantity { display:grid; grid-template-columns:calc(var(--u)*5) 1fr calc(var(--u)*5) calc(var(--u)*10); align-items:center; gap:calc(var(--u)*.55); }
+#market .shop-quantity label { grid-column:1/-1; font-size:calc(var(--u)*2.15); color:#f6dcba; padding-bottom:calc(var(--u)*.5); }
+#market .shop-quantity .quiet { min-height:calc(var(--u)*5.6); font-size:calc(var(--u)*3); padding:0; border:1px solid #b68d67; border-radius:calc(var(--u)*.6); background:linear-gradient(#f8d69b,#b8804b); color:#6e3c20; box-shadow:inset 0 1px 3px #fff1cb; }
+#market .shop-quantity .quiet:last-child { font-size:calc(var(--u)*2.05); background:#4d302a; color:#ffebda; }
+#market .shop-quantity input { appearance:textfield; width:100%; border:0; outline:0; background:transparent; padding:0; color:#fff2de; min-height:calc(var(--u)*5.6); font-size:calc(var(--u)*3); font-weight:700; text-align:center; }
+#market .shop-quantity input::-webkit-inner-spin-button { appearance:none; }
+#market button.shop-buy { display:flex; flex-direction:column; justify-content:center; gap:calc(var(--u)*.6); width:100%; height:calc(var(--u)*11); padding:calc(var(--u)*1) calc(var(--u)*1.2); min-height:0; border:0; border-radius:0; box-shadow:none; background:url('./assets/ui/shop-buy-gold.webp') center / 100% 100% no-repeat; color:#783c20; font-size:calc(var(--u)*2.9); font-weight:900; text-shadow:0 1px 1px #fff1c1; }
+#market button.shop-buy-ten { background-image:url('./assets/ui/shop-buy-pink.webp'); color:#fff2e6; text-shadow:0 1px 2px #96234e; }
+#market .shop-buy small { display:flex; align-items:center; justify-content:center; gap:.3em; font-size:calc(var(--u)*2.35); font-weight:650; line-height:1.2; }
+#market .shop-buy:disabled { opacity:.65; filter:saturate(.6); }
+#market .shop-purchase output { grid-column:1/-1; font-size:calc(var(--u)*1.5); line-height:1.25; margin:0; min-height:1.25em; }
+#market button:focus-visible, #market input:focus-visible, #market summary:focus-visible { outline:2px solid #ffedba; outline-offset:2px; }
+@media (prefers-reduced-motion: no-preference) { #market .shop-product { transition:box-shadow .15s, border-color .15s; } #market .shop-buy:active { transform:scale(.97); } }
+@media (max-width:430px) {
+ #market .shop-theme-tabs { grid-template-columns:repeat(4,minmax(0,1fr)); min-height:calc(var(--u)*9.2); }
+ #market .shop-theme-tabs button { font-size:calc(var(--u)*2.15); padding:calc(var(--u)*.28) calc(var(--u)*.2); }
+ #market .shop-product { height:calc(var(--u)*39.2); }
+ #market .shop-display { height:calc(var(--u)*29.6); }
+}
+
+#market .shop-heading { top:calc(var(--u)*10.8); width:calc(var(--u)*49); }
+#market #market-balance { width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+#market .shop-lock { left:0; right:0; top:calc(var(--u)*13.5); width:100%; height:calc(var(--u)*17); padding:0; border:0; background:none; display:block; }
+#market .shop-lock::before { display:none; }
+#market .shop-lock img.shop-lock-art { inset:0; width:100%; height:100%; object-fit:fill; filter:none; box-shadow:none; }
+#market .shop-lock > span { position:absolute; left:45%; top:52%; width:44%; text-align:center; font-size:max(9px,calc(var(--u)*1.8)); }
+@media (max-width:430px) {
+ #market .shop-theme-tabs button { font-size:max(10px,calc(var(--u)*2.15)); }
+ #market .shop-product small { font-size:max(9px,calc(var(--u)*1.85)); }
+ #market .shop-quantity { grid-template-columns:34px 1fr 34px; }
+ #market .shop-quantity label { grid-column:1/3; grid-row:1; font-size:10px; }
+ #market .shop-quantity .quiet:last-child { grid-column:3; grid-row:1; min-height:25px; font-size:10px; }
+ #market .shop-quantity .quiet { min-height:34px; font-size:16px; }
+ #market .shop-quantity input { min-height:34px; font-size:15px; }
+ #market .shop-purchase output { font-size:9px; }
+ #market .market-header .shop-close { font-size:10px; min-height:28px; }
+ #market .shop-odds details { font-size:10px; }
+ #market { padding-bottom:max(8px,env(safe-area-inset-bottom)); }
+}
+@media (max-width:430px) {
+ #market .market-header { height:calc(var(--u)*33); }
+ #market .shop-heading { top:calc(var(--u)*9.8); }
+ #market .shop-product { height:calc(var(--u)*38.2); }
+ #market .shop-display { height:calc(var(--u)*28.6); }
+}
+@media (max-width:430px) { #market .shop-list { gap:calc(var(--u)*1.2); } }
+
+/* Round two: user-rejected generic packaging and sparse display replaced. */
+#market .shop-display { background:url('./assets/ui/shop-display-stage-v2.webp') center / 100% 100% no-repeat; border-bottom:0; box-shadow:none; }
+#market .shop-display::before,#market .shop-display::after { display:none; }
+#market .shop-pack-wrap { width:calc(var(--u)*21); height:calc(var(--u)*28.5); left:calc(var(--u)*8); bottom:calc(var(--u)*1.5); }
+#market .shop-pack-wrap img.shop-complete-pack { inset:0; width:100%; height:100%; object-fit:contain; filter:none; border-radius:0; box-shadow:none; }
+#market .shop-display .shop-example { left:58%; bottom:8%; width:calc(var(--u)*12.5); height:calc(var(--u)*19.5); }
+#market .shop-display .shop-example:nth-of-type(2) { left:66%; bottom:10%; }
+#market .shop-display .shop-example:nth-of-type(3) { left:12%; bottom:8%; height:calc(var(--u)*15.5); width:calc(var(--u)*10.4); }
+#market .shop-product[aria-pressed=true] { box-shadow:inset 0 0 0 2px #fff4bd,0 0 6px #ffed9a,0 0 16px #ffae26,0 0 25px #ffc7658a; }
+#market .shop-navigation { display:flex; align-items:stretch; }
+#market .shop-theme-tabs { display:flex; flex:1; min-width:0; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; padding:0; border-radius:calc(var(--u)*1.2); min-height:calc(var(--u)*7.8); }
+#market .shop-theme-tabs button { flex:0 0 20%; min-width:0; font-size:calc(var(--u)*2.65); padding:calc(var(--u)*1.15) calc(var(--u)*.3); white-space:nowrap; scroll-snap-align:start; }
+#market .shop-theme-tabs button:first-child { flex-basis:22%; }
+#market .shop-theme-arrow { width:calc(var(--u)*2.2); flex:0 0 auto; padding:0; min-height:0; border:0; border-radius:0; background:#311c22d9; color:#ffd7a0; font-size:calc(var(--u)*3.2); }
+#market .shop-theme-arrow:disabled { visibility:hidden; }
+#market .shop-odds-content { min-width:0; }
+#market .shop-detail-heading { display:flex; align-items:center; justify-content:space-between; gap:calc(var(--u)*1); }
+#market .shop-detail-heading h3 { font-size:calc(var(--u)*3.75); color:#fff6e9; text-shadow:0 0 6px #e89bfa; margin:0; white-space:nowrap; }
+#market .shop-catalog-button { border:1px solid #ecbd7c; border-radius:999px; background:linear-gradient(125deg,#7a4d5cba,#32243dc9); box-shadow:inset 0 0 0 1px #f5c18c4d; color:#ffe8d8; font-size:calc(var(--u)*2.15); padding:calc(var(--u)*.8) calc(var(--u)*1.4); white-space:nowrap; }
+#market .shop-odds-label { margin:calc(var(--u)*.65) 0 calc(var(--u)*1); font-size:calc(var(--u)*1.8); }
+#market .shop-probability-inset { background:linear-gradient(120deg,#f9d9ddd9,#f5cedeea); border:1px solid #ffe3c1; border-radius:calc(var(--u)*1.2); padding:calc(var(--u)*.7) calc(var(--u)*1); }
+#market .shop-probability-inset details { margin:0; }
+#market .shop-probability-inset summary { display:flex; justify-content:space-between; align-items:center; gap:.4em; font-size:calc(var(--u)*2); color:#5d3a55; list-style:none; padding:calc(var(--u)*.3) 0 calc(var(--u)*.65); font-weight:650; }
+#market .shop-probability-inset summary::-webkit-details-marker { display:none; }
+#market .shop-probability-inset summary span:last-child { font-size:.85em; font-weight:400; }
+#market .odds-rates { padding:0; border:0; background:none; }
+#market .odds-rates .rarity { font-size:calc(var(--u)*2.9); padding:calc(var(--u)*.5) 0 0; border-radius:calc(var(--u)*.9); background:linear-gradient(#c3b3c9 0 52%,#e5d8e9 52%); }
+#market .odds-rates .rarity[data-rarity=R] { background:linear-gradient(#75cdff 0 52%,#d3e7f4 52%); }
+#market .odds-rates .rarity[data-rarity=SR] { background:linear-gradient(#c181f8 0 52%,#e6cffa 52%); }
+#market .odds-rates .rarity[data-rarity=SSR] { background:linear-gradient(#ffcb58 0 52%,#ffe6af 52%); }
+#market .odds-rates .rarity[data-rarity=UR] { background:linear-gradient(#ff78c2 0 52%,#ffcce9 52%); }
+#market .odds-rates b { font-size:calc(var(--u)*2); margin:0; padding:calc(var(--u)*.9) 0 calc(var(--u)*.45); }
+#market .shop-catalog-cards { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:calc(var(--u)*.8); padding-bottom:calc(var(--u)*1); max-height:calc(var(--u)*36); overflow:auto; }
+#market .shop-catalog-cards figure { margin:0; min-width:0; }
+#market .shop-catalog-cards img { width:100%; border:1px solid #e7b967; border-radius:calc(var(--u)*.4); }
+#market .shop-catalog-cards figcaption { color:#59334a; font-size:calc(var(--u)*1.4); line-height:1.2; }
+@media (max-width:430px) {
+ #market .shop-theme-tabs { display:flex; min-height:calc(var(--u)*8); }
+ #market .shop-theme-tabs button { font-size:max(10px,calc(var(--u)*2.65)); padding:calc(var(--u)*.9) calc(var(--u)*.25); }
+ #market .shop-theme-arrow { font-size:16px; width:12px; }
+ #market .shop-pack-wrap { width:calc(var(--u)*20); height:calc(var(--u)*27); bottom:calc(var(--u)*1.2); }
+ #market .shop-detail-heading h3 { font-size:calc(var(--u)*3.4); }
+ #market .shop-catalog-button { font-size:10px; padding:calc(var(--u)*.65) calc(var(--u)*1); }
+ #market .shop-odds-label { font-size:8px; }
+ #market .shop-probability-inset summary { font-size:9px; }
+ #market .shop-catalog-cards figcaption { font-size:8px; }
+}
+
+#market .shop-theme-arrow { width:max(24px,calc(var(--u)*2.2)); }
+#market .shop-theme-arrow:disabled { visibility:visible; opacity:.3; }
+#market .shop-catalog-cards img { max-height:none; }
+/* Locked packs retain their theme color; supporting cards and controls indicate the lock. */
+#market .shop-product[data-locked=true] .shop-pack-wrap { filter:saturate(.96) brightness(.96) drop-shadow(2px 3px 3px #120b18); }
+#market .page-hud > button[aria-label="设置"] { color:transparent; font-size:0; background:url('./assets/ui/home-settings.webp') center / 100% 100% no-repeat; border:0; box-shadow:none; }
+@media (max-width:430px) {
+ #market .shop-product { height:calc(var(--u)*37.6); }
+ #market .shop-display { height:calc(var(--u)*28); }
+ #market .shop-pack-wrap { height:calc(var(--u)*26.6); }
+}
+#market .shop-odds:has(details[open]) { align-items:start; }
+#market .shop-odds:has(details[open])::after { bottom:auto; height:calc(var(--u)*30.7); background-position:center top; background-size:100% 100%; }
+#market .page-hud > button[aria-label="设置"] { background:url('./assets/ui/home-settings.webp') center / 70% 70% no-repeat,var(--wood); border:1px solid #bd8a54; border-radius:calc(var(--u)*1.2); box-shadow:var(--gold-edge); }
+#market .shop-product strong { font-size:calc(var(--u)*3); }
+/* Expanded catalog keeps only the top ornament; no decorative bottom edge crosses cards. */
+#market .shop-odds:has(details[open])::after { height:calc(var(--u)*4.5); background-size:100% calc(var(--u)*30.7); }

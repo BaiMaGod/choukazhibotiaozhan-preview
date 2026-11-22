@@ -1,0 +1,123 @@
+/* Approved six-theme talent composition; real nodes, costs and actions stay native. */
+.room-page[data-room="talents"] {
+    --talent-hue: 0deg;
+    --talent-header: url('./assets/ui/talents-v2/draw-header.webp');
+    --talent-surface: #9a285a;
+    width: min(100vw, 667px); max-width: calc(100svh * 418 / 627);
+    --u: min(1vw, 6.67px, calc(1svh * 418 / 62700));
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    height: 100svh; overflow: hidden; background: var(--talent-surface);
+    container-type: inline-size;
+}
+.room-page[data-room="talents"][data-talent-theme="order"] { --talent-hue: -125deg; --talent-surface: #135bba; }
+.room-page[data-room="talents"][data-talent-theme="gift"] { --talent-hue: -55deg; --talent-surface: #8a20ba; }
+.room-page[data-room="talents"][data-talent-theme="challenge"] { --talent-hue: 61deg; --talent-surface: #b6610e; }
+.room-page[data-room="talents"][data-talent-theme="tool"] { --talent-hue: 142deg; --talent-surface: #1c7e42; }
+.room-page[data-room="talents"][data-talent-theme="heat"] { --talent-hue: 27deg; --talent-surface: #b3223e; }
+.room-page[data-room="talents"]::before { display: none; }
+.room-page[data-room="talents"] .market-header {
+    position: absolute; z-index: 5; inset: 0 0 auto; margin: 0; padding: 0;
+    min-height: 0; height: 49.52cqw; pointer-events: none; background: none;
+}
+.room-page[data-room="talents"] .market-header h2 {
+    position: absolute; margin: 0; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%);
+}
+.room-page[data-room="talents"] .market-header form {
+    position: absolute; top: 3.86%; right: 1.67%; bottom: auto; width: 29.2%; height: 22.2%; pointer-events: auto;
+}
+.room-page[data-room="talents"] .market-header button {
+    width: 100%; height: 100%; min-height: 0; padding: 0; border: 0; box-shadow: none; background: transparent;
+    color: transparent; text-shadow: none; border-radius: 999px;
+}
+.room-page[data-room="talents"] .page-hud { display: none; }
+.room-page[data-room="talents"] #growth-list { display: block; height: 100%; margin: 0; padding: 0; }
+.talent-restored.talent-area { min-height: 0; height: 100%; display: flex; flex-direction: column; gap: 0; }
+.talent-restored .talent-art {
+    flex: 0 0 auto; height: auto; aspect-ratio: 418 / 207; min-height: 0; border: 0; border-radius: 0;
+    background: transparent; mask-image: none; overflow: visible;
+}
+.talent-restored .talent-art::before, .talent-restored .talent-art::after { display: none; }
+.talent-header-scene { display: block; width: 100%; height: auto; }
+.talent-restored .talent-tree {
+    flex: 1 1 auto; height: auto; min-height: 0; margin: -1px 2.4% 0; border: 0; border-radius: 0;
+    background: none; box-shadow: none; overflow: visible; isolation: isolate;
+}
+.talent-restored .talent-tree::before {
+    position: absolute; z-index: -1; inset: 0; border-radius: 4%;
+    background: url('./assets/ui/talents-v2/tree.webp') center / 100% 100% no-repeat;
+    filter: hue-rotate(var(--talent-hue));
+}
+.talent-restored .talent-node {
+    width: 15%; min-width: 0; min-height: 0; padding: 0; border: 0; border-radius: 50%;
+    background: none; box-shadow: none; line-height: 1; display: block; overflow: visible;
+    aspect-ratio: 1; transition: filter .15s, scale .15s;
+}
+.talent-restored .talent-node.talent-root { width: 23%; z-index: 2; }
+.talent-node-art { display: block; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+.talent-restored .talent-node[data-level="0"] { background: none; }
+.talent-restored .talent-node[aria-pressed="true"] { box-shadow: none; filter: drop-shadow(0 0 5px #fff4b1); scale: 1.05; }
+.talent-restored .talent-node:focus-visible { outline: 2px solid #fff2aa; outline-offset: 2px; }
+.talent-restored .talent-node small {
+    right: -1px; bottom: 0; font: 700 12px/1.15 system-ui; min-width: 16px; text-align: center;
+    color: #fff5d5; background: #542738; border: 1px solid #ffedb3; padding: 0 2px; text-shadow: none;
+}
+.talent-restored .talent-detail {
+    position: relative; isolation: isolate; flex: 0 0 auto; min-height: 112px; height: auto;
+    display: grid; grid-template-columns: 21% minmax(0, 1fr) 21%; gap: 0; align-items: center;
+    margin: 1px 2.4% 0; padding: 8px 10px; border: 0; border-radius: 0; box-shadow: none; background: none;
+}
+.talent-restored .talent-detail::before {
+    content: ''; position: absolute; z-index: -1; inset: 0;
+    background: url('./assets/ui/talents-v2/detail.webp') center / 100% 100% no-repeat;
+    filter: hue-rotate(var(--talent-hue));
+}
+.talent-restored .talent-detail-emblem { grid-column: 1; grid-row: 1; width: 95%; height: auto; aspect-ratio: 1; border-radius: 0; object-fit: contain; background: none; }
+.talent-detail-content { grid-column: 2; align-self: stretch; display: flex; flex-direction: column; justify-content: center; min-width: 0; padding: 0 2px; }
+.talent-restored .talent-detail h3 { font: 800 16px/1.2 system-ui; color: white; text-shadow: 0 1px 2px #401035; margin: 0 0 2px; }
+.talent-restored .talent-detail p { font: 500 12px/1.2 system-ui; margin: 0; overflow-wrap: anywhere; }
+.talent-restored .talent-detail .talent-description { color: #fff5e9; text-shadow: 0 1px 2px #5c1743; margin-bottom: 5px; }
+.talent-restored .talent-detail .talent-rank,
+.talent-restored .talent-detail .talent-cost,
+.talent-restored .talent-detail .talent-requirements { color: #452333; font-weight: 750; text-shadow: 0 1px 1px #ffffff55; }
+.talent-restored .talent-detail .talent-cost { font-size: 12px; }
+.talent-restored .talent-detail .talent-requirements { font-size: 12px; }
+.talent-restored .talent-detail .talent-requirements:empty { display: none; }
+.talent-restored .talent-upgrade {
+    grid-column: 3; grid-row: 1; position: relative; isolation: isolate; align-self: center;
+    padding: 5px 0; width: 100%; min-height: 37px; border: 0; border-radius: 999px;
+    background: none; box-shadow: none; font: 800 17px/1.2 system-ui; letter-spacing: .02em; color: #fff;
+    text-shadow: 0 1px 2px #722348;
+}
+.talent-restored .talent-upgrade::before {
+    content: ''; position: absolute; z-index: -1; inset: -3px -4px;
+    background: url('./assets/ui/talents-v2/upgrade.webp') center / 100% 100% no-repeat;
+    filter: hue-rotate(var(--talent-hue));
+}
+.talent-restored .talent-upgrade:disabled { opacity: .72; }
+.talent-restored .talent-tabs {
+    flex: 0 0 auto; display: grid; grid-template-columns: repeat(6,minmax(0,1fr));
+    gap: 1.1%; margin: 0; padding: 2px 2.6% 3px; min-height: 0; overflow: visible;
+    background: linear-gradient(0deg, var(--talent-surface), transparent);
+}
+.talent-restored .talent-tabs > button[data-talent-branch] {
+    position: relative; min-height: 0; padding: 0; aspect-ratio: 59 / 64; border: 0; border-radius: 9px;
+    background: transparent; box-shadow: none; font-size: 0; color: transparent; text-shadow: none;
+}
+.talent-tab-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+.talent-restored .talent-tabs > button[aria-pressed="true"] { box-shadow: 0 0 8px #fff1bb; outline: 1px solid #fff1ac; outline-offset: -3px; }
+@media (min-height: 760px) { .talent-restored .talent-detail { min-height: 132px; } .talent-restored .talent-detail p { font-size: 13px; } }
+@media (prefers-reduced-motion: reduce) { .talent-restored .talent-node { transition: none; } }
+.talent-restored { position: relative; }
+.talent-back { position: absolute; z-index: 6; top: 1.1%; left: 2%; width: 11%; height: 7%; min-height: 32px; border: 0; background: transparent; color: transparent; box-shadow: none; padding: 0; border-radius: 50%; }
+/* The second reference row starts below the composite divider, not through it. */
+.talent-restored[data-branch="challenge"] .talent-art,
+.talent-restored[data-branch="tool"] .talent-art,
+.talent-restored[data-branch="heat"] .talent-art { aspect-ratio: 418 / 199; }
+.talent-restored .talent-detail .talent-rank,
+.talent-restored .talent-detail .talent-cost { font-size: 14px; line-height: 1.2; }
+/* Long effects stay readable across the decorative light/dark division. */
+.talent-copy { border-radius: 5px; padding: 2px 4px; margin: 0 0 2px; background: var(--shade); }
+.talent-restored .talent-detail .talent-description { max-height: 2.4em; overflow: auto; scrollbar-width: thin; margin-bottom: 0; }
+.talent-description:focus-visible { outline: 1px solid #fff2b3; }
+.talent-restored .talent-detail .talent-description { scrollbar-width: none; }
+.talent-description::-webkit-scrollbar { display: none; }
