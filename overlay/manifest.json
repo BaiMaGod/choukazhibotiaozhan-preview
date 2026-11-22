@@ -83,7 +83,8 @@
     "prism-review/js/pack-presentation-central.js": "d4acc40e7277d8e56faaaad2a45adce62ebc34d6b0fba34350240346999e9c4e",
     "prism-review/js/pack-fx/controller-central.js": "e7d4e62ee71e88fa7af7548bf7277361944b540e867d1cc8d5042496dc013ca2",
     "prism-review/pack-fx-central.css": "3aceb88ad59c80f1c3cddb9062b4d36d3f88e750d6519aa51f04eac155413e83",
-    "central-review/build-info.json": "b842f70cf0f30c85795590c958aad5dd37844ada9a26c470ecf1875170fe8aeb"
+    "central-review/build-info.json": "b842f70cf0f30c85795590c958aad5dd37844ada9a26c470ecf1875170fe8aeb",
+    "central-review/qa.html": "41c9a5d34e9004effa84726bd7aeb9850b11bb261eb760e7a0253f66136dc58f"
   },
   "source_commit": "9a9c68c0ff155aa6ae5c0c13bad3d577cee9a6b7"
 }
