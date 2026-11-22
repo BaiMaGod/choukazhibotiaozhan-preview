@@ -270,8 +270,10 @@ export function createPrismPresentation(table, options = {}) {
             // Keep the already-ejected card in place while its face decodes.
             const wasWaiting = !!waitingCard;
             const card = waitingCard ?? createCardView({ url: cardBackArt, rarity: 'N' });
-            if (!waitingCard)
+            if (!waitingCard) {
+                card.style.opacity = '0';
                 stage.append(card);
+            }
             card.style.transform = 'translate3d(-50%,-50%,0) rotateY(180deg) scale(.96)';
             if (visual.subject && visual.background)
                 visual = await prepareCardVisual(visual);
@@ -283,6 +285,7 @@ export function createPrismPresentation(table, options = {}) {
             card.replaceChildren(...Array.from(face.children));
             card.dataset.rarity = rarity;
             waitingCard = undefined;
+            card.style.opacity = '1';
             const box = table.getBoundingClientRect(), target = slot?.getBoundingClientRect();
             const dx = target ? target.left + target.width / 2 - box.left - box.width / 2 : 0;
             const dy = target ? target.top + target.height / 2 - box.top - box.height / 2 : 0;
