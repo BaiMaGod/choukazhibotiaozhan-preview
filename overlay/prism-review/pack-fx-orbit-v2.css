@@ -107,3 +107,8 @@
 .shell #slots li.prism-has-landed > :is(img,.prism-result-foil) { visibility:hidden; }
 .shell #slots li .prism-card.prism-landed { left:0; top:0; position:absolute; border-radius:inherit; transform:none; will-change:auto; }
 .prism-landed .prism-card-caption { display:none; }
+/* Result-slot image rules must not hide the persistent card's own art. */
+.shell #pack-table #slots li .prism-landed img { display:block; }
+/* Explicit sides also prevent mirrored faces when a browser flattens a layer. */
+.prism-flight-card[data-side='back'] .prism-card-face,
+.prism-flight-card[data-side='front'] .prism-card-back { visibility:hidden; }

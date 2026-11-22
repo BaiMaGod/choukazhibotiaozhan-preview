@@ -1,4 +1,4 @@
-import { orbitPose, landingPose, poseTransform } from './flight-path-v2.js?v=3f0d295d';
+import { orbitPose, landingPose, poseTransform } from './flight-path-v2.js?v=828afffe';
 import { SpringValue, stepSprings, clamp } from '../vendor/prism-holo-pack/physics.js';
 import { advanceTear, shouldCompleteOnRelease } from '../vendor/prism-holo-pack/tear-geometry.js';
 import { createPouchView } from './pouch-view.js';
@@ -82,6 +82,7 @@ export function createPrismPresentation(table, options = {}) {
                     else
                         actor.pose = orbitPose(actor.index, flightAge, flightSpace);
                     actor.el.style.transform = poseTransform(actor.pose);
+                    actor.el.dataset.side = Math.cos(actor.pose.ry * Math.PI / 180) > 0 ? 'front' : 'back';
                     actor.el.style.zIndex = actor.landing ? '300' : String(100 + Math.round(actor.pose.z));
                 }
             if (flightAge > .35)
@@ -172,6 +173,7 @@ export function createPrismPresentation(table, options = {}) {
             el.style.width = `${flightSpace.cardHeight * .75}px`;
             const pose = orbitPose(i, flightAge, flightSpace);
             el.style.transform = poseTransform(pose);
+            el.dataset.side = 'back';
             flight.append(el);
             actors.push({ el, index: i, pose, landed: false, landing: false });
         }
@@ -362,6 +364,7 @@ export function createPrismPresentation(table, options = {}) {
                     slot.append(actor.el);
                     slot.classList.add('prism-has-landed');
                     actor.el.classList.add('prism-landed');
+                    actor.el.dataset.side = 'front';
                     actor.el.style.height = '100%';
                     actor.el.style.width = '100%';
                     actor.el.style.transform = 'none';
