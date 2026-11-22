@@ -113,3 +113,4 @@
 .prism-flight-card[data-side='back'] .prism-card-face,
 .prism-flight-card[data-side='front'] .prism-card-back { visibility:hidden; }
 .shell #pack-table[data-fx-sequence='orbit'] :is(#approved-art,.caption,#live-rarity-sticker) { visibility:hidden; }
+.shell #pack-table[data-fx-sequence='orbit'] #slots li.prism-has-landed > strong { position:absolute; z-index:4; left:0; right:0; bottom:0; background:#23142bd9; color:#fff0d3; font-size:10px; line-height:1.3; }
