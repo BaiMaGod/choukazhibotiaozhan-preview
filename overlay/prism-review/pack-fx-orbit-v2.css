@@ -112,3 +112,4 @@
 /* Explicit sides also prevent mirrored faces when a browser flattens a layer. */
 .prism-flight-card[data-side='back'] .prism-card-face,
 .prism-flight-card[data-side='front'] .prism-card-back { visibility:hidden; }
+.shell #pack-table[data-fx-sequence='orbit'] :is(#approved-art,.caption,#live-rarity-sticker) { visibility:hidden; }

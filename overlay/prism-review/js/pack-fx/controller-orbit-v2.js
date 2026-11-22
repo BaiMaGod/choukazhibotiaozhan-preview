@@ -1,4 +1,4 @@
-import { orbitPose, landingPose, poseTransform } from './flight-path-v2.js?v=828afffe';
+import { orbitPose, landingPose, poseTransform } from './flight-path-v2.js?v=825e211a';
 import { SpringValue, stepSprings, clamp } from '../vendor/prism-holo-pack/physics.js';
 import { advanceTear, shouldCompleteOnRelease } from '../vendor/prism-holo-pack/tear-geometry.js';
 import { createPouchView } from './pouch-view.js';
@@ -343,7 +343,13 @@ export function createPrismPresentation(table, options = {}) {
             actor.duration = reduced() ? 80 : revealDuration[rarity];
             // The compositor clock drives the same actor; its destination is remeasured
             // while flying, so scroll/viewport changes cannot leave a stale landing point.
-            const a = animate(actor.el, reduced() ? [{ opacity: 0 }, { opacity: 0 }] : [{ opacity: 1 }, { opacity: 1 }], actor.duration);
+            // Animating opacity on the 3D actor flattens its faces in Chromium.
+            // Keep the clock on an invisible sibling so both faces retain depth.
+            const clock = document.createElement('i');
+            clock.className = 'prism-cue';
+            stage.append(clock);
+            const a = animate(clock, [{ opacity: 0 }, { opacity: 0 }], actor.duration);
+            void a.finished.catch(() => { }).finally(() => clock.remove());
             actor.animation = a;
             if (reduced())
                 flight.hidden = true;
