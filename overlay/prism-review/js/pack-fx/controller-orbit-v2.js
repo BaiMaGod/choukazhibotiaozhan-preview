@@ -1,4 +1,4 @@
-import { orbitPose, landingPose, poseTransform } from './flight-path-v2.js?v=825e211a';
+import { orbitPose, landingPose, poseTransform } from './flight-path-v2.js?v=6171bc4d';
 import { SpringValue, stepSprings, clamp } from '../vendor/prism-holo-pack/physics.js';
 import { advanceTear, shouldCompleteOnRelease } from '../vendor/prism-holo-pack/tear-geometry.js';
 import { createPouchView } from './pouch-view.js';
@@ -8,6 +8,9 @@ import { createFoilAudio } from './audio.js';
 import { cardBackArt } from './resources.js';
 export const revealDuration = { N: 720, R: 800, SR: 1100, SSR: 1600, UR: 2100 };
 export function createPrismPresentation(table, options = {}) {
+    // Slow playback is confined to the isolated five-grade sample QA route.
+    const qaParams = typeof location === 'undefined' ? undefined : new URLSearchParams(location.search);
+    const playbackRate = qaParams?.get('demo') === '1' && qaParams.get('fxSlow') === '1' ? .25 : 1;
     const root = document.createElement('div');
     root.className = 'pack-presentation prism-fx';
     root.setAttribute('aria-hidden', 'true');
@@ -68,7 +71,7 @@ export function createPrismPresentation(table, options = {}) {
         last = now;
         time += dt;
         if (actors.length) {
-            flightAge += elapsed;
+            flightAge += elapsed * playbackRate;
             if (typeof innerWidth === 'number') {
                 flightSpace.width = innerWidth;
                 flightSpace.height = innerHeight;
@@ -77,7 +80,7 @@ export function createPrismPresentation(table, options = {}) {
                 if (!actor.landed) {
                     if (actor.landing && actor.start && actor.animation) {
                         const u = clamp(Number(actor.animation.currentTime ?? 0) / (actor.duration ?? 1), 0, 1);
-                        actor.pose = landingPose(actor.index, actor.startAge ?? 0, flightSpace, slotPose(actor.slot), actor.start, u, (actor.duration ?? 900) / 1000);
+                        actor.pose = landingPose(actor.index, actor.startAge ?? 0, flightSpace, slotPose(actor.slot), actor.start, u, (actor.duration ?? 900) / 1000 * playbackRate);
                     }
                     else
                         actor.pose = orbitPose(actor.index, flightAge, flightSpace);
@@ -95,7 +98,7 @@ export function createPrismPresentation(table, options = {}) {
         previousProgress = progress.x;
         let fall = 0;
         if (phase === 'opening') {
-            openingAge += elapsed;
+            openingAge += elapsed * playbackRate;
             const t = Math.max(0, openingAge - .08);
             fall = t * height * .65 + t * t * height * 2;
         }
@@ -301,7 +304,7 @@ export function createPrismPresentation(table, options = {}) {
             const cue = document.createElement('i');
             cue.className = 'prism-cue';
             stage.append(cue);
-            const a = animate(cue, [{ opacity: 0 }, { opacity: 0 }], reduced() ? 80 : 800);
+            const a = animate(cue, [{ opacity: 0 }, { opacity: 0 }], reduced() ? 80 : 800 / playbackRate);
             void a.finished.catch(() => { }).finally(() => cue.remove());
         }
         else {
@@ -340,7 +343,7 @@ export function createPrismPresentation(table, options = {}) {
             actor.el.style.zIndex = '300';
             actor.start = { ...actor.pose };
             actor.startAge = flightAge;
-            actor.duration = reduced() ? 80 : revealDuration[rarity];
+            actor.duration = reduced() ? 80 : revealDuration[rarity] / playbackRate;
             // The compositor clock drives the same actor; its destination is remeasured
             // while flying, so scroll/viewport changes cannot leave a stale landing point.
             // Animating opacity on the 3D actor flattens its faces in Chromium.
@@ -358,7 +361,7 @@ export function createPrismPresentation(table, options = {}) {
             const cue = document.createElement('i');
             cue.className = 'prism-cue';
             stage.append(cue);
-            const cueAnimation = animate(cue, [{ opacity: 0 }, { opacity: 0 }], reduced() ? 0 : revealDuration[rarity] * .28);
+            const cueAnimation = animate(cue, [{ opacity: 0 }, { opacity: 0 }], reduced() ? 0 : revealDuration[rarity] * .28 / playbackRate);
             void cueAnimation.finished.then(() => { if (epoch !== current)
                 return; table.dataset.fxReveal = 'front'; options.onSound?.('reveal', rarity); actor.el.classList.add('prism-front-visible'); }).catch(() => { }).finally(() => cue.remove());
             void a.finished.then(() => {

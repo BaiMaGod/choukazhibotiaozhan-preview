@@ -1,5 +1,5 @@
-import { createPrismPresentation } from './pack-fx/controller-orbit-v2.js?v=825e211a';
-export { revealDuration } from './pack-fx/controller-orbit-v2.js?v=825e211a';
+import { createPrismPresentation } from './pack-fx/controller-orbit-v2.js?v=6171bc4d';
+export { revealDuration } from './pack-fx/controller-orbit-v2.js?v=6171bc4d';
 export const createPackPresentation = createPrismPresentation;
 // Business reveal order remains the sole durable source of progress.
 export function nextRevealSlot(pack) {

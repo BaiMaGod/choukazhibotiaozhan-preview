@@ -1,4 +1,4 @@
-import { createPackPresentation, nextRevealSlot } from "./pack-presentation-orbit-v2.js?v=825e211a";
+import { createPackPresentation, nextRevealSlot } from "./pack-presentation-orbit-v2.js?v=6171bc4d";
 import { createCardView, decorateResult, attachCardTilt, prepareCardVisual, warmCardVisual } from "./pack-fx/card-view.js?v=fccaace3";
 import { cardVisual, pouchArt, cardBackArt } from "./pack-fx/resources.js?v=fccaace3";
 import { RARITIES, effectiveRarity, visibleCards } from "../../js/pack.js";
@@ -211,7 +211,7 @@ function renderPack(currentPack, settled, openable, focusSlot, themeId = rules.s
     art.hidden = !url;
     if (url && art.getAttribute("src") !== url)
         art.src = url;
-    scene.draw(current?.rarity, !!currentPack, 0, (!isDemo && !!currentPack) || (!!url && art.complete && art.naturalWidth > 0));
+    scene.draw(current?.rarity, !!currentPack, 0, !!currentPack || (!!url && art.complete && art.naturalWidth > 0));
     element("pack-state").textContent = settled ? "已结算" : currentPack ? `已揭 ${currentPack.revealed} / 5` : "未拆封";
     const rarity = element("rarity");
     rarity.hidden = !current;
