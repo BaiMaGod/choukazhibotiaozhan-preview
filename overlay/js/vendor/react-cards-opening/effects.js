@@ -144,7 +144,14 @@ export function playEffects(layer, effects, options = {}) {
     layer.append(root);
     const stage = {
         root,
-        field: fieldOf(layer, options.blend ?? "add"),
+        field: {
+            emit: particles => fieldOf(layer, options.blend ?? "add").emit(particles),
+            clear: () => fields.get(layer)?.clear(),
+            destroy: () => { fields.get(layer)?.destroy(); fields.delete(layer); },
+            count: () => fields.get(layer)?.count() ?? 0,
+            advance: dt => fields.get(layer)?.advance(dt),
+            shift: (dx, dy) => fields.get(layer)?.shift(dx, dy),
+        },
         x,
         y,
         size,

@@ -856,3 +856,8 @@
 /* The existing flight actors (z=80) always paint over these independent lights. */
 .pack-rarity-effects { position:fixed; inset:0; z-index:79; pointer-events:none; overflow:hidden; contain:layout style; }
 @media(prefers-reduced-motion:reduce){.pack-rarity-effects{display:none!important}}
+
+/* Dim the stage while retaining the same five 3D flight actors. */
+.pack-rarity-matte { position:fixed; inset:0; z-index:78; background:#100a22; pointer-events:none; }
+.prism-flight[data-hero-active='true'] .prism-flight-card:not([data-hero='true']) .prism-card-back { filter:brightness(.42) saturate(.6); }
+@media(prefers-reduced-motion:reduce){.pack-rarity-matte{display:none!important}}

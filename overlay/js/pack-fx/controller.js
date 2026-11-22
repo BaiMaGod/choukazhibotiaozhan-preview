@@ -5,9 +5,10 @@ import { createPouchView } from './pouch-view.js';
 import { createCardView, prepareCardVisual } from './card-view.js';
 import { createParticles } from './particles.js';
 import { createFoilAudio } from './audio.js';
+import { REVEAL_SHOWS, sampleRevealShow, showDuration, focusRevealPose } from './reveal-show.js';
 import { createRarityEffects } from './rarity-effects.js';
 import { cardBackArt } from './resources.js';
-export const revealDuration = { N: 720, R: 800, SR: 1100, SSR: 1600, UR: 2100 };
+export const revealDuration = { N: 720, R: 800, SR: 1600, SSR: 2400, UR: 3100 };
 export function createPrismPresentation(table, options = {}) {
     // Slow playback is confined to the isolated five-grade sample QA route.
     const qaParams = typeof location === 'undefined' ? undefined : new URLSearchParams(location.search);
@@ -82,7 +83,10 @@ export function createPrismPresentation(table, options = {}) {
                 if (!actor.landed) {
                     if (actor.landing && actor.start && actor.animation) {
                         const u = clamp(Number(actor.animation.currentTime ?? 0) / (actor.duration ?? 1), 0, 1);
-                        actor.pose = landingPose(actor.index, actor.startAge ?? 0, flightSpace, slotPose(actor.slot), actor.start, u, (actor.duration ?? 900) / 1000 * playbackRate);
+                        const sample = actor.show ? sampleRevealShow(actor.show, u * showDuration(actor.show)) : undefined;
+                        actor.pose = landingPose(actor.index, actor.startAge ?? 0, flightSpace, slotPose(actor.slot), actor.start, sample?.motion ?? u, actor.show ? .9 : (actor.duration ?? 900) / 1000 * playbackRate);
+                        if (sample)
+                            actor.pose = focusRevealPose(actor.pose, sample, flightSpace.width, flightSpace.height);
                     }
                     else
                         actor.pose = orbitPose(actor.index, flightAge, flightSpace);
@@ -135,7 +139,8 @@ export function createPrismPresentation(table, options = {}) {
         actor.el.remove();
         actor.slot?.classList.remove('prism-has-landed');
     } actors = []; flight.hidden = true; }
-    function cancelPlay(preserveActors = false) { rarityFx.clear(); epoch++; const ready = tearReady; tearReady = undefined; ready?.(); for (const a of animations)
+    function cancelPlay(preserveActors = false) { rarityFx.clear(); delete flight.dataset.heroActive; for (const a of actors)
+        delete a.el.dataset.hero; epoch++; const ready = tearReady; tearReady = undefined; ready?.(); for (const a of animations)
         a.cancel(); animations = []; if (!preserveActors)
         removeActors(); releaseDestination(); const done = finish; finish = undefined; done?.(); }
     function clear() { cancelPlay(); delete table.dataset.fxSequence; drag = undefined; audio?.dispose(); particles?.clear(); pouch?.hide(); root.hidden = true; setPhase('hidden'); stop(); table.classList.remove('prism-presenting'); }
@@ -143,6 +148,9 @@ export function createPrismPresentation(table, options = {}) {
         if (expected !== epoch)
             return;
         rarityFx.clear();
+        delete flight.dataset.heroActive;
+        for (const a of actors)
+            delete a.el.dataset.hero;
         for (const a of animations)
             a.cancel();
         animations = [];
@@ -346,9 +354,15 @@ export function createPrismPresentation(table, options = {}) {
             actor.landing = true;
             actor.slot = slot;
             actor.el.style.zIndex = '300';
+            actor.show = !soft && !reduced() && qaParams?.get('rarityFx') !== '0' ? REVEAL_SHOWS[rarity] : undefined;
+            const legacyDuration = { N: 720, R: 800, SR: 1100, SSR: 1600, UR: 2100 }[rarity];
             actor.start = { ...actor.pose };
             actor.startAge = flightAge;
-            actor.duration = reduced() ? 80 : revealDuration[rarity] / playbackRate;
+            actor.duration = reduced() ? 80 : (actor.show ? showDuration(actor.show) * 1000 : legacyDuration) / playbackRate;
+            if (actor.show) {
+                flight.dataset.heroActive = 'true';
+                actor.el.dataset.hero = 'true';
+            }
             // The compositor clock drives the same actor; its destination is remeasured
             // while flying, so scroll/viewport changes cannot leave a stale landing point.
             // Animating opacity on the 3D actor flattens its faces in Chromium.
@@ -367,7 +381,7 @@ export function createPrismPresentation(table, options = {}) {
             const cue = document.createElement('i');
             cue.className = 'prism-cue';
             stage.append(cue);
-            const cueAnimation = animate(cue, [{ opacity: 0 }, { opacity: 0 }], reduced() ? 0 : revealDuration[rarity] * .28 / playbackRate);
+            const cueAnimation = animate(cue, [{ opacity: 0 }, { opacity: 0 }], reduced() ? 0 : (actor.show ? (actor.show.windup + actor.show.flip * .7) * 1000 : legacyDuration * .28) / playbackRate);
             void cueAnimation.finished.then(() => { if (epoch !== current)
                 return; table.dataset.fxReveal = 'front'; options.onSound?.('reveal', rarity); actor.el.classList.add('prism-front-visible'); }).catch(() => { }).finally(() => cue.remove());
             void a.finished.then(() => {
