@@ -77,7 +77,13 @@
     "prism-review/assets/fx/layers/spr19-subject.webp": "28e7b0086822200c869263cd3088749f5fa394595d336122dd57b779ebde6bb0",
     "prism-review/assets/fx/layers/spr19-background.webp": "9dd0b9528f5f458f6ff4c239a9bf4d53f92ec850daabf024870fd82ecabe6245",
     "prism-review/assets/fx/layers/der18-subject.webp": "4b68139e38f5eb8f1dc9fc8745ff37756ef6d3f81a0f3aafc6a0eda1e8a91705",
-    "prism-review/assets/fx/card-back.webp": "66ac4e480ad1b5d9f9c2b2f16b01a2753bcc6eeee8f67af20d62507a6c17925b"
+    "prism-review/assets/fx/card-back.webp": "66ac4e480ad1b5d9f9c2b2f16b01a2753bcc6eeee8f67af20d62507a6c17925b",
+    "central-review/index.html": "11fa874e1411559b286c4e7b9781eb9b3c45fbd0befe59d77848119914a18028",
+    "prism-review/js/main-central.js": "a4238511db6adafd1a3d494787da6ceb9be75d768156aa30ffdfa17972359637",
+    "prism-review/js/pack-presentation-central.js": "d4acc40e7277d8e56faaaad2a45adce62ebc34d6b0fba34350240346999e9c4e",
+    "prism-review/js/pack-fx/controller-central.js": "e7d4e62ee71e88fa7af7548bf7277361944b540e867d1cc8d5042496dc013ca2",
+    "prism-review/pack-fx-central.css": "3aceb88ad59c80f1c3cddb9062b4d36d3f88e750d6519aa51f04eac155413e83",
+    "central-review/build-info.json": "b842f70cf0f30c85795590c958aad5dd37844ada9a26c470ecf1875170fe8aeb"
   },
   "source_commit": "9a9c68c0ff155aa6ae5c0c13bad3d577cee9a6b7"
 }
