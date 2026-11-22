@@ -1,4 +1,4 @@
-import { createPackPresentation, nextRevealSlot } from "./pack-presentation-central.js?v=d9c107e";
+import { createPackPresentation, nextRevealSlot } from "./pack-presentation-central.js?v=853ca3f";
 import { createCardView, decorateResult, attachCardTilt, prepareCardVisual, warmCardVisual } from "./pack-fx/card-view.js?v=fccaace3";
 import { cardVisual, pouchArt, cardBackArt } from "./pack-fx/resources.js?v=fccaace3";
 import { RARITIES, effectiveRarity, visibleCards } from "../../js/pack.js";
