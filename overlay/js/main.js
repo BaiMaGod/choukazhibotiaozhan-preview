@@ -19,10 +19,13 @@ import { renderTalentTree } from "./talent-ui.js";
 import { hasSet, signInAmounts } from "./growth.js";
 import { cardImage, installPageHud, packImage, roomButton, roomTab, roomTabs } from "./room-ui.js";
 import { canUpgrade, finalCards, guaranteeFor, heldCoupons } from "./challenges.js";
+import { installLiveDrawer } from "./live-layout.js";
 const shell = document.querySelector(".shell");
+const liveDrawer = installLiveDrawer(shell, () => scheduleAuto());
 const liveInteractionTabs = Array.from(document.querySelectorAll(".live-interaction-tabs button"));
 function showScreen(screen) {
     if (shell.dataset.screen !== screen) {
+        liveDrawer.close();
         if (screen === "home" || screen === "summary")
             presentation.clear();
         shell.dataset.screen = screen;
@@ -1731,7 +1734,7 @@ function scheduleAuto() {
             refreshPlayControls();
         return;
     }
-    if (busy || document.hidden || pauseMenu.open || settingsMenu.open || oddsMenu.open ||
+    if (busy || document.hidden || liveDrawer.dialog.open || pauseMenu.open || settingsMenu.open || oddsMenu.open ||
         archiveMenu.open || cardDetails.open || growth.open || market.open)
         return;
     const next = revealing ? () => {
@@ -1759,7 +1762,7 @@ function scheduleAuto() {
     if (!isDemo)
         refreshPlayControls();
     autoTimer = window.setTimeout(() => {
-        if (ready && !busy && !document.hidden && !pauseMenu.open && !settingsMenu.open && !oddsMenu.open &&
+        if (ready && !busy && !document.hidden && !liveDrawer.dialog.open && !pauseMenu.open && !settingsMenu.open && !oddsMenu.open &&
             !archiveMenu.open && !cardDetails.open && !growth.open && !market.open)
             next();
     }, revealing ? (presentation.skipped(current.id) ? 0 : Math.max(80, revealDue - performance.now())) : 580);
@@ -1836,19 +1839,6 @@ element("open-settings").onclick = showSettings;
 element("pause-settings").onclick = showSettings;
 element("live-settings").onclick = showSettings;
 element("live-odds").onclick = () => element("show-odds").click();
-element("live-items").onclick = () => tools.scrollIntoView({ block: "center" });
-element("live-effects").onclick = () => {
-    if (!settlement.hidden)
-        settlement.scrollIntoView({ block: "center" });
-    else
-        element("show-odds").click();
-};
-element("live-orders").onclick = () => {
-    const candidates = element("candidate-panel");
-    const active = element("lesson").hidden ? element("business-live") : element("lesson");
-    const orders = !candidates.hidden ? candidates : !active.hidden ? active : element("receipt");
-    orders.scrollIntoView({ block: "center" });
-};
 settingsMenu.onclose = scheduleAuto;
 oddsMenu.onclose = scheduleAuto;
 growth.onclose = scheduleAuto;
@@ -1862,7 +1852,7 @@ document.addEventListener("visibilitychange", () => {
 window.addEventListener("popstate", () => {
     if (!ready || isDemo)
         return;
-    const dialog = [cardDetails, archiveMenu, settingsMenu, oddsMenu, growth, market, startConfirm, checkInMenu, dailyMenu, homeBenefits].find(item => item.open);
+    const dialog = [cardDetails, archiveMenu, settingsMenu, oddsMenu, growth, market, startConfirm, checkInMenu, dailyMenu, homeBenefits, liveDrawer.dialog].find(item => item.open);
     if (!dialog && !(liveRunning() || teaching.business?.free))
         return;
     if (!history.state?.ssrLive)
@@ -2000,7 +1990,7 @@ function blockCloud(error) {
         market.close();
     if (startConfirm.open)
         startConfirm.close();
-    for (const dialog of [cardDetails, archiveMenu, pauseMenu, settingsMenu, oddsMenu, checkInMenu, dailyMenu, homeBenefits])
+    for (const dialog of [cardDetails, archiveMenu, pauseMenu, settingsMenu, oddsMenu, checkInMenu, dailyMenu, homeBenefits, liveDrawer.dialog])
         if (dialog.open)
             dialog.close();
 }

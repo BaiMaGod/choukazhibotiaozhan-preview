@@ -1,0 +1,129 @@
+/* The playable screen owns the viewport; only lists and detail panels scroll. */
+:root {
+    --game-width: min(100%, 941px, calc((100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) * 941 / 1672));
+    --game-unit: min(1cqw, 9.41px, calc((100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) * 941 / 167200));
+}
+html, body { height: 100%; min-height: 0; overflow: hidden; }
+body, .shell, .room-page { height: 100dvh; }
+.shell { overflow: hidden; }
+.shell, .room-page {
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+dialog { max-height: calc(100dvh - var(--safe-top, 0px) - var(--safe-bottom, 0px) - 16px); }
+.market { max-height: calc(100dvh - var(--safe-top, 0px) - var(--safe-bottom, 0px) - 16px); }
+
+.shell[data-screen="live"] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto auto minmax(0, calc(var(--u) * 33)) auto auto;
+    padding-top: var(--safe-top);
+    padding-bottom: max(4px, var(--safe-bottom));
+    gap: 0;
+}
+.shell[data-screen="live"] > .stage-hero {
+    grid-row: 1; height: auto; min-height: 0;
+    background-size: 100% auto;
+    background-position: center top;
+}
+.shell[data-screen="live"] > .masthead { top: var(--safe-top); }
+.shell[data-screen="live"] > #pack-table.table {
+    grid-row: 2; width: 100%; min-height: 0;
+    height: clamp(100px, calc(var(--u) * 38), 30dvh);
+    margin: 0;
+}
+.shell[data-screen="live"] > .action-bar {
+    grid-row: 3; min-height: 0;
+    margin: 4px auto 6px;
+}
+.shell[data-screen="live"] #primary {
+    min-height: 44px; height: max(44px, calc(var(--u) * 12.6));
+    font-size: clamp(14px, calc(var(--u) * 4.65), 40px);
+    padding-inline: 4px; letter-spacing: 0;
+}
+.shell[data-screen="live"] #live-pack-overview { min-height: 44px; }
+.shell[data-screen="live"] > .live-panels {
+    grid-row: 4; min-height: 0; margin-bottom: 4px;
+    grid-template-rows: minmax(0, 1fr); overflow: hidden;
+}
+.shell[data-screen="live"] .live-panels > .lesson {
+    min-height: 0; max-height: 100%; overflow: auto;
+    overscroll-behavior: contain; scrollbar-width: thin;
+}
+.shell[data-screen="live"] > .controls {
+    grid-row: 5; min-height: 0; margin-block: 0 4px; padding: 3px 6px;
+    max-height: 12dvh; overflow: auto;
+}
+.shell[data-screen="live"] > .controls #play-controls { display: none; }
+.shell[data-screen="live"] > .controls .instruction { margin: 0; line-height: 1.25; font-size: 11px; }
+.shell[data-screen="live"] > .controls :is(#tools, #settlement) { display: none; }
+.shell[data-screen="live"] > #live-tools-bar {
+    grid-row: 6; position: static; margin-block: 0;
+    min-height: 0; padding-block: 2px;
+}
+.shell[data-screen="live"] #live-tools-bar button {
+    min-height: 44px; padding-block: 0;
+}
+.shell[data-screen="live"] #live-tools-bar button span { width: min(calc(var(--u) * 8), 76px); }
+.shell[data-screen="live"] > :is(#receipt, #candidate-panel, .home-nav, footer) { display: none; }
+.shell[data-screen="live"] > #platform-status {
+    position: absolute; inset: 18% 3% auto; z-index: 10;
+    max-height: 55dvh; overflow: auto;
+}
+.live-order-details { position: sticky; bottom: 0; min-height: 32px; width: 100%; padding: 3px; font-size: 12px; }
+.live-receipt-details { display: none; }
+.shell[data-screen="live"]:has(> #receipt:not([hidden])) .live-receipt-details { display: block; }
+.shell[data-screen="live"]:has(> #receipt:not([hidden])) .live-panels:has(#lesson[hidden]):has(#business-live[hidden]) #live-interactions { grid-column: auto; }
+
+/* Keep the original panels and handlers in a native modal with a fixed close row. */
+.live-detail-dialog[open] {
+    display: flex; flex-direction: column; gap: 12px;
+    width: min(94%, 600px); max-height: calc(100dvh - 24px - var(--safe-top) - var(--safe-bottom));
+    padding: 12px; overflow: hidden;
+}
+.live-detail-dialog > header { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-shrink: 0; }
+.live-detail-dialog > header h2 { font-size: 18px; margin: 0; }
+.live-detail-dialog > header button { min-height: 44px; }
+.live-detail-content { min-height: 0; overflow: auto; overscroll-behavior: contain; }
+.live-detail-content > :is(.lesson, .panel) { margin: 0 0 10px; padding: 10px; }
+.live-detail-content :is(p, details, .shop-row p) { font-size: 14px; line-height: 1.5; }
+.live-detail-content .shop-row h3 { font-size: 15px; }
+.live-detail-content .shop-row button { min-height: 44px; font-size: 14px; }
+.live-detail-content .live-order-details { display: none; }
+.live-detail-content .options button { min-height: 44px; font-size: 13px; }
+
+/* The ledger can grow; the two settlement actions remain on screen. */
+.shell[data-screen="summary"] { padding-bottom: max(4px, var(--safe-bottom)); }
+.shell[data-screen="summary"] > .stage-hero { flex: 0 1 calc(var(--u) * 71); min-height: 0; }
+.shell[data-screen="summary"] > #receipt { flex: 1 1 auto; min-height: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; }
+.shell[data-screen="summary"] > .action-bar { flex: 0 0 auto; margin-bottom: 4px; }
+.shell[data-screen="summary"] > .home-nav { display: none; }
+.shell[data-screen="summary"] #receipt-note { position: static; width: auto; margin: 6px 0; }
+
+.shell[data-screen="free"] > .stage-hero { flex: 1 1 auto; min-height: 0; height: auto; background-size: 100% auto; }
+.shell[data-screen="free"] > #pack-table.table { flex: 0 0 auto; min-height: 0; height: clamp(100px, calc(var(--u) * 38), 32dvh); }
+.shell[data-screen="free"] > .action-bar { flex: 0 0 auto; margin-block: 4px; }
+.shell[data-screen="free"] > #free-session { margin-block: 0 4px; padding: 6px 9px; }
+.shell[data-screen="free"] > #free-session h2 { display: none; }
+.shell[data-screen="free"] > #free-session p { margin: 0 0 4px; font-size: 12px; }
+.shell[data-screen="free"] > .controls { flex: 0 1 auto; min-height: 0; max-height: 29dvh; overflow: auto; padding: 6px; }
+.shell[data-screen="free"] > :is(.home-nav, footer) { display: none; }
+
+/* Page headers and navigation stay in view while catalogues scroll inside. */
+.room-page[open] { display: flex; flex-direction: column; overflow: hidden; max-height: 100dvh; }
+.room-page > * { flex-shrink: 0; }
+#growth-list, #archive-cards, #market-list, .prep-content { flex: 1 1 auto; min-height: 0; overflow: auto; overscroll-behavior: contain; }
+#archive-cards { margin-block: 8px; }
+#archive-preview { max-height: 22dvh; overflow: auto; }
+#growth[data-room="talents"] #growth-list { overflow: hidden; }
+#start-confirm > form { display: grid; grid-template-rows: minmax(0, 1fr) auto auto auto; min-height: 0; flex: 1; }
+#start-confirm .page-hero { min-height: 0; height: auto; padding-top: calc(var(--u) * 12.5); }
+#start-confirm .inventory-panel { min-height: 0; max-height: 28dvh; overflow: auto; }
+#start-confirm .prep-lower { min-height: 0; max-height: 25dvh; overflow: auto; }
+#start-confirm .dialog-actions { min-height: 48px; margin-top: 6px; }
+@media (max-height: 600px) {
+    .shell[data-screen="live"] { grid-template-rows: minmax(0, 1fr) auto auto minmax(0, 116px) auto auto; }
+    .shell[data-screen="live"] .live-panels .lesson { padding: 4px; }
+    .shell[data-screen="live"] .live-activity p { margin: 2px 0; padding: 2px 4px; }
+    .shell[data-screen="live"] .live-interaction-tabs button { min-height: 28px; }
+}
