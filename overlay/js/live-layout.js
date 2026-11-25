@@ -73,10 +73,36 @@ export function installLiveDrawer(shell, onModalChange) {
     const receiptButton = document.createElement("button");
     receiptButton.type = "button";
     receiptButton.className = "quiet live-receipt-details";
-    receiptButton.textContent = "已发货 · 查看账单";
+    const receiptHeading = document.createElement("span");
+    receiptHeading.className = "live-receipt-heading";
+    receiptHeading.textContent = "当前订单";
+    const receiptTab = document.createElement("span");
+    receiptTab.className = "live-receipt-tab";
+    receiptTab.textContent = "订单完成";
+    const receiptState = document.createElement("strong");
+    receiptState.textContent = "已发货";
+    const receiptArt = document.createElement("img");
+    receiptArt.id = "live-receipt-art";
+    receiptArt.alt = "";
+    const receiptSummary = document.createElement("small");
+    receiptSummary.id = "live-receipt-summary";
+    const receiptAction = document.createElement("span");
+    receiptAction.className = "live-receipt-action";
+    receiptAction.textContent = "查看账单 ›";
+    receiptButton.append(receiptHeading, receiptTab, receiptArt, receiptState, receiptSummary, receiptAction);
     receiptButton.onclick = orders;
     shell.querySelector(".live-panels").prepend(receiptButton);
     element("live-orders").onclick = orders;
+    const currencyInfo = () => {
+        element("live-currency-coins").textContent = element("coins").textContent;
+        element("live-currency-fans").textContent = element("fans").textContent;
+        open("金币与粉丝", ["live-currency-info"]);
+    };
+    for (const id of ["live-coin-info", "live-fan-info"]) {
+        const button = document.getElementById(id);
+        if (button)
+            button.onclick = currencyInfo;
+    }
     element("live-items").onclick = () => open("本包道具", ["tools"]);
     element("live-effects").onclick = () => {
         if (element("settlement").hidden)

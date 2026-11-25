@@ -242,8 +242,11 @@ function renderPack(currentPack, settled, openable, focusSlot, themeId = rules.s
     const showLiveRare = shell.dataset.screen === "live" && featuredSlot >= 0;
     table.toggleAttribute("data-live-rare", showLiveRare);
     table.style.setProperty("--rare-slot", String(featuredSlot));
+    table.dataset.liveRareSlot = String(featuredSlot);
     sticker.hidden = !showLiveRare;
-    sticker.textContent = featuredSlot < 0 ? "" : `${cards[featuredSlot].rarity}!`;
+    const rarityLabel = document.createElement("span");
+    rarityLabel.textContent = featuredSlot < 0 ? "" : `${cards[featuredSlot].rarity}!`;
+    sticker.replaceChildren(rarityLabel);
     slots.forEach((slot, index) => {
         const card = cards[index];
         slot.dataset.rarity = card?.rarity ?? "";
@@ -434,15 +437,33 @@ function renderTeaching() {
         const packs = teaching.broadcast?.packs ?? [];
         const visits = packs.reduce((sum, pack) => sum + (pack.settledAt ? pack.interaction.visitors : 0), 0);
         renderLiveInteraction(view.comments, visits, view.fans, view.giftCount, view.giftGrossMilli, view.online, String(view.heat), packs.flatMap(pack => visibleCards(pack)));
-        renderLivePackOverview(rules.starter.id, `${view.completed} / ${teachingRarities.length} 包已结算`);
+        renderLivePackOverview(rules.starter.id, `${view.completed} / ${teachingRarities.length} 包已结算`, view.completed, teachingRarities.length);
         const progress = element("lesson-pack-progress");
         progress.max = teachingRarities.length;
         progress.value = view.completed;
+        element("lesson-progress-number").textContent = `${view.completed} / ${teachingRarities.length}`;
+        const rewardLabel = document.createElement("span");
+        rewardLabel.textContent = "达标：";
+        const rewardArt = document.createElement("img");
+        rewardArt.src = "./assets/ui/live-r7/reward-glasses.webp";
+        rewardArt.alt = "墨镜";
+        const rewardCount = document.createElement("strong");
+        rewardCount.textContent = `墨镜×${teachingOrder.mainGift}`;
+        const rewardBonus = document.createElement("small");
+        rewardBonus.textContent = `超额 +${teachingOrder.bonusGift}`;
+        element("lesson-order-reward").replaceChildren(rewardLabel, rewardArt, rewardCount, rewardBonus);
         const art = element("lesson-pack-art");
         const url = rules.art.packs[rules.starter.id];
         art.hidden = !url;
         if (url && art.getAttribute("src") !== url)
             art.src = url;
+    }
+    element("live-shipment-display").hidden = !live || !view.shipment;
+    if (view.shipment) {
+        element("shipment-pack-art").src = rules.art.packs[rules.starter.id];
+        element("shipment-copy").textContent = `货款 ${teachingOrder.saleGold} 金币已到账 · 可查看账单后下播`;
+        element("live-receipt-art").src = rules.art.packs[rules.starter.id];
+        element("live-receipt-summary").textContent = `货款 ${teachingOrder.saleGold} 金币已到账`;
     }
     const inPack = live && !view.shipment;
     const settledPack = view.pack?.settledAt != null;
@@ -502,7 +523,7 @@ function renderTeaching() {
         instruction.textContent = `三包已完成，发货收 ${teachingOrder.saleGold} 金币并登记客户礼物。`;
     }
     else if (readyToOpen) {
-        primary.textContent = `${view.pack && !nextTeachingPreview ? "准备下一包" : "滑动卡包封口"} · 第 ${view.opened + 1} 包`;
+        primary.textContent = view.pack && !nextTeachingPreview ? "拆下一包" : "滑动撕开";
         instruction.textContent = "首次教学采用保底，后续自然抽卡无教学保底。教学期间不能用券。";
     }
     else if (view.pack) {
@@ -511,14 +532,23 @@ function renderTeaching() {
     }
     refreshPlayControls();
 }
-function renderLivePackOverview(themeId, progress) {
+function renderLivePackOverview(themeId, progress, completed = 0, total = 0) {
     const image = element("live-pack-art");
     const url = themeId && rules.art.packs[themeId];
     image.hidden = !url;
-    if (url && image.getAttribute("src") !== url)
-        image.src = url;
-    element("live-pack-name").textContent = themeId ? themeFor(themeId).name : "等待接单";
+    const foilUrl = url ? pouchArt(url) : undefined;
+    if (foilUrl && image.getAttribute("src") !== foilUrl)
+        image.src = foilUrl;
+    element("live-pack-overview").style.setProperty("--pack-face", foilUrl ? `url("${foilUrl}")` : "none");
+    const themeName = themeId ? themeFor(themeId).name : "等待接单";
+    element("live-pack-name").textContent = themeName.split("·")[0];
+    element("live-pack-name").title = themeName;
+    image.alt = themeId ? `${themeName}卡包` : "";
     element("live-pack-progress").textContent = progress;
+    const meter = element("live-pack-meter");
+    meter.hidden = total <= 0;
+    meter.max = Math.max(1, total);
+    meter.value = completed;
 }
 function renderLiveInteraction(comments, visits, fanChange, gifts, grossMilli, online, heat, cards) {
     element("live-comments").textContent = `${comments} 条`;
@@ -530,12 +560,27 @@ function renderLiveInteraction(comments, visits, fanChange, gifts, grossMilli, o
     element("live-gift-activity").textContent = `${gifts} 份`;
     element("live-fan-change").textContent = `${fanChange > 0 ? "+" : ""}${fanChange}`;
     element("live-gift-total").textContent = gold(grossMilli);
+    element("live-gift-average").textContent = gifts ? gold(Math.round(grossMilli / gifts)) : "—";
     const recent = recentRareCards(cards).slice(-3).reverse();
     const moments = element("live-moments");
-    const key = recent.map(card => `${card.id}:${card.rarity}`).join("|");
+    const recentFeed = cards.slice(-3).reverse();
+    const key = [...recent, ...recentFeed].map(card => `${card.id}:${card.rarity}`).join("|");
     if (moments.dataset.cards === key)
         return;
     moments.dataset.cards = key;
+    const feed = element("live-event-feed");
+    feed.replaceChildren(...recentFeed.map(card => {
+        const row = document.createElement("p");
+        row.className = "live-real-event";
+        row.dataset.rarity = card.rarity;
+        const art = cardImage(card);
+        if (art)
+            row.append(art);
+        const badge = document.createElement("em");
+        badge.textContent = card.rarity;
+        row.append(badge, `揭出 ${card.name}`);
+        return row;
+    }));
     moments.replaceChildren(...recent.map(card => {
         const row = document.createElement("p");
         const art = cardImage(card);
@@ -1485,8 +1530,35 @@ function renderBusiness(profile) {
     if (market.open)
         renderMarket(profile, busy, sendBusiness);
     element("business-live").hidden = !live || !!live.report;
+    element("live-shipment-display").hidden = !live || !!task || !!live.report || !live.shipped;
+    if (live && !task && live.shipped && !live.report) {
+        element("shipment-pack-art").src = "./assets/ui/summary-reward-coins-v2.webp";
+        element("shipment-pack-art").alt = "货款到账";
+        element("shipment-copy").textContent = `本场已发货 ${live.shipped} 单 · 货款到账 ${live.saleGold} 金币`;
+        element("live-receipt-art").src = "./assets/ui/summary-reward-coins-v2.webp";
+        element("live-receipt-summary").textContent = `${live.shipped} 单 · 货款 ${live.saleGold} 金币`;
+    }
     if (live) {
-        element("business-title").textContent = task ? `${themeFor(task.order.themeId).name} · ${task.completed}/${task.order.quantity} 包` : "等待接单";
+        element("business-title").textContent = task ? themeFor(task.order.themeId).name : "等待接单";
+        const orderArt = element("business-pack-art");
+        const orderUrl = task && rules.art.packs[task.order.themeId];
+        orderArt.hidden = !orderUrl;
+        if (orderUrl && orderArt.getAttribute("src") !== orderUrl)
+            orderArt.src = orderUrl;
+        const orderProgress = element("business-pack-progress");
+        orderProgress.max = task?.order.quantity ?? 1;
+        orderProgress.value = task?.completed ?? 0;
+        element("business-progress-number").textContent = task ? `${task.completed} / ${task.order.quantity}` : "—";
+        const orderReward = element("business-order-reward");
+        if (!task)
+            orderReward.textContent = "选择订单后开始拆包";
+        else if (task.order.challenge) {
+            const goal = task.order.challenge.goal;
+            const target = goal.kind === "heat" ? goal.exactTarget ?? goal.target : goal.target;
+            orderReward.textContent = `${goalLabel(task.order)} · ${challengeProgress(live, task)}/${target}`;
+        }
+        else
+            orderReward.textContent = `${task.completed} / ${task.order.quantity} 包 · ${task.order.selfOpen ? "拆后入藏" : `货款 ${task.order.payment} 金币`}`;
         element("business-stock").textContent = `本场带入 ${totalStock(live.startingStock)} 包 · 未拆 ${totalStock(profile.stock)} 包`;
         const progress = element("challenge-progress");
         const contract = task?.order.challenge;
@@ -1516,7 +1588,7 @@ function renderBusiness(profile) {
                 ? visibleCards({ ...current, cards: finalCards(current.cards, current.upgraded), upgraded: undefined }) : [];
             renderLiveInteraction(live.comments, live.visits, profile.fans - live.openingFans, live.giftCount, live.grossMilli, online, live.heatExact ?? String(live.heat), [...(live.featuredCards ?? []), ...fresh]);
             renderLivePackOverview(task?.order.themeId, task ? `${task.completed} / ${task.order.quantity} 包已结算`
-                : `本场库存 ${totalStock(profile.stock)} 包`);
+                : `本场库存 ${totalStock(profile.stock)} 包`, task?.completed, task?.order.quantity);
         }
         const pending = task && !task.order.selfOpen ? task.order.payment : 0;
         const accepted = live.shipped + Number(!!task && !task.order.selfOpen);
@@ -1618,7 +1690,7 @@ function renderBusiness(profile) {
         instruction.textContent = "升品只作用于本包，关闭窗口后结算卡牌、热度和奖励。";
     }
     else if (canOpen) {
-        primary.textContent = `滑动卡包封口 · 第 ${task.completed + 1} 包`;
+        primary.textContent = "滑动撕开";
         instruction.textContent = "正式订单使用自然抽卡概率，锁包后可以刷新续拆。";
     }
     else if (opened) {
@@ -1700,11 +1772,13 @@ function autoStep() {
     return view.phase === "live" && !view.shipment && view.completed < teachingRarities.length ? () => view.completed === view.opened ? open() : teachingPrimary() : null;
 }
 function refreshPlayControls() {
+    primary.dataset.longLabel = String((primary.textContent ?? "").replace(/\s/g, "").length > 5);
     const active = liveRunning() || !!teaching.business?.free;
     const button = element("auto-pack");
     element("play-controls").hidden = !active;
     button.disabled = !ready || !!teaching.business?.free?.exiting || !autoStep();
-    button.textContent = auto ? "停止自动拆卡" : "自动拆卡";
+    button.textContent = auto ? "停止自动" : "自动拆卡";
+    button.setAttribute("aria-label", auto ? "停止自动拆卡" : "自动拆卡");
     button.setAttribute("aria-pressed", String(auto));
     const odds = element("show-odds");
     odds.disabled = !(currentGamePack() || teaching.business?.live?.task || teaching.business?.live?.rewards.length || teaching.business?.free);
@@ -1864,7 +1938,7 @@ window.addEventListener("popstate", () => {
     else
         showPause();
 });
-element("show-odds").onclick = () => {
+function showOdds() {
     clearTimeout(autoTimer);
     const list = element("odds-list");
     list.replaceChildren();
@@ -1915,7 +1989,9 @@ element("show-odds").onclick = () => {
         }
     }
     oddsMenu.showModal();
-};
+}
+element("show-odds").onclick = showOdds;
+element("live-pack-details").onclick = showOdds;
 function updateTeachingClock() {
     if (busy)
         return;

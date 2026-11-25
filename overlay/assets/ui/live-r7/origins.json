@@ -1,0 +1,465 @@
+[
+  {
+    "path": "game/assets/ui/live-r7/activity-body.webp",
+    "pixels": [
+      892,
+      518
+    ],
+    "bytes": 12836,
+    "sha256": "e97c88a812d8620c32748a004405fc3fda0b8c177e72ef1ce19d4ca96065e920",
+    "material_decisions": [
+      {
+        "feature": "activity",
+        "component": "动态玻璃",
+        "path": "../../../../game/assets/ui/live-r7/activity-body.webp",
+        "mode": "generate",
+        "image_required": true,
+        "reason": "从已生成空白面板显式裁取无数据玻璃区域。"
+      }
+    ],
+    "revision_source": "Original target local crop, built-in imagegen content removal, preserved dark brown glass and reflections; no fabricated data."
+  },
+  {
+    "path": "game/assets/ui/live-r7/activity-decor.webp",
+    "pixels": [
+      126,
+      252
+    ],
+    "bytes": 13456,
+    "sha256": "de894c2409fbdb0a675c418b474217dad8a8fa11f96b0c6f4c1f2b34383e1f99",
+    "material_decisions": [
+      {
+        "feature": "activity",
+        "component": "原图白猫与心形装饰",
+        "path": "../../../../game/assets/ui/live-r7/activity-decor.webp",
+        "mode": "extract",
+        "image_required": true,
+        "reason": "从正式图裁取独立美术，不含示例数字或用户虚构资料。"
+      }
+    ]
+  },
+  {
+    "path": "game/assets/ui/live-r7/activity-tab.webp",
+    "pixels": [
+      450,
+      128
+    ],
+    "bytes": 7662,
+    "sha256": "c0e0bd3aab740365b6ca5d2930b6d0e93d5319b6b8b75e04656c97608db6a0c3",
+    "material_decisions": [
+      {
+        "feature": "activity",
+        "component": "选中标签",
+        "path": "../../../../game/assets/ui/live-r7/activity-tab.webp",
+        "mode": "generate",
+        "image_required": true,
+        "reason": "从已生成选中标签裁取，绑定真实aria-pressed状态。"
+      }
+    ]
+  },
+  {
+    "path": "game/assets/ui/live-r7/balance-plus.webp",
+    "pixels": [
+      48,
+      48
+    ],
+    "bytes": 1232,
+    "sha256": "fc70738ffd022866b887a097d0e66e3209e2dd05b827b9c9d6a4d9d976d3537a",
+    "material_decisions": [
+      {
+        "feature": "top",
+        "component": "原图加号与真实数值说明",
+        "mode": "extract",
+        "image_required": true,
+        "path": "../../../../game/assets/ui/live-r7/balance-plus.webp",
+        "reason": "裁取原图圆形加号；点击复用真实抽屉展示金币/粉丝说明，不触发购买或虚构充值。"
+      }
+    ]
+  },
+  {
+    "path": "game/assets/ui/live-r7/card-bezel.webp",
+    "pixels": [
+      160,
+      212
+    ],
+    "bytes": 4148,
+    "sha256": "51cd98f187d42a7330818e8651ffc34582707202dca2576d219cc41a8c797870",
+    "material_decisions": [
+      {
+        "feature": "cards",
+        "component": "独立稀有卡框",
+        "path": "../../../../game/assets/ui/live-r7/card-bezel.webp",
+        "mode": "extract",
+        "image_required": true,
+        "reason": "从正式图裁取独立美术，不含示例数字或用户虚构资料。"
+      }
+    ]
+  },
+  {
+    "path": "game/assets/ui/live-r7/card-normal-bezel.webp",
+    "pixels": [
+      142,
+      184
+    ],
+    "bytes": 4422,
+    "sha256": "6d65e87fab98b10b916cce9a8ba9503074e8ce89bd231d3eab11194ae7a5ddc6",
+    "material_decisions": [
+      {
+        "feature": "cards",
+        "component": "普通卡独立金边",
+        "path": "../../../../game/assets/ui/live-r7/card-normal-bezel.webp",
+        "mode": "extract",
+        "image_required": true,
+        "reason": "独立R4逐项退回后制作，保持既有视觉条件和真实数据映射。"
+      }
+    ]
+  },
+  {
+    "path": "game/assets/ui/live-r7/detail.webp",
+    "pixels": [
+      648,
+      132
+    ],
+    "bytes": 16090,
+    "sha256": "690494cc0a6e31da980d4fdff97ef95dddc91f11f33481c3749e20ecea05be91",
+    "material_decisions": [
+      {
+        "feature": "order",
+        "component": "详情胶囊",
+        "path": "../../../../game/assets/ui/live-r7/detail.webp",
+        "mode": "generate",
+        "image_required": true,
+        "reason": "独立细金棕色树脂底板，真实按钮仍为DOM。"
+      }
+    ]
+  },
+  {
+    "path": "game/assets/ui/live-r7/footer-desk.webp",
+    "pixels": [
+      1882,
+      336
+    ],
+    "bytes": 152236,
+    "sha256": "2756587a95be146a3f9d9fce61209cb9796e6af79105fa9d8990ae0856365fc3",
+    "material_decisions": [
+      {
+        "feature": "nav",
+        "component": "清晰金木桌面",
+        "path": "../../../../game/assets/ui/live-r7/footer-desk.webp",
+        "mode": "generate",
+        "image_required": true,
+        "reason": "独立R4逐项退回后制作，保持既有视觉条件和真实数据映射。"
+      }
+    ]
+  },
+  {
+    "path": "game/assets/ui/live-r7/gift.webp",
+    "pixels": [
+      786,
+      642
+    ],
+    "bytes": 69512,
+    "sha256": "99cb72c6415cef797daf28b16841ffebbaa1d09e69c11024c6c7f1cbd9a8647e",
+    "material_decisions": [
+      {
+        "feature": "gift",
+        "component": "礼物面板",
+        "path": "../../../../game/assets/ui/live-r7/gift.webp",
+        "mode": "generate",
+        "image_required": true,
+        "reason": "原图定向空白，真实份数/总额/平均值。"
+      }
+    ],
+    "revision_source": "Original target local crop, built-in imagegen content removal, preserved dark brown glass and reflections; no fabricated data."
+  },
+  {
+    "path": "game/assets/ui/live-r7/nav-effects.webp",
+    "pixels": [
+      124,
+      125
+    ],
+    "bytes": 6928,
+    "sha256": "71f6150a67989d33cf36fc1cbd4945ae631b4219602a2ed9eddac31b8f0f9815",
+    "material_decisions": [
+      {
+        "feature": "nav",
+        "component": "独立导航 effects",
+        "path": "../../../../game/assets/ui/live-r7/nav-effects.webp",
+        "mode": "extract",
+        "image_required": true,
+        "reason": "从正式图裁取独立美术，不含示例数字或用户虚构资料。"
+      }
+    ],
+    "alpha_revision": "Restored whole closed label arc using original-source crop; retained original upper badge and removed decorative sample notification."
+  },
+  {
+    "path": "game/assets/ui/live-r7/nav-items.webp",
+    "pixels": [
+      123,
+      125
+    ],
+    "bytes": 6724,
+    "sha256": "6f46ffc0adc993adc2fda5625b9485f2e0ce43595b75cdc827f17534dbc02e2a",
+    "material_decisions": [
+      {
+        "feature": "nav",
+        "component": "独立导航 items",
+        "path": "../../../../game/assets/ui/live-r7/nav-items.webp",
+        "mode": "extract",
+        "image_required": true,
+        "reason": "从正式图裁取独立美术，不含示例数字或用户虚构资料。"
+      }
+    ],
+    "alpha_revision": "Restored whole closed label arc using original-source crop; retained original upper badge and removed decorative sample notification."
+  },
+  {
+    "path": "game/assets/ui/live-r7/nav-odds.webp",
+    "pixels": [
+      124,
+      125
+    ],
+    "bytes": 7178,
+    "sha256": "e6ab7c5f9b3766e540bfa61141bd09243d2bc9ec7a23a837eeee40046b4ab51f",
+    "material_decisions": [
+      {
+        "feature": "nav",
+        "component": "独立导航 odds",
+        "path": "../../../../game/assets/ui/live-r7/nav-odds.webp",
+        "mode": "extract",
+        "image_required": true,
+        "reason": "从正式图裁取独立美术，不含示例数字或用户虚构资料。"
+      }
+    ],
+    "alpha_revision": "Restored whole closed label arc using original-source crop; retained original upper badge and removed decorative sample notification."
+  },
+  {
+    "path": "game/assets/ui/live-r7/nav-order.webp",
+    "pixels": [
+      123,
+      125
+    ],
+    "bytes": 6542,
+    "sha256": "186654dc4f71a85ac459f89486b3413809cfa4db6bb163feb4b68c54d68f0980",
+    "material_decisions": [
+      {
+        "feature": "nav",
+        "component": "独立导航 order",
+        "path": "../../../../game/assets/ui/live-r7/nav-order.webp",
+        "mode": "extract",
+        "image_required": true,
+        "reason": "从正式图裁取独立美术，不含示例数字或用户虚构资料。"
+      }
+    ],
+    "alpha_revision": "Restored whole closed label arc using original-source crop; retained original upper badge and removed decorative sample notification."
+  },
+  {
+    "path": "game/assets/ui/live-r7/nav-settings.webp",
+    "pixels": [
+      125,
+      125
+    ],
+    "bytes": 7038,
+    "sha256": "aa3d3999d5315dbd2d9ea8b0196c815d1542be30cc78a451cb6b7a7733ad73b7",
+    "material_decisions": [
+      {
+        "feature": "nav",
+        "component": "独立导航 settings",
+        "path": "../../../../game/assets/ui/live-r7/nav-settings.webp",
+        "mode": "extract",
+        "image_required": true,
+        "reason": "从正式图裁取独立美术，不含示例数字或用户虚构资料。"
+      }
+    ],
+    "alpha_revision": "Restored whole closed label arc using original-source crop; retained original upper badge and removed decorative sample notification."
+  },
+  {
+    "path": "game/assets/ui/live-r7/neon.webp",
+    "pixels": [
+      984,
+      465
+    ],
+    "bytes": 215544,
+    "sha256": "565bfe0b83be2aedd29d9a09d6ec608c8de5350bfbb2934a2841ec8e5d9d94d4",
+    "material_decisions": [
+      {
+        "feature": "neon",
+        "component": "霓虹标题",
+        "path": "../../../../game/assets/ui/live-r7/neon.webp",
+        "mode": "generate",
+        "image_required": true,
+        "reason": "原图定向透明化，保留皇冠心轨与原文案，不用旧粗字版本。"
+      }
+    ]
+  },
+  {
+    "path": "game/assets/ui/live-r7/order-card-frame.webp",
+    "pixels": [
+      94,
+      95
+    ],
+    "bytes": 1638,
+    "sha256": "82efd3fc856441803a30591ce4d9d3ba13ecbe29079c7119efd51f34905e3b74",
+    "material_decisions": [
+      {
+        "feature": "order",
+        "component": "左侧插画槽边框",
+        "path": "../../../../game/assets/ui/live-r7/order-card-frame.webp",
+        "mode": "extract",
+        "image_required": true,
+        "reason": "从正式图裁取独立美术，不含示例数字或用户虚构资料。"
+      }
+    ]
+  },
+  {
+    "path": "game/assets/ui/live-r7/order.webp",
+    "pixels": [
+      920,
+      540
+    ],
+    "bytes": 36924,
+    "sha256": "6f05db1c95fbfa55d6e02da6952362e6648ef9ef69000531900b332ff4086849",
+    "material_decisions": [
+      {
+        "feature": "order",
+        "component": "订单玻璃",
+        "path": "../../../../game/assets/ui/live-r7/order.webp",
+        "mode": "generate",
+        "image_required": true,
+        "reason": "独立空白玻璃，无示例数据。"
+      }
+    ]
+  },
+  {
+    "path": "game/assets/ui/live-r7/pack.webp",
+    "pixels": [
+      801,
+      556
+    ],
+    "bytes": 45380,
+    "sha256": "109a3b16af5c1570bea0b60d5e0d783c0c9c2b407e74eae68c3b89694f54c01d",
+    "material_decisions": [
+      {
+        "feature": "secondary",
+        "component": "卡包信息板",
+        "path": "../../../../game/assets/ui/live-r7/pack.webp",
+        "mode": "generate",
+        "image_required": true,
+        "reason": "原图定向空白，真实卡包、进度与详情。"
+      }
+    ]
+  },
+  {
+    "path": "game/assets/ui/live-r7/primary.webp",
+    "pixels": [
+      1305,
+      358
+    ],
+    "bytes": 93946,
+    "sha256": "97a6b4e88e7fa454de66a9703ec1149738241c4205cec2c5c8776551ecb6a5da",
+    "material_decisions": [
+      {
+        "feature": "primary",
+        "component": "主按钮",
+        "path": "../../../../game/assets/ui/live-r7/primary.webp",
+        "mode": "generate",
+        "image_required": true,
+        "reason": "原图定向编辑，去示例字保留粉色胶囊、卡包及猫爪。"
+      }
+    ]
+  },
+  {
+    "path": "game/assets/ui/live-r7/rare-bubble.webp",
+    "pixels": [
+      399,
+      196
+    ],
+    "bytes": 20548,
+    "sha256": "5ab797d5cdc4d9d5b9bb2f06eac2c3ab39a0bf68abb1327d6cb5e12ecf931a48",
+    "material_decisions": [
+      {
+        "feature": "cards",
+        "component": "稀有话泡",
+        "path": "../../../../game/assets/ui/live-r7/rare-bubble.webp",
+        "mode": "generate",
+        "image_required": true,
+        "reason": "独立R4逐项退回后制作，保持既有视觉条件和真实数据映射。"
+      }
+    ]
+  },
+  {
+    "path": "game/assets/ui/live-r7/rare-cat.webp",
+    "pixels": [
+      81,
+      65
+    ],
+    "bytes": 3294,
+    "sha256": "80249d7865d590900e8de0e9ecd21bcdde3bdb4de79b76e48ee223bef40f2013",
+    "material_decisions": [
+      {
+        "feature": "cards",
+        "component": "原图稀有白猫",
+        "path": "../../../../game/assets/ui/live-r7/rare-cat.webp",
+        "mode": "extract",
+        "image_required": true,
+        "reason": "独立R4逐项退回后制作，保持既有视觉条件和真实数据映射。"
+      }
+    ]
+  },
+  {
+    "path": "game/assets/ui/live-r7/reward-glasses.webp",
+    "pixels": [
+      216,
+      113
+    ],
+    "bytes": 15264,
+    "sha256": "b418166549d09c4a719f807921f68589751a7c53e5e93bcc0d279cd012213642",
+    "material_decisions": [
+      {
+        "feature": "order",
+        "component": "真实奖励图示",
+        "path": "../../../../game/assets/ui/live-r7/reward-glasses.webp",
+        "mode": "generate",
+        "image_required": true,
+        "reason": "金色镜架紫色镜片独立透明墨镜图。"
+      }
+    ]
+  },
+  {
+    "path": "game/assets/ui/live-r7/secondary.webp",
+    "pixels": [
+      579,
+      223
+    ],
+    "bytes": 34616,
+    "sha256": "71ab341e3d68a9b1d70d02fb69f3cfe174325f33532cd4f3cbc9042b094a584c",
+    "material_decisions": [
+      {
+        "feature": "secondary",
+        "component": "副按钮",
+        "path": "../../../../game/assets/ui/live-r7/secondary.webp",
+        "mode": "generate",
+        "image_required": true,
+        "reason": "原图定向编辑，保留叠牌及棕金倒角，文字原生。"
+      }
+    ]
+  },
+  {
+    "path": "game/assets/ui/live-r7/status-pill.webp",
+    "pixels": [
+      291,
+      162
+    ],
+    "bytes": 12356,
+    "sha256": "4641dd5771791a52b75f31d28d68da11e519dc359be8545124250698072f0b96",
+    "material_decisions": [
+      {
+        "feature": "top",
+        "component": "真实状态胶囊",
+        "path": "../../../../game/assets/ui/live-r7/status-pill.webp",
+        "mode": "generate",
+        "image_required": true,
+        "reason": "独立R4逐项退回后制作，保持既有视觉条件和真实数据映射。"
+      }
+    ]
+  }
+]
