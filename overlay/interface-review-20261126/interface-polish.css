@@ -80,14 +80,18 @@ dialog:not(.room-page) select { font-size: 12px; }
 #play-settings input[type='checkbox']:checked { background: linear-gradient(#fa8ba5, #ce356b); border-color: #f3c58a; }
 #play-settings input[type='checkbox']:checked::before { transform: translateX(19px); }
 /* Shared drawer scrolls its contents, while its heading and return action stay visible. */
-#live-detail-dialog[open] { display: flex; flex-direction: column; gap: 0; overflow: hidden; }
+#live-detail-dialog[open] {
+    display: flex; flex-direction: column; gap: 0; overflow: hidden;
+    width: min(540px, calc(var(--portrait-width) - 18px));
+    padding: 58px var(--modal-pad) 44px;
+}
 #live-detail-dialog > header { flex: 0 0 auto; }
 #live-detail-dialog .live-detail-content { min-height: 0; overflow-y: auto; padding: 2px; scrollbar-width: thin; }
 #live-detail-dialog .live-detail-content > :is(.lesson, .panel) { padding: 14px; margin: 0 0 10px; }
 #live-detail-dialog #lesson { position: relative; min-height: 150px; padding-left: 95px; }
 #live-detail-dialog #lesson::before {
     content: ''; position: absolute; width: 65px; height: 96px; left: 14px; top: 30px;
-    background: url('../assets/ui/live-r7/order.webp') center / cover; border: 1px solid #d4a86d; border-radius: 7px;
+    background: url('../assets/art/packs/pack-mcj-heal-01.webp') center / cover; border: 1px solid #d4a86d; border-radius: 7px;
 }
 #live-detail-dialog #lesson .kicker { font-size: 12px; margin: 0 0 14px; color: #f3cd8b; }
 #live-detail-dialog #lesson h2 { font-size: 18px; margin: 0 0 12px; }
@@ -215,6 +219,10 @@ dialog:not(.room-page) select { font-size: 12px; }
 #growth[data-room='collection'] .collection-shelf { min-height: 0; height: auto; align-items: stretch; }
 #growth[data-room='collection'] .shelf-board .collection-grid { grid-auto-rows: calc(var(--u) * 27); }
 #growth[data-room='collection'] .shelf-board .collection-grid li { overflow: hidden; }
+#growth:is([data-room='collection'], [data-room='free']) #growth-list { display: block; overflow-y: auto; padding-bottom: 8px; }
+#growth[data-room='collection'] .collection-progress { margin: 10px 0; }
+#growth[data-room='free'] .free-start { display: block; margin: 10px auto; }
+#growth[data-room='free'] .free-results { margin-top: 8px; }
 #growth[data-room='free'] .market-header { min-height: calc(var(--u) * 105); }
 #growth[data-room='free'] .free-picker { display: grid; grid-template-columns: 1fr 1.5fr; align-items: center; gap: 5px; }
 #growth[data-room='free'] .free-picker h3 { font-size: 13px; margin: 0; }
@@ -234,6 +242,7 @@ dialog:not(.room-page) select { font-size: 12px; }
 .shell[data-screen='free'] .controls { background: #3a222bd9; border-color: #d4a366; }
 @media (max-width: 380px), (max-height: 700px) {
     #play-settings { padding-inline: 34px; padding-bottom: 60px; }
+    #live-detail-dialog[open] { padding: 52px 25px 44px; }
     #start-confirm .inventory-panel { max-height: 30dvh; }
     #odds-dialog { padding-bottom: 48px; }
 }
