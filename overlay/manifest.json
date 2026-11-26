@@ -148,6 +148,10 @@
     "assets/ui/live-rare-rays-v3.webp": "46841806fa2e3606d7ef9edd797b7bc2c89a0129d0811193116497d5b0cefb08",
     "assets/ui/live-scene-v3.webp": "c1549e441b133874d9f95f17f40427595abf4857fa414ac32edadd17a1c8787b",
     "live-elements.css": "9c981fb637f896bd36da0dff7f2c015ef3e55b7069260a1d71a1ebaf164aa0ac",
-    "live-restoration.css": "4464295243aaf132a598e8cea8c959ef722693085d88c69daf6efa588257bf50"
+    "live-restoration.css": "4464295243aaf132a598e8cea8c959ef722693085d88c69daf6efa588257bf50",
+    "interface-review-20261126/assets/ui/dialog-v1/rose-glass-panel.webp": "bd03a7018959f22ba68cfcfcbb49b122c97caac1b89b0a6dc0dd06202e805f1d",
+    "interface-review-20261126/main.js": "629b175be2c02ef2f522ac9ab00fb8582c02a1d2c6f3df0ceb320f4fe6961d3a",
+    "interface-review-20261126/interface-polish.css": "23b9cf2f1092a8fb65390319074532816c4c20f96eb2b82c5597127f53584393",
+    "interface-review-20261126/index.html": "a9601c014daa312b4b4a0e947d1d343cf4a23759b4d254a882db079e6d7ffd57"
   }
 }
