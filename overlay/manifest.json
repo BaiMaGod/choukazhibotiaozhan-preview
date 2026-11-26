@@ -161,6 +161,7 @@
     "interface-review-20261126/confirmation.js": "f58770581b96d25e8e774b70c75c04aa65b1af62d0526931309937089fbcd8a1",
     "interface-review-20261126/business-ui.js": "89330c5c360500c635649382628d032e8d1031ad5974c99b1711a044baaaf873",
     "interface-review-20261126/assets/ui/dialog-v1/cabinet.webp": "a28a7c4e97ea1a051fae68d87ef2db521846d9006d51c85031fbbf33705e1565",
-    "interface-review-20261126/assets/ui/dialog-v1/inset.webp": "7b23398323afd59c01a2aa40f40437f63fed5c1da5326926faad706003aadfcf"
+    "interface-review-20261126/assets/ui/dialog-v1/inset.webp": "7b23398323afd59c01a2aa40f40437f63fed5c1da5326926faad706003aadfcf",
+    "interface-review-20261126/build-info.json": "852471c4ce1820a99c49467f31db7c95278de6759dd6f17365c576a27f3302e0"
   }
 }

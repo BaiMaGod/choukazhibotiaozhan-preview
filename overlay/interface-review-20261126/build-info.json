@@ -1,0 +1,9 @@
+{
+  "target": "browser-preview",
+  "source_repository": "BaiMaGod/choukazhibotiaozhan",
+  "source_branch": "work/all-ui-art-20261126",
+  "source_commit": "8765f2bc9bd07fbaa15f84ea540833174476887c",
+  "pull_request": 18,
+  "entry": "interface-review-20261126/",
+  "verified_tests": 61
+}
