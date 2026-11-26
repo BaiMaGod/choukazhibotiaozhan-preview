@@ -150,15 +150,17 @@
     "live-elements.css": "9c981fb637f896bd36da0dff7f2c015ef3e55b7069260a1d71a1ebaf164aa0ac",
     "live-restoration.css": "4464295243aaf132a598e8cea8c959ef722693085d88c69daf6efa588257bf50",
     "interface-review-20261126/assets/ui/dialog-v1/rose-glass-panel.webp": "bd03a7018959f22ba68cfcfcbb49b122c97caac1b89b0a6dc0dd06202e805f1d",
-    "interface-review-20261126/main.js": "393f0738491a255e08ff24f44672e80dc7d86df296ed1f86dd3a01a8f1e88579",
-    "interface-review-20261126/interface-polish.css": "764652aa668de3a4f15e7ab5842e5e2d211022e20f112c12854be16475928533",
-    "interface-review-20261126/index.html": "bb272c30cad976cf2fe5cd65b020e9cb161bf62e906f7a7171de38f50d4ec09c",
-    "interface-review-20261126/assets/ui/dialog-v1/manifest.json": "592e7e6392c967182c71ab53940b12c8eed213fc64813a9709d6f28dc718dcfb",
+    "interface-review-20261126/main.js": "a444ca240f3de0fbe3e5e1a9185f53a5e45a129288b178ed0119e8c118411d50",
+    "interface-review-20261126/interface-polish.css": "1d0648a58f83f153fd0976d391565318b95aece92bb47f78937999730a046395",
+    "interface-review-20261126/index.html": "ac8d395db5fb4a06a2444f6c7c825152005940124fd0c732b6bd166be992a432",
+    "interface-review-20261126/assets/ui/dialog-v1/manifest.json": "c69e12f07cb15e7218a6be88ba591dd99fb4efb2a8ca691b71e453828c335f42",
     "interface-review-20261126/assets/ui/dialog-v1/free-title.webp": "0498d0e2e0e15d8ab7972151bae217274e02621c3d31cf5c99bb13f104d32e7b",
     "interface-review-20261126/assets/ui/dialog-v1/collection-title.webp": "979131729c92ed653b0bf492eae47e189f744eff1a53d3900c0508362cb1b5fb",
     "interface-review-20261126/assets/ui/dialog-v1/archive-title.webp": "558a15e45fa7838a2c8fd8a0b4b89b17bd1c35da5174bd4f20a06954724bba61",
     "interface-review-20261126/assets/ui/dialog-v1/prep-title.webp": "3db051b8dae4eee66abee85bda115417b7deabf57bf1dce73ee7729ab728d09c",
     "interface-review-20261126/confirmation.js": "f58770581b96d25e8e774b70c75c04aa65b1af62d0526931309937089fbcd8a1",
-    "interface-review-20261126/business-ui.js": "89330c5c360500c635649382628d032e8d1031ad5974c99b1711a044baaaf873"
+    "interface-review-20261126/business-ui.js": "89330c5c360500c635649382628d032e8d1031ad5974c99b1711a044baaaf873",
+    "interface-review-20261126/assets/ui/dialog-v1/cabinet.webp": "a28a7c4e97ea1a051fae68d87ef2db521846d9006d51c85031fbbf33705e1565",
+    "interface-review-20261126/assets/ui/dialog-v1/inset.webp": "7b23398323afd59c01a2aa40f40437f63fed5c1da5326926faad706003aadfcf"
   }
 }

@@ -223,6 +223,22 @@ dialog:not(.room-page) select { font-size: 12px; }
 #growth[data-room='collection'] .collection-progress { margin: 10px 0; }
 #growth[data-room='free'] .free-start { display: block; margin: 10px auto; }
 #growth[data-room='free'] .free-results { margin-top: 8px; }
+#growth[data-room='collection'] .shelf-board {
+    border: 0; border-radius: 0; box-shadow: none;
+    padding: calc(var(--u) * 7.5) calc(var(--u) * 4) calc(var(--u) * 4);
+    background: url('./assets/ui/dialog-v1/cabinet.webp') center / 100% 100% no-repeat;
+}
+#growth[data-room='collection'] .shelf-board .collection-grid li { background-color: #2d1c2570; border-color: #c3996380; }
+#growth[data-room='collection'] .collection-progress,
+#growth[data-room='free'] :is(.free-picker, .free-results),
+#archive-preview {
+    border-style: solid; border-width: 18px 13px 14px; border-radius: 0; box-shadow: none; background: transparent;
+    border-image-source: url('./assets/ui/dialog-v1/inset.webp');
+    border-image-slice: 100 100 80 fill; border-image-repeat: stretch;
+    padding: 2px 4px 6px;
+}
+#growth[data-room='collection'] .collection-progress { padding: 4px 8px 9px; }
+#archive-preview { max-height: 23dvh; }
 #growth[data-room='free'] .market-header { min-height: calc(var(--u) * 105); }
 #growth[data-room='free'] .free-picker { display: grid; grid-template-columns: 1fr 1.5fr; align-items: center; gap: 5px; }
 #growth[data-room='free'] .free-picker h3 { font-size: 13px; margin: 0; }

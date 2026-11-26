@@ -1937,7 +1937,7 @@ document.addEventListener("visibilitychange", () => {
 window.addEventListener("popstate", () => {
     if (!ready || isDemo)
         return;
-    const dialog = [cardDetails, archiveMenu, settingsMenu, oddsMenu, growth, market, startConfirm, checkInMenu, dailyMenu, homeBenefits, liveDrawer.dialog].find(item => item.open);
+    const dialog = [document.querySelector("#action-confirm"), cardDetails, archiveMenu, settingsMenu, oddsMenu, growth, market, startConfirm, checkInMenu, dailyMenu, homeBenefits, liveDrawer.dialog].find(item => item?.open);
     if (!dialog && !(liveRunning() || teaching.business?.free))
         return;
     if (!history.state?.ssrLive)
