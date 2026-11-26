@@ -1,6 +1,7 @@
 import { createPackPresentation, nextRevealSlot } from "../js/pack-presentation.js";
 import { createCardView, decorateResult, attachCardTilt, prepareCardVisual, warmCardVisual } from "../js/pack-fx/card-view.js";
 import { cardVisual, pouchArt, cardBackArt } from "../js/pack-fx/resources.js";
+import { confirmAction } from "./confirmation.js";
 import { RARITIES, effectiveRarity, visibleCards } from "../js/pack.js";
 import { defaultSettings, readSettings, reachesPause } from "../js/controls.js";
 import { DeviceClock } from "../js/clock.js";
@@ -13,7 +14,7 @@ import { challengeProgress, openingAudience, recentRareCards } from "../js/busin
 import { drawOddsStages, themeFor, totalStock } from "../js/order-rules.js";
 import { createScene } from "../js/scene.js";
 import { element } from "../js/dom.js";
-import { challengeCardArt, goalLabel, renderCandidates, renderMarket } from "../js/business-ui.js";
+import { challengeCardArt, goalLabel, renderCandidates, renderMarket } from "./business-ui.js";
 import { rewardAllowed, rewardValid } from "../js/rewards.js";
 import { renderTalentTree } from "../js/talent-ui.js";
 import { hasSet, signInAmounts } from "../js/growth.js";
@@ -1391,12 +1392,16 @@ element("sign-in").onclick = () => {
     if (profile)
         sendBusiness({ type: "sign-in", revision: profile.revision });
 };
-element("exit-free").onclick = () => {
+element("exit-free").onclick = async () => {
     const profile = teaching.business;
     const pack = profile?.free?.pack;
     const prompt = pack && pack.revealed < 5 ? "已锁定的包将结算入藏，其余未拆包保留。确定退出？" : "退出后本次金包接力和 UR 余辉清空。确定退出？";
-    if (profile?.free && !profile.free.exiting && window.confirm(prompt))
-        sendBusiness({ type: "exit-free", revision: profile.revision });
+    if (!profile?.free || profile.free.exiting)
+        return;
+    const accepted = await confirmAction("退出自由拆卡", prompt, "确认退出");
+    const current = teaching.business;
+    if (accepted && current?.free && !current.free.exiting)
+        sendBusiness({ type: "exit-free", revision: current.revision });
 };
 let rewardPlaying = false;
 let rewardResult;
@@ -1795,6 +1800,8 @@ function refreshPlayControls() {
 function scheduleAuto() {
     presentation.setPaused(!!document.querySelector("dialog[open]"));
     clearTimeout(autoTimer);
+    if (document.querySelector("#action-confirm[open]"))
+        return;
     if (!ready)
         return;
     const current = isDemo ? pack : currentGamePack();
@@ -2120,10 +2127,11 @@ async function cloudStart(takeover = false) {
     }
 }
 element("platform-retry").onclick = () => void cloudStart();
-element("platform-takeover").onclick = () => {
-    if (window.confirm("从最新云档继续？此设备尚未同步的进度会被保留用于核对。"))
+element("platform-takeover").onclick = async () => {
+    if (await confirmAction("从云存档继续", "从最新云档继续？此设备尚未同步的进度会被保留用于核对。", "继续云存档"))
         void cloudStart(true);
 };
+document.addEventListener("game:modalchange", scheduleAuto);
 window.addEventListener("offline", () => {
     if (requireCloud)
         blockCloud(new PlatformFailure("网络已断开，重新联网后核对云档。"));

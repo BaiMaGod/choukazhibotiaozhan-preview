@@ -211,6 +211,32 @@ dialog:not(.room-page) select { font-size: 12px; }
 #archive-cards .known-card { box-shadow: inset 0 0 0 1px #ffe5a352, 0 0 5px #ffa63a50; }
 /* Bottom ornament keeps clear of the final settings row. */
 #play-settings { padding-inline: clamp(32px, 5vw, 42px); padding-bottom: 48px; }
+#archive-cards { grid-auto-rows: calc(var(--u) * 24); min-height: 0; max-height: none; }
+#growth[data-room='collection'] .collection-shelf { min-height: 0; height: auto; align-items: stretch; }
+#growth[data-room='collection'] .shelf-board .collection-grid { grid-auto-rows: calc(var(--u) * 27); }
+#growth[data-room='collection'] .shelf-board .collection-grid li { overflow: hidden; }
+#growth[data-room='free'] .market-header { min-height: calc(var(--u) * 105); }
+#growth[data-room='free'] .free-picker { display: grid; grid-template-columns: 1fr 1.5fr; align-items: center; gap: 5px; }
+#growth[data-room='free'] .free-picker h3 { font-size: 13px; margin: 0; }
+#growth[data-room='free'] .free-tiers { grid-column: 1 / -1; }
+#odds-dialog[open] { display: flex; flex-direction: column; overflow: hidden; }
+#odds-list { overflow: auto; min-height: 0; padding: 2px; scrollbar-width: thin; }
+#action-confirm #action-confirm-message { text-align: center; margin: 14px 4px 22px; font-size: 14px; }
+#action-confirm .dialog-actions { grid-template-columns: 1fr 1.7fr; gap: 10px; }
+#action-confirm .primary { font-size: 14px; min-height: 44px; }
+.shell[data-screen='free'] .stage-title { inset: calc(var(--u) * 12) 9% auto; height: calc(var(--u) * 25); background: url('./assets/ui/dialog-v1/free-title.webp') center / contain no-repeat; }
+.shell[data-screen='free'] .stage-title > * { visibility: hidden; }
+.shell[data-screen='free'] > .action-bar { width: 80%; }
+.shell[data-screen='free'] #primary { min-height: 48px; font-size: clamp(13px, calc(var(--u) * 3.9), 29px); background: url('../assets/ui/home-start-skin.webp') center / 100% 100% no-repeat; border: 0; box-shadow: none; }
+.shell[data-screen='free'] #free-session { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.shell[data-screen='free'] #free-session p { font-size: 11px; }
+.shell[data-screen='free'] #free-session .quiet { min-height: 36px; white-space: nowrap; border-radius: 999px; font-size: 11px; }
+.shell[data-screen='free'] .controls { background: #3a222bd9; border-color: #d4a366; }
+@media (max-width: 380px), (max-height: 700px) {
+    #play-settings { padding-inline: 34px; padding-bottom: 60px; }
+    #start-confirm .inventory-panel { max-height: 30dvh; }
+    #odds-dialog { padding-bottom: 48px; }
+}
 @media (max-width: 380px), (max-height: 700px) {
     dialog:not(.room-page) { padding: 52px 23px 30px; }
     dialog:not(.room-page) > :is(header, .market-header) { min-height: 48px; margin-bottom: 14px; gap: 4px; }
