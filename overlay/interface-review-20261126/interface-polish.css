@@ -126,7 +126,7 @@ dialog:not(.room-page) select { font-size: 12px; }
 }
 #archive-dialog { background-image: linear-gradient(#28172315, #26132340), url('../assets/ui/archive.webp'); }
 #start-confirm { background-image: linear-gradient(#28172310, #26132345), url('../assets/ui/prep.webp'); }
-#growth[data-room='collection'] { background-image: linear-gradient(#28172315, #26132350), url('../assets/ui/home.webp'); }
+#growth[data-room='collection'] { background-image: linear-gradient(#28172315, #26132350), url('../assets/ui/shop-room.webp'); }
 #growth[data-room='free'] { background-image: linear-gradient(#28172315, #26132345), url('../assets/ui/free.webp'); }
 #archive-dialog .market-header { min-height: calc(var(--u) * 48); }
 #archive-dialog #archive-heading {
