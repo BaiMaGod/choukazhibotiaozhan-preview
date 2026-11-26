@@ -1,0 +1,55 @@
+{
+  "purpose": "Reusable modal skin and independent decorated page titles. Original formal reference images stay unchanged.",
+  "assets": [
+    {
+      "file": "archive-title.webp",
+      "size": [
+        1400,
+        700
+      ],
+      "bytes": 237494,
+      "sha256": "558a15e45fa7838a2c8fd8a0b4b89b17bd1c35da5174bd4f20a06954724bba61",
+      "alpha": true
+    },
+    {
+      "file": "collection-title.webp",
+      "size": [
+        1400,
+        467
+      ],
+      "bytes": 219422,
+      "sha256": "979131729c92ed653b0bf492eae47e189f744eff1a53d3900c0508362cb1b5fb",
+      "alpha": true
+    },
+    {
+      "file": "free-title.webp",
+      "size": [
+        1400,
+        467
+      ],
+      "bytes": 209708,
+      "sha256": "0498d0e2e0e15d8ab7972151bae217274e02621c3d31cf5c99bb13f104d32e7b",
+      "alpha": true
+    },
+    {
+      "file": "prep-title.webp",
+      "size": [
+        1400,
+        467
+      ],
+      "bytes": 194348,
+      "sha256": "3db051b8dae4eee66abee85bda115417b7deabf57bf1dce73ee7729ab728d09c",
+      "alpha": true
+    },
+    {
+      "file": "rose-glass-panel.webp",
+      "size": [
+        1122,
+        1402
+      ],
+      "bytes": 208090,
+      "sha256": "bd03a7018959f22ba68cfcfcbb49b122c97caac1b89b0a6dc0dd06202e805f1d",
+      "alpha": true
+    }
+  ]
+}

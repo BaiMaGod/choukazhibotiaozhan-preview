@@ -150,8 +150,13 @@
     "live-elements.css": "9c981fb637f896bd36da0dff7f2c015ef3e55b7069260a1d71a1ebaf164aa0ac",
     "live-restoration.css": "4464295243aaf132a598e8cea8c959ef722693085d88c69daf6efa588257bf50",
     "interface-review-20261126/assets/ui/dialog-v1/rose-glass-panel.webp": "bd03a7018959f22ba68cfcfcbb49b122c97caac1b89b0a6dc0dd06202e805f1d",
-    "interface-review-20261126/main.js": "629b175be2c02ef2f522ac9ab00fb8582c02a1d2c6f3df0ceb320f4fe6961d3a",
-    "interface-review-20261126/interface-polish.css": "23b9cf2f1092a8fb65390319074532816c4c20f96eb2b82c5597127f53584393",
-    "interface-review-20261126/index.html": "a9601c014daa312b4b4a0e947d1d343cf4a23759b4d254a882db079e6d7ffd57"
+    "interface-review-20261126/main.js": "dd7c61b5f6e1f7923ce4d8943c63a3500e0e67eadcaf5f37d6e2a2143342998f",
+    "interface-review-20261126/interface-polish.css": "8ed8b789f7769e0a546f52151f4d790a6ca5693007586a58c20331da06eae6bc",
+    "interface-review-20261126/index.html": "771a8994a95556890bc05e8b808c0e0cc9cbcd4379cf73e1ee069c2f789ee0f5",
+    "interface-review-20261126/assets/ui/dialog-v1/manifest.json": "592e7e6392c967182c71ab53940b12c8eed213fc64813a9709d6f28dc718dcfb",
+    "interface-review-20261126/assets/ui/dialog-v1/free-title.webp": "0498d0e2e0e15d8ab7972151bae217274e02621c3d31cf5c99bb13f104d32e7b",
+    "interface-review-20261126/assets/ui/dialog-v1/collection-title.webp": "979131729c92ed653b0bf492eae47e189f744eff1a53d3900c0508362cb1b5fb",
+    "interface-review-20261126/assets/ui/dialog-v1/archive-title.webp": "558a15e45fa7838a2c8fd8a0b4b89b17bd1c35da5174bd4f20a06954724bba61",
+    "interface-review-20261126/assets/ui/dialog-v1/prep-title.webp": "3db051b8dae4eee66abee85bda115417b7deabf57bf1dce73ee7729ab728d09c"
   }
 }

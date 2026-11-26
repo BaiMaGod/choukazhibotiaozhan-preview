@@ -791,8 +791,10 @@ function showStartConfirm(stock, note) {
         const tile = document.createElement("div");
         tile.className = "inventory-item";
         const cover = packImage(theme.id);
-        if (cover)
+        if (cover) {
+            cover.src = pouchArt(cover.src);
             tile.append(cover);
+        }
         const label = document.createElement("strong");
         label.textContent = theme.name;
         const count = document.createElement("span");
@@ -1219,8 +1221,10 @@ function renderFreePicker(list, profile) {
             renderGrowth(profile);
         });
         const art = selected && packImage(selected.id);
-        if (art)
+        if (art) {
+            art.src = pouchArt(art.src);
             button.prepend(art);
+        }
         const label = document.createElement("small");
         label.textContent = `拥有 ${stock} 包`;
         button.append(label);
