@@ -229,6 +229,7 @@ dialog:not(.room-page) select { font-size: 12px; }
     background: url('./assets/ui/dialog-v1/cabinet.webp') center / 100% 100% no-repeat;
 }
 #growth[data-room='collection'] .shelf-board .collection-grid li { background-color: #2d1c2570; border-color: #c3996380; }
+#growth[data-room='collection'] .market-header::before { display: none; }
 #growth[data-room='collection'] .collection-progress,
 #growth[data-room='free'] :is(.free-picker, .free-results),
 #archive-preview {
