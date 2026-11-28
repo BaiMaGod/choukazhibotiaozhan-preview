@@ -231,3 +231,39 @@ body:has(.shell[data-screen="live"]) > .prism-flight { z-index: 4; }
 @media (max-height: 700px) {
     .shell[data-screen="live"] > .live-panels > #business-live > .live-order-details { min-height: 20px; }
 }
+
+.masthead .live-session-stat { display: none; }
+.shell[data-screen="live"] .masthead { grid-template-columns: 44fr 40fr 16fr; }
+.shell[data-screen="live"] .masthead #open-settings { display: none; }
+.shell[data-screen="live"] .host-chip { height: auto; min-height: calc(var(--u) * 11); }
+.shell[data-screen="live"] .masthead #mode-label { display: none; }
+.shell[data-screen="live"] #live-player-assets {
+    display: flex; flex-wrap: wrap; gap: 2px 6px; margin: 2px 0 0;
+    color: #ffe8ba; font-size: clamp(9px,calc(var(--u) * 2.2),20px);
+}
+#live-player-assets > div { display: flex; align-items: baseline; gap: 3px; position: relative; }
+#live-player-assets dt, #live-player-assets dd { margin: 0; white-space: nowrap; }
+.shell[data-screen="live"] #live-player-assets .live-balance-more { position: static; transform: none; align-self: center; width: 1em; height: 1em; }
+.shell[data-screen="live"] .masthead #profile > div.live-session-stat {
+    display: flex; justify-content: center; gap: .35em; min-width: 0; padding: 0 3px;
+    border: 1px solid #dcad7a; border-radius: 999px; background: linear-gradient(#58354b,#2c1929);
+    color: #ffe9c9; min-height: 22px;
+}
+.shell[data-screen="live"] .live-session-stat dt { flex: none; }
+.shell[data-screen="live"] .live-session-stat dd { overflow: hidden; text-overflow: ellipsis; }
+.shell[data-screen="live"] #live-end {
+    grid-column: 3; min-height: 34px; width: 100%; padding-inline: 4px;
+    border-color: #efb88c; color: #fff0da; font-weight: 750;
+    background: linear-gradient(160deg,#873955eb,#4e212fee 58%,#321725f2);
+    box-shadow: inset 0 1px #ffc7ac60, 0 2px 6px #1c0c16a0;
+    text-shadow: 0 1px 2px #321522;
+}
+#live-player-assets dt::before {
+    content: ''; display: inline-block; width: 1.15em; height: 1.15em;
+    margin-right: 2px; vertical-align: -.2em; background: center / contain no-repeat;
+}
+#live-player-assets #profile-coins dt::before { background-image: url('./assets/ui/summary-metric-coins-v2.webp'); }
+#live-player-assets #profile-fans dt::before { background-image: url('./assets/ui/summary-metric-fans-v2.webp'); }
+.shell[data-screen="live"] .masthead #profile > div.live-session-stat dt { display: block; font-size: max(9px,calc(var(--u) * 2.2)); }
+.shell[data-screen="live"] .live-gift-ledger { transform: translate(calc(var(--u) * -.65), calc(var(--u) * 2.8)); }
+.shell[data-screen="live"] .live-gift-ledger dl { grid-template-rows: repeat(2,minmax(0,1fr)); }

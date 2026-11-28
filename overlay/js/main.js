@@ -10,7 +10,7 @@ import { openPackStore, transactPack, transactTeaching } from "./save.js";
 import { rules } from "./generated-rules.js";
 import { beijingDay, teachingView } from "./teaching.js";
 import { describeTeachingReward, teachingOrder, teachingRarities } from "./teaching-rules.js";
-import { availableStock, challengeProgress, normalGiftNet, openingAudience, recentRareCards } from "./business.js";
+import { availableStock, challengeProgress, openingAudience, recentRareCards } from "./business.js";
 import { drawOddsStages, themeFor, totalStock } from "./order-rules.js";
 import { createScene } from "./scene.js";
 import { element } from "./dom.js";
@@ -56,6 +56,13 @@ function showScreen(screen) {
     const panel = screen === "home" ? homeBenefits : shell;
     if (platform.parentElement !== panel)
         panel.append(platform);
+    const liveAssets = element("live-player-assets");
+    const profile = element("profile");
+    const assetsParent = screen === "live" ? liveAssets : profile;
+    const coins = element("profile-coins");
+    if (coins.parentElement !== assetsParent)
+        assetsParent.prepend(coins, element("profile-fans"));
+    liveAssets.hidden = screen !== "live";
     element("live-hud").hidden = screen !== "live";
     element("live-interactions").hidden = screen !== "live";
     element("live-tools-bar").hidden = screen !== "live";
@@ -444,8 +451,6 @@ function renderTeaching() {
     }
     element("restart-live").hidden = !summary;
     element("restart-live").disabled = teaching.stamina.current < rules.stamina.spend;
-    element("live-heat").textContent = `热度 ${view.heat}`;
-    element("live-audience").textContent = `在线 ${view.online}`;
     if (live) {
         const packs = teaching.broadcast?.packs ?? [];
         const visits = packs.reduce((sum, pack) => sum + (pack.settledAt ? pack.interaction.visitors : 0), 0);
@@ -595,17 +600,15 @@ function renderLiveEnd(taskActive) {
     end.setAttribute("aria-label", taskActive ? "下播暂不可用，当前任务未完成" : "下播");
 }
 function renderLiveInteraction(visits, fanChange, gifts, grossMilli, online, heat, cards, accepted, orderTotal, paid) {
+    element("live-audience").textContent = String(online);
+    element("live-heat").textContent = heat;
     element("live-visits").textContent = visits === undefined ? "无记录" : `${visits} 人次`;
     element("live-gross").textContent = gold(grossMilli);
-    element("live-online").textContent = String(online);
-    element("live-heat-data").textContent = heat;
     element("live-gift-count").textContent = `${gifts} 份`;
     element("live-gift-activity").textContent = `${gifts} 份`;
     element("live-fan-change").textContent = `${fanChange > 0 ? "+" : ""}${fanChange}`;
     element("live-gift-total").textContent = gold(grossMilli);
-    const net = normalGiftNet(grossMilli);
-    element("live-gift-net").textContent = `${net} 金币`;
-    element("live-gift-totals").textContent = `已收 ${gifts} 份 · 毛额 ${gold(grossMilli)} · 正常下播预计到账 ${net} 金币`;
+    element("live-gift-totals").textContent = `已收 ${gifts} 份 · 总值 ${gold(grossMilli)}`;
     element("live-order-count").textContent = `${accepted} 单`;
     element("live-order-total").textContent = `${orderTotal} 金币`;
     element("live-order-paid").textContent = `${paid} 金币`;
@@ -1615,8 +1618,6 @@ function renderBusiness(profile) {
         element("business-stock").textContent = `本场带入 ${totalStock(live.startingStock)} 包 · 未拆 ${totalStock(profile.stock)} 包`;
         const audience = live.audience;
         const online = audience ? audience.oldFans + audience.visitors : openingAudience(live);
-        element("live-heat").textContent = `热度 ${live.heatExact ?? live.heat}`;
-        element("live-audience").textContent = `在线 ${online}`;
         const pending = task && !task.order.selfOpen ? task.order.payment : 0;
         const accepted = live.shipped + Number(!!task && !task.order.selfOpen);
         if (!live.report && !profile.free) {
@@ -1905,8 +1906,7 @@ async function confirmLiveEnd() {
         return;
     const broadcastId = live?.id ?? teaching.broadcast.id;
     const stock = profile ? totalStock(profile.stock) : view.inventory;
-    const net = normalGiftNet(live?.grossMilli ?? view.giftGrossMilli);
-    const confirmed = await confirmAction("下播结算", `未拆的 ${stock} 包将保留，礼物按 50% 分成，预计到账 ${net} 金币。本场候选、增益和未用道具将清空。`, "确认下播", "继续直播");
+    const confirmed = await confirmAction("下播结算", `未拆的 ${stock} 包将保留，礼物按 50% 分成结算。本场候选、增益和未用道具将清空。`, "确认下播", "继续直播");
     if (!confirmed || busy)
         return;
     auto = false;

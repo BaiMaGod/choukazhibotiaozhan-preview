@@ -14,7 +14,7 @@
   <script defer src="./libs/laya.webgl_2D.js"></script>
   <script src="./libs/gsap.min.js"></script>
   <script type="importmap">{"imports":{"./js/pack-fx/controller.js":"./js/pack-fx/controller.js?v=show-v3","./js/pack-fx/rarity-effects.js":"./js/pack-fx/rarity-effects.js?v=show-v3","./js/pack-fx/reveal-show.js":"./js/pack-fx/reveal-show.js?v=show-v3","./js/vendor/react-cards-opening/effects.js":"./js/vendor/react-cards-opening/effects.js?v=show-v3"}}</script>
-  <script type="module" src="./js/main.js?v=ui-20261128"></script>
+  <script type="module" src="./js/main.js?v=ui-20261128-hud"></script>
   <link rel="stylesheet" href="./talents.css">
   <link rel="stylesheet" href="./pack-fx.css">
   <link rel="stylesheet" href="./rarity-effects.css?v=show-v3">
@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="./live-restoration.css?v=live-v3">
   <link rel="stylesheet" href="./live-elements.css?v=live-r7">
   <link rel="stylesheet" href="./interface-polish.css?v=20261126-r7">
-  <link rel="stylesheet" href="./live-play.css?v=20261128">
+  <link rel="stylesheet" href="./live-play.css?v=20261128-hud">
 </head>
 <body>
   <main class="shell">
@@ -30,11 +30,13 @@
     <header class="masthead">
       <div class="host-chip">
         <img src="./assets/ui/avatar.webp" width="104" height="104" alt="">
-        <div><b>猫猫主播</b><small id="mode-label">首次教学</small><small id="edition"></small></div>
+        <div><b>猫猫主播</b><dl id="live-player-assets" aria-label="玩家资产" hidden></dl><small id="mode-label">首次教学</small><small id="edition"></small></div>
       </div>
       <dl id="profile" class="profile" hidden>
-        <div><dt>金币</dt><dd id="coins">—</dd><button id="live-coin-info" class="live-balance-more" type="button" aria-label="金币说明"><img src="./assets/ui/live-r7/balance-plus.webp" alt=""></button></div>
-        <div><dt>粉丝</dt><dd id="fans">—</dd><button id="live-fan-info" class="live-balance-more" type="button" aria-label="粉丝说明"><img src="./assets/ui/live-r7/balance-plus.webp" alt=""></button></div>
+        <div id="profile-coins"><dt>金币</dt><dd id="coins">—</dd><button id="live-coin-info" class="live-balance-more" type="button" aria-label="金币说明"><img src="./assets/ui/live-r7/balance-plus.webp" alt=""></button></div>
+        <div id="profile-fans"><dt>粉丝</dt><dd id="fans">—</dd><button id="live-fan-info" class="live-balance-more" type="button" aria-label="粉丝说明"><img src="./assets/ui/live-r7/balance-plus.webp" alt=""></button></div>
+        <div class="live-session-stat"><dt>在线</dt><dd id="live-audience"></dd></div>
+        <div class="live-session-stat"><dt>热度</dt><dd id="live-heat"></dd></div>
         <div class="profile-stamina"><dt>体力</dt><dd id="stamina">—</dd></div>
         <div class="profile-stock"><dt>未拆库存<button id="live-inventory" type="button" aria-label="查看本场库存"></button></dt><dd id="inventory">—</dd></div>
       </dl>
@@ -72,14 +74,11 @@
         </dl>
       </div>
       <div id="live-hud" class="live-hud" hidden>
-        <div class="live-indicator"><b>● LIVE</b><span id="live-audience"></span></div>
-        <div class="live-meters"><span aria-hidden="true">🔥</span><span id="live-heat"></span></div>
         <div class="live-gift-ledger">
           <button id="live-gifts" type="button">本场礼物 ›</button>
           <dl>
             <div><dt><img src="./assets/ui/summary-reward-gift-v2.webp" alt="">已收</dt><dd id="live-gift-count"></dd></div>
-            <div><dt><img src="./assets/ui/summary-reward-coins-v2.webp" alt="">估值</dt><dd id="live-gift-total"></dd></div>
-            <div><dt><img src="./assets/ui/summary-reward-coins-v2.webp" alt="">预计到账</dt><dd id="live-gift-net"></dd></div>
+            <div><dt><img src="./assets/ui/summary-reward-coins-v2.webp" alt="">总值</dt><dd id="live-gift-total"></dd></div>
           </dl>
         </div>
       </div>
@@ -130,8 +129,6 @@
       </div>
       <div id="live-moments" class="live-moments" hidden></div>
       <dl id="live-data" class="interaction-stats" hidden>
-        <div><dt>在线</dt><dd id="live-online"></dd></div>
-        <div><dt>热度</dt><dd id="live-heat-data"></dd></div>
         <div><dt>礼物件数</dt><dd id="live-gift-activity"></dd></div>
         <div><dt>礼物毛额</dt><dd id="live-gross"></dd></div>
         <div><dt>已接订单</dt><dd id="live-order-count"></dd></div>
