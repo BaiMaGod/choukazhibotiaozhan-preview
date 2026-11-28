@@ -71,7 +71,22 @@ function showScreen(screen) {
     element("live-end").hidden = screen !== "live";
     element("pack-table").toggleAttribute("data-live-size", screen === "live");
     if (screen !== "live")
-        shell.removeAttribute("data-live-waiting");
+        setLiveWaiting(false);
+}
+function setLiveWaiting(waiting) {
+    const wasWaiting = shell.hasAttribute("data-live-waiting");
+    shell.toggleAttribute("data-live-waiting", waiting);
+    element("live-ledger").hidden = !waiting;
+    const activity = element("live-activity");
+    const panel = waiting ? element("live-waiting-chat") : element("live-interactions");
+    if (activity.parentElement !== panel) {
+        if (waiting)
+            panel.append(activity);
+        else
+            element("live-moments").before(activity);
+    }
+    if (waiting && !wasWaiting)
+        selectLiveInteraction(liveInteractionTabs[0]);
 }
 const primary = element("primary");
 const skip = element("skip");
@@ -456,7 +471,8 @@ function renderTeaching() {
         const visits = packs.reduce((sum, pack) => sum + (pack.settledAt ? pack.interaction.visitors : 0), 0);
         const broadcast = teaching.broadcast;
         const sale = view.shipment?.saleGold ?? 0;
-        renderLiveInteraction(visits, view.fans, view.giftCount, view.giftGrossMilli, view.online, String(view.heat), packs.flatMap(pack => visibleCards(pack)), 1, teachingOrder.saleGold, sale);
+        renderLiveInteraction(visits, view.fans, view.giftCount, view.giftGrossMilli, view.online, String(view.heat), packs.flatMap(pack => visibleCards(pack)), 1, teachingOrder.saleGold, sale, Number(!!view.shipment));
+        renderLiveItems(packs.filter(pack => pack.settledAt != null).map(pack => pack.reward));
         liveActivity.update(broadcast.id, [
             ...packs.flatMap(pack => pack.settledAt != null ? packEvents(pack.id, pack.interaction) : []),
             ...(view.shipment?.sunglasses ? [glassesEvent(broadcast.id, "customer", view.shipment.sunglasses, view.shipment.giftMilli)] : []),
@@ -592,6 +608,37 @@ function renderLiveStock(stock, reserved) {
         rows.push(row);
     }
     element("live-stock-list").replaceChildren(...rows);
+    const total = stocked.reduce((sum, theme) => sum + stock[theme.id], 0);
+    element("live-stock-count").textContent = String(total);
+    element("live-inventory").setAttribute("aria-label", `库存，${total} 包未拆`);
+}
+function renderLiveItems(rewards, spentCoupons = []) {
+    const coupons = heldCoupons(rewards, spentCoupons);
+    const count = element("live-item-count");
+    count.hidden = coupons.length === 0;
+    count.textContent = String(coupons.length);
+    element("live-items").setAttribute("aria-label", `道具，${coupons.length} 张券`);
+    element("live-item-total").textContent = `${coupons.length} 张券`;
+    element("live-item-empty").hidden = coupons.length > 0;
+    const groups = new Map();
+    for (const coupon of coupons) {
+        const label = describeTeachingReward(coupon).replace(/ ×1$/, "");
+        groups.set(label, (groups.get(label) ?? 0) + 1);
+    }
+    element("live-item-list").replaceChildren(...Array.from(groups, ([label, quantity]) => {
+        const item = document.createElement("li");
+        item.textContent = `${label} ×${quantity}`;
+        return item;
+    }));
+    const buffs = rewards.flatMap(reward => {
+        if (reward.kind !== "buff")
+            return [];
+        const item = document.createElement("li");
+        item.textContent = describeTeachingReward(reward);
+        return [item];
+    });
+    element("live-active-buffs").hidden = buffs.length === 0;
+    element("live-buff-list").replaceChildren(...buffs);
 }
 function renderLiveEnd(taskActive) {
     const end = element("live-end");
@@ -599,7 +646,7 @@ function renderLiveEnd(taskActive) {
     end.textContent = taskActive ? "履约中" : "下播";
     end.setAttribute("aria-label", taskActive ? "下播暂不可用，当前任务未完成" : "下播");
 }
-function renderLiveInteraction(visits, fanChange, gifts, grossMilli, online, heat, cards, accepted, orderTotal, paid) {
+function renderLiveInteraction(visits, fanChange, gifts, grossMilli, online, heat, cards, accepted, orderTotal, paid, shipped) {
     element("live-audience").textContent = String(online);
     element("live-heat").textContent = heat;
     element("live-visits").textContent = visits === undefined ? "无记录" : `${visits} 人次`;
@@ -612,6 +659,8 @@ function renderLiveInteraction(visits, fanChange, gifts, grossMilli, online, hea
     element("live-order-count").textContent = `${accepted} 单`;
     element("live-order-total").textContent = `${orderTotal} 金币`;
     element("live-order-paid").textContent = `${paid} 金币`;
+    element("live-ledger-paid").textContent = String(paid);
+    element("live-ledger-shipped").textContent = String(shipped);
     const recent = recentRareCards(cards).slice(-3).reverse();
     const moments = element("live-moments");
     const key = recent.map(card => `${card.id}:${card.rarity}`).join("|");
@@ -1536,8 +1585,8 @@ function renderBusiness(profile) {
     element("restart-live").hidden = !live?.report;
     element("restart-live").disabled = teaching.stamina.current < rules.stamina.spend;
     const task = live?.task;
-    const waiting = !!live && !task && !live.report;
-    shell.toggleAttribute("data-live-waiting", waiting);
+    const waiting = !!live && !task && !live.report && !profile.free;
+    setLiveWaiting(waiting);
     const current = task?.pack ?? null;
     const opened = current && current.revealed < current.cards.length;
     const choosing = !!current?.pending && !opened;
@@ -1623,7 +1672,8 @@ function renderBusiness(profile) {
         if (!live.report && !profile.free) {
             const fresh = current && (opened || choosing)
                 ? visibleCards({ ...current, cards: finalCards(current.cards, current.upgraded), upgraded: undefined }) : [];
-            renderLiveInteraction(live.visits, profile.fans - live.openingFans, live.giftCount, live.grossMilli, online, live.heatExact ?? String(live.heat), [...(live.featuredCards ?? []), ...fresh], accepted, live.saleGold + pending, live.saleGold);
+            renderLiveInteraction(live.visits, profile.fans - live.openingFans, live.giftCount, live.grossMilli, online, live.heatExact ?? String(live.heat), [...(live.featuredCards ?? []), ...fresh], accepted, live.saleGold + pending, live.saleGold, live.shipped);
+            renderLiveItems(live.rewards, live.spentCoupons);
             liveActivity.update(live.id, live.activity ?? []);
             renderLiveStock(profile.stock, themeId => profile.stock[themeId] - availableStock(profile, themeId));
             renderLiveEnd(!!task);
@@ -1820,8 +1870,6 @@ function refreshPlayControls() {
     const odds = element("show-odds");
     odds.disabled = !(currentGamePack() || teaching.business?.live?.task || teaching.business?.live?.rewards.length || teaching.business?.free);
     element("live-odds").disabled = odds.disabled;
-    element("live-items").disabled = tools.hidden;
-    element("live-effects").disabled = settlement.hidden && !teaching.business?.live?.rewards.length;
     if (active && !history.state?.ssrLive)
         history.pushState({ ssrLive: true }, "");
 }
@@ -1894,7 +1942,6 @@ function showPause() {
     pauseMenu.showModal();
 }
 element("pause-play").onclick = showPause;
-element("live-pause").onclick = showPause;
 pauseMenu.onclose = scheduleAuto;
 async function confirmLiveEnd() {
     if (busy || !liveRunning())
@@ -1971,8 +2018,7 @@ function showSettings() {
 }
 element("open-settings").onclick = showSettings;
 element("pause-settings").onclick = showSettings;
-element("live-archive").onclick = () => element("open-archive").click();
-element("live-odds").onclick = () => element("show-odds").click();
+element("live-settings").onclick = showSettings;
 settingsMenu.onclose = scheduleAuto;
 oddsMenu.onclose = scheduleAuto;
 growth.onclose = scheduleAuto;

@@ -92,7 +92,7 @@ export function installLiveDrawer(shell, onModalChange) {
     receiptButton.append(receiptHeading, receiptTab, receiptArt, receiptState, receiptSummary, receiptAction);
     receiptButton.onclick = orders;
     shell.querySelector(".live-panels").prepend(receiptButton);
-    element("live-orders").onclick = orders;
+    element("live-ledger").onclick = orders;
     const currencyInfo = () => {
         element("live-currency-coins").textContent = element("coins").textContent;
         element("live-currency-fans").textContent = element("fans").textContent;
@@ -111,12 +111,10 @@ export function installLiveDrawer(shell, onModalChange) {
     const gifts = document.getElementById("live-gifts");
     if (gifts)
         gifts.onclick = () => open("本场礼物", ["live-gift-info"]);
-    element("live-items").onclick = () => open("本包道具", ["tools"]);
-    element("live-effects").onclick = () => {
-        if (element("settlement").hidden)
-            element("show-odds").click();
-        else
-            open("本包增益", ["settlement"]);
+    element("live-items").onclick = () => open("本场道具与增益", ["live-item-info", "tools", "settlement"]);
+    element("live-odds").onclick = () => {
+        dismiss();
+        element("show-odds").click();
     };
     return { dialog, close: dismiss };
 }

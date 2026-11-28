@@ -261,6 +261,7 @@ export function renderMarket(profile, busy, send) {
 }
 const coinIcon = "./assets/ui/summary-metric-coins-v2.webp";
 const giftIcon = "./assets/ui/live-r7/reward-glasses.webp";
+const fineIcon = "./assets/ui/live-orders/red-envelope.webp";
 let candidateLiveId;
 let selectedCandidate;
 function candidateMetric(label, amount, icon, unit) {
@@ -321,7 +322,7 @@ function candidateCard(order, available) {
     terms.append(order.selfOpen ? candidateMetric("卡牌", "归你") : candidateMetric("货款", order.payment, coinIcon, "金币"));
     if (order.challenge) {
         const success = candidateMetric("成功", `×${order.challenge.glasses}`, giftIcon, "墨镜");
-        const failure = candidateMetric("失败", order.challenge.fine, coinIcon, "金币红包");
+        const failure = candidateMetric("失败", order.challenge.fine, fineIcon, "金币红包");
         failure.classList.add("candidate-failure");
         terms.append(success, failure);
     }

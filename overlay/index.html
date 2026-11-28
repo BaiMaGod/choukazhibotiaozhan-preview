@@ -14,7 +14,7 @@
   <script defer src="./libs/laya.webgl_2D.js"></script>
   <script src="./libs/gsap.min.js"></script>
   <script type="importmap">{"imports":{"./js/pack-fx/controller.js":"./js/pack-fx/controller.js?v=show-v3","./js/pack-fx/rarity-effects.js":"./js/pack-fx/rarity-effects.js?v=show-v3","./js/pack-fx/reveal-show.js":"./js/pack-fx/reveal-show.js?v=show-v3","./js/vendor/react-cards-opening/effects.js":"./js/vendor/react-cards-opening/effects.js?v=show-v3"}}</script>
-  <script type="module" src="./js/main.js?v=ui-20261128-hud"></script>
+  <script type="module" src="./js/main.js?v=ui-20261128-order-art"></script>
   <link rel="stylesheet" href="./talents.css">
   <link rel="stylesheet" href="./pack-fx.css">
   <link rel="stylesheet" href="./rarity-effects.css?v=show-v3">
@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="./live-restoration.css?v=live-v3">
   <link rel="stylesheet" href="./live-elements.css?v=live-r7">
   <link rel="stylesheet" href="./interface-polish.css?v=20261126-r7">
-  <link rel="stylesheet" href="./live-play.css?v=20261128-hud">
+  <link rel="stylesheet" href="./live-play.css?v=20261128-order-art">
 </head>
 <body>
   <main class="shell">
@@ -30,7 +30,7 @@
     <header class="masthead">
       <div class="host-chip">
         <img src="./assets/ui/avatar.webp" width="104" height="104" alt="">
-        <div><b>猫猫主播</b><dl id="live-player-assets" aria-label="玩家资产" hidden></dl><small id="mode-label">首次教学</small><small id="edition"></small></div>
+        <div><b>猫猫主播</b><span class="live-host-status" aria-label="正在直播">● LIVE</span><dl id="live-player-assets" aria-label="玩家资产" hidden></dl><small id="mode-label">首次教学</small><small id="edition"></small></div>
       </div>
       <dl id="profile" class="profile" hidden>
         <div id="profile-coins"><dt>金币</dt><dd id="coins">—</dd><button id="live-coin-info" class="live-balance-more" type="button" aria-label="金币说明"><img src="./assets/ui/live-r7/balance-plus.webp" alt=""></button></div>
@@ -38,7 +38,7 @@
         <div class="live-session-stat"><dt>在线</dt><dd id="live-audience"></dd></div>
         <div class="live-session-stat"><dt>热度</dt><dd id="live-heat"></dd></div>
         <div class="profile-stamina"><dt>体力</dt><dd id="stamina">—</dd></div>
-        <div class="profile-stock"><dt>未拆库存<button id="live-inventory" type="button" aria-label="查看本场库存"></button></dt><dd id="inventory">—</dd></div>
+        <div class="profile-stock"><dt>未拆库存</dt><dd id="inventory">—</dd></div>
       </dl>
       <button class="quiet home-mail" type="button" aria-label="邮件暂未开放" disabled><img src="./assets/ui/home-mail.webp" alt=""></button>
       <button id="open-settings" class="quiet" type="button" aria-label="设置"><span aria-hidden="true">⚙</span><img class="home-settings-art" src="./assets/ui/home-settings.webp" alt=""></button>
@@ -82,6 +82,7 @@
           </dl>
         </div>
       </div>
+      <div id="live-waiting-chat"></div>
       <div id="gift-banner" role="status" hidden>
         <span id="gift-banner-art" class="gift-art" aria-hidden="true"></span>
         <span class="gift-copy"><b id="gift-banner-source"></b><small id="gift-banner-name"></small></span>
@@ -191,6 +192,12 @@
         <button id="candidate-remove" type="button">移除</button>
       </div>
     </section>
+    <button id="live-ledger" type="button" aria-haspopup="dialog" hidden>
+      <b>本场账单</b>
+      <span>已发货 <strong id="live-ledger-shipped">0</strong> 单</span>
+      <span>已到账 <img src="./assets/ui/summary-metric-coins-v2.webp" alt="金币"> <strong id="live-ledger-paid">0</strong></span>
+      <span>数据 ›</span>
+    </button>
     <dialog id="candidate-risk-dialog" class="market" aria-labelledby="candidate-risk-title">
       <header><h2 id="candidate-risk-title">成功率与风险</h2></header>
       <div id="candidate-risk-body"></div>
@@ -200,6 +207,16 @@
       <section id="live-currency-info" class="panel live-currency-info">
         <p>当前金币 <b id="live-currency-coins"></b> · 当前粉丝 <b id="live-currency-fans"></b></p>
         <p>金币可在下播后的卡包商店购买卡包；粉丝可解锁卡包与天赋。</p>
+      </section>
+      <section id="live-item-info" class="panel live-room-detail" aria-label="持有道具">
+        <h2>持有道具 <small id="live-item-total"></small></h2>
+        <p id="live-item-empty">本场暂无可用道具。</p>
+        <ul id="live-item-list"></ul>
+        <section id="live-active-buffs" hidden>
+          <h3>本场增益</h3>
+          <ul id="live-buff-list"></ul>
+        </section>
+        <button id="live-odds" class="quiet" type="button">查看概率</button>
       </section>
       <section id="live-stock-info" class="panel live-room-detail" aria-label="本场库存">
         <p>可接库存可以用于下一单。预留卡包在撕开时才扣除。</p>
@@ -231,12 +248,9 @@
       </div>
     </section>
     <nav id="live-tools-bar" aria-label="直播快捷操作" hidden>
-      <button id="live-orders" class="quiet" type="button"><span aria-hidden="true"></span>订单</button>
-      <button id="live-items" class="quiet" type="button"><span aria-hidden="true"></span>道具</button>
-      <button id="live-effects" class="quiet" type="button"><span aria-hidden="true"></span>增益</button>
-      <button id="live-odds" class="quiet" type="button"><span aria-hidden="true"></span>概率</button>
-      <button id="live-archive" class="quiet" type="button">图鉴</button>
-      <button id="live-pause" class="quiet" type="button">暂停</button>
+      <button id="live-items" class="quiet" type="button" aria-haspopup="dialog"><span class="live-nav-label">道具</span><span id="live-item-count" class="live-count-badge" hidden></span></button>
+      <button id="live-inventory" class="quiet" type="button" aria-haspopup="dialog"><span class="live-nav-label">库存</span><span id="live-stock-count" class="live-count-badge"></span></button>
+      <button id="live-settings" class="quiet" type="button" aria-haspopup="dialog"><span class="live-nav-label">设置</span></button>
     </nav>
     <div id="action-bar" class="action-bar">
       <div id="live-pack-overview" hidden>
