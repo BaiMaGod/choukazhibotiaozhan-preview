@@ -271,9 +271,8 @@ function candidateMetric(label, amount, icon, unit) {
     caption.textContent = label;
     const value = document.createElement("strong");
     value.textContent = String(amount);
-    if (icon)
-        value.prepend(roomImage(icon, "", unit));
-    line.append(caption, value);
+    const symbol = icon ? roomImage(icon, "", unit) : document.createElement("span");
+    line.append(caption, symbol, value);
     return line;
 }
 function candidateCard(order, available) {
