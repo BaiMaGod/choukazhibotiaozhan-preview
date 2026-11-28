@@ -103,6 +103,14 @@ export function installLiveDrawer(shell, onModalChange) {
         if (button)
             button.onclick = currencyInfo;
     }
+    for (const id of ["live-inventory", "live-pack-details"]) {
+        const button = document.getElementById(id);
+        if (button)
+            button.onclick = () => open("卡包与库存", ["live-stock-info"]);
+    }
+    const gifts = document.getElementById("live-gifts");
+    if (gifts)
+        gifts.onclick = () => open("本场礼物", ["live-gift-info"]);
     element("live-items").onclick = () => open("本包道具", ["tools"]);
     element("live-effects").onclick = () => {
         if (element("settlement").hidden)

@@ -219,14 +219,14 @@ function interval(probability, samples) {
     const radius = z * Math.sqrt(probability * (1 - probability) / samples + correction / (4 * samples));
     return [Math.max(0, (mid - radius) / (1 + correction)), Math.min(1, (mid + radius) / (1 + correction))];
 }
-export function quoteChallenge(order, theme, selfOpen, context, spent, random) {
+export function quoteChallenge(order, theme, selfOpen, context, spent, random, preferredBand) {
     const quantity = selfOpen ? weightedIndex(rules.challenges.selfQuantities, random) + 1 : order.quantity;
     context = { ...context, selfOpen, rewards: forecastRewards(context.rewards, spent, quantity) };
     const seed = Math.floor(random() * 0x100000000);
     const difficulty = [...rules.challenges.difficulty];
     if (!selfOpen)
         difficulty[2] += teachingBuff(context.rewards, "high_weight");
-    const desired = weightedIndex(difficulty, random);
+    const desired = preferredBand ?? weightedIndex(difficulty, random);
     const families = [...rules.challenges.estimator.goal_families];
     const first = families.splice(Math.floor(random() * families.length), 1)[0];
     const heatGoal = { kind: "heat", target: 1 };

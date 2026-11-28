@@ -177,7 +177,10 @@ export function createPrismPresentation(table, options = {}) {
     function setupFlight(firstIndex = 0, restored = false) {
         const box = table.getBoundingClientRect(), pw = pouch?.el.offsetWidth ?? width * .45, ph = pouch?.el.offsetHeight ?? height * .8;
         const vw = typeof innerWidth === 'number' ? innerWidth : width, vh = typeof innerHeight === 'number' ? innerHeight : 640;
-        flightSpace = { width: vw, height: vh, cardHeight: Math.min(vh * .34, vw * .66), mouthX: box.left + width * .5, mouthY: box.top + height * .48 - ph * .38 };
+        const cardHeight = table.dataset.liveSize !== undefined
+            ? Math.min(width * .33, height * .82)
+            : Math.min(vh * .34, vw * .66);
+        flightSpace = { width: vw, height: vh, cardHeight, mouthX: box.left + width * .5, mouthY: box.top + height * .48 - ph * .38 };
         flightAge = restored ? .8 : 0;
         flight.hidden = false;
         flight.style.clipPath = `polygon(0 0,100% 0,100% ${flightSpace.mouthY}px,0 ${flightSpace.mouthY}px)`;

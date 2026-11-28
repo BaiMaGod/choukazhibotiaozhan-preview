@@ -1,8 +1,9 @@
 import { availableStock, candidateRemovalSealed, removalFee } from "./business.js";
 import { element } from "./dom.js";
+import { confirmAction } from "./confirmation.js";
 import { rules } from "./generated-rules.js";
 import { themeFor } from "./order-rules.js";
-import { cardImage, packImage, roomButton, roomTab, roomTabs } from "./room-ui.js";
+import { cardImage, packImage, roomButton, roomImage, roomTab, roomTabs } from "./room-ui.js";
 import { describeTeachingReward } from "./teaching-rules.js";
 function targetCard(order) {
     const goal = order.challenge?.goal;
@@ -13,9 +14,9 @@ export function goalLabel(order) {
     if (!goal)
         return "";
     if (goal.kind === "heat")
-        return `新增热度达到 ${goal.exactTarget ?? goal.target}`;
+        return `新增 ${goal.exactTarget ?? goal.target} 热度`;
     if (goal.kind === "count")
-        return `抽出 ${goal.target} 张 ${goal.rarity} 或以上`;
+        return `抽到 ${goal.target} 张 ${goal.rarity} 或以上`;
     return `抽到「${targetCard(order)?.name ?? goal.cardId}」`;
 }
 export function challengeCardArt(order) {
@@ -258,70 +259,200 @@ export function renderMarket(profile, busy, send) {
     };
     render();
 }
+const coinIcon = "./assets/ui/summary-metric-coins-v2.webp";
+const giftIcon = "./assets/ui/live-r7/reward-glasses.webp";
+let candidateLiveId;
+let selectedCandidate;
+function candidateMetric(label, amount, icon, unit) {
+    const line = document.createElement("span");
+    line.className = "candidate-metric";
+    const caption = document.createElement("span");
+    caption.textContent = label;
+    const value = document.createElement("strong");
+    value.textContent = String(amount);
+    if (icon)
+        value.prepend(roomImage(icon, "", unit));
+    line.append(caption, value);
+    return line;
+}
+function candidateCard(order, available) {
+    const row = document.createElement("article");
+    row.dataset.order = order.id;
+    const face = document.createElement("button");
+    face.type = "button";
+    face.className = "candidate-card";
+    face.dataset.tier = String(order.challenge?.band ?? 0);
+    const body = document.createElement("span");
+    body.className = "candidate-face";
+    const banner = document.createElement("span");
+    banner.className = "candidate-banner";
+    const cover = packImage(order.themeId, "candidate-cover");
+    if (cover)
+        banner.append(cover);
+    const band = order.challenge?.band;
+    if (band !== undefined) {
+        const stars = document.createElement("span");
+        stars.className = "candidate-stars";
+        stars.setAttribute("aria-hidden", "true");
+        for (let i = 0; i <= band; i++) {
+            const star = document.createElement("span");
+            star.className = "candidate-star";
+            stars.append(star);
+        }
+        const description = document.createElement("span");
+        description.className = "candidate-visually-hidden";
+        description.textContent = `难度 ${band + 1} 星`;
+        banner.append(description, stars);
+    }
+    const tick = document.createElement("span");
+    tick.className = "candidate-tick";
+    tick.textContent = "✓";
+    tick.setAttribute("aria-hidden", "true");
+    banner.append(tick);
+    const pack = document.createElement("span");
+    pack.className = "candidate-pack";
+    const name = themeFor(order.themeId).name;
+    pack.textContent = `${name.split("·").pop()} · 拆 ${order.quantity} 包`;
+    const goal = document.createElement("strong");
+    goal.className = "candidate-goal";
+    goal.textContent = goalLabel(order) || "完成订单并发货";
+    const terms = document.createElement("span");
+    terms.className = "candidate-terms";
+    terms.append(order.selfOpen ? candidateMetric("卡牌", "归你") : candidateMetric("货款", order.payment, coinIcon, "金币"));
+    if (order.challenge) {
+        const success = candidateMetric("成功", `×${order.challenge.glasses}`, giftIcon, "墨镜");
+        const failure = candidateMetric("失败", order.challenge.fine, coinIcon, "金币红包");
+        failure.classList.add("candidate-failure");
+        terms.append(success, failure);
+    }
+    if (available < order.quantity) {
+        const flag = document.createElement("span");
+        flag.className = "candidate-stock-flag";
+        flag.textContent = `库存不足 · 余 ${available} 包`;
+        terms.append(flag);
+    }
+    body.append(banner, pack, goal, terms);
+    face.append(body);
+    row.append(face);
+    return row;
+}
+function showCandidateRisk(order, profile) {
+    const dialog = element("candidate-risk-dialog");
+    const body = element("candidate-risk-body");
+    const stock = document.createElement("p");
+    stock.textContent = `${themeFor(order.themeId).name} · 需拆 ${order.quantity} 包 · 可用 ${availableStock(profile, order.themeId)} 包`;
+    body.replaceChildren(stock);
+    const contract = order.challenge;
+    if (contract) {
+        const percent = (p) => `${(p * 100).toFixed(1)}%`;
+        const heading = document.createElement("p");
+        heading.textContent = goalLabel(order);
+        const tools = contract.tools.map(tool => {
+            const label = describeTeachingReward({ kind: "coupon", id: "", key: tool.key, rarity: tool.rarity }).replace(" ×1", "");
+            return `${label} ${tool.expected.toFixed(2)} 张`;
+        }).join("、");
+        const range = contract.range ? `（${percent(contract.range[0])}–${percent(contract.range[1])}）` : "";
+        const estimate = document.createElement("p");
+        estimate.textContent = `最近一轮预估：不用券 ${percent(contract.without)} · 按策略 ${percent(contract.withTools)}${range} · ${tools || "预计不用券"}`;
+        const balance = document.createElement("p");
+        balance.textContent = `余额 ${profile.wallet} 金币 · 失败需付 ${contract.fine} 金币红包` +
+            (profile.wallet + order.payment < contract.fine ? " · 届时付不起将强制下播、退回礼物并掉粉。" : "。");
+        body.append(heading, estimate, balance);
+        const art = challengeCardArt(order);
+        if (art)
+            body.append(art);
+    }
+    dialog.onclose = () => document.dispatchEvent(new Event("game:modalchange"));
+    dialog.showModal();
+    document.dispatchEvent(new Event("game:modalchange"));
+}
 export function renderCandidates(profile, busy, send) {
-    const live = profile.live;
+    const { live } = profile;
     const panel = element("candidate-panel");
     panel.hidden = !live || !!live.report;
-    if (!live || live.report)
+    if (!live || live.report) {
+        selectedCandidate = candidateLiveId = undefined;
         return;
-    const hasAvailable = live.candidates.some(order => availableStock(profile, order.themeId) >= order.quantity);
+    }
+    const list = element("candidate-list");
+    const sameLive = candidateLiveId === live.id;
+    const left = sameLive ? list.scrollLeft : 0;
+    const restoreFocus = list.contains(document.activeElement);
+    const oldIndex = Array.from(list.children).findIndex(row => row.dataset.order === selectedCandidate);
+    const orders = live.candidates;
+    const kept = sameLive && orders.find(order => order.id === selectedCandidate);
+    const firstAvailable = orders.find(order => availableStock(profile, order.themeId) >= order.quantity);
+    const selected = kept || (sameLive && oldIndex >= 0 ? orders[Math.min(oldIndex, orders.length - 1)] : firstAvailable || orders[0]);
+    selectedCandidate = selected?.id;
+    candidateLiveId = live.id;
+    const count = element("candidate-count");
+    if (count.textContent !== String(orders.length))
+        count.textContent = String(orders.length);
+    const message = element("candidate-message");
     const sealed = candidateRemovalSealed(live);
-    element("candidate-message").textContent = sealed ? "最后一包已结算，请完成本单后再移除其他候选。"
-        : live.task ? "当前任务需先结算，拆卡期间可发红包移除其他候选。"
-            : hasAvailable ? "接单后预留对应主题的全部所需卡包。"
-                : "当前没有可接订单，可以直接下播。";
-    element("candidate-list").replaceChildren(...live.candidates.map(order => {
-        const row = document.createElement("article");
-        row.className = "shop-row";
-        row.dataset.order = order.id;
-        const title = document.createElement("h3");
-        const kind = order.selfOpen ? "自拆挑战" : order.challenge ? "附挑战订单" : "纯订单";
-        row.dataset.kind = order.selfOpen ? "self" : order.challenge ? "challenge" : "order";
-        title.textContent = `${kind} · ${themeFor(order.themeId).name}`;
-        const details = document.createElement("p");
-        const available = availableStock(profile, order.themeId);
-        const payout = order.selfOpen ? "卡牌归你" : `发货得 ${order.payment} 金币`;
-        details.textContent = `需要 ${order.quantity} 包 · 可用 ${available} 包 · ${payout}`;
-        const contract = order.challenge;
-        if (contract) {
-            const conditions = document.createElement("p");
-            conditions.textContent = `${["低", "中", "高"][contract.band]}难度 · ${goalLabel(order)} · 成功 ${contract.glasses} 个墨镜 · 失败红包 ${contract.fine} 金币`;
-            const estimate = document.createElement("p");
-            const percent = (p) => `${(p * 100).toFixed(1)}%`;
-            const tools = contract.tools.map(tool => {
-                const label = describeTeachingReward({ kind: "coupon", id: "", key: tool.key, rarity: tool.rarity }).replace(" ×1", "");
-                return `${label} ${tool.expected.toFixed(2)} 张`;
-            }).join("、");
-            const range = contract.range ? `（${percent(contract.range[0])}–${percent(contract.range[1])}）` : "";
-            estimate.textContent = `最近一轮预估：不用券 ${percent(contract.without)} · 按策略 ${percent(contract.withTools)}${range} · ${tools || "预计不用券"}`;
-            row.append(title, details);
-            const art = challengeCardArt(order);
-            if (art)
-                conditions.prepend(art);
-            conditions.className = "challenge-condition";
-            row.append(conditions, estimate);
-        }
-        const actions = document.createElement("div");
-        actions.className = "shop-controls";
-        const accept = document.createElement("button");
-        accept.className = "quiet";
-        accept.textContent = available >= order.quantity ? (order.selfOpen ? "接挑战" : "接单") : "库存不足";
-        accept.disabled = busy || !!live.task || available < order.quantity;
+    message.textContent = sealed ? "最后一包已结算，请完成本单后再移除其他候选。" : live.task
+        ? "当前任务完成后可接下一单。" : firstAvailable ? "" :
+        totalAvailableMessage(profile, orders.length);
+    message.hidden = !message.textContent;
+    const accept = element("candidate-accept");
+    const remove = element("candidate-remove");
+    const risk = element("candidate-risk");
+    const rows = orders.map(order => candidateCard(order, availableStock(profile, order.themeId)));
+    function select(order) {
+        selectedCandidate = order?.id;
+        for (const row of rows)
+            row.firstElementChild.setAttribute("aria-pressed", String(row.dataset.order === selectedCandidate));
+        panel.querySelector(".candidate-actions").hidden = !order;
+        risk.hidden = !order;
+        if (!order)
+            return;
+        const enough = availableStock(profile, order.themeId) >= order.quantity;
+        accept.textContent = !enough ? "库存不足" : order.selfOpen ? "接挑战" : "接单";
+        accept.disabled = busy || !!live?.task || !enough;
         accept.onclick = () => send({ type: "accept", revision: profile.revision, id: order.id });
-        const remove = document.createElement("button");
-        remove.className = "quiet";
         const fee = removalFee(order);
-        remove.textContent = `移除 · ${fee} 金币`;
-        remove.disabled = busy || sealed || live.candidates.length <= 1 || profile.wallet < fee;
-        remove.onclick = () => {
-            if (window.confirm(`发 ${fee} 金币红包移除这条候选？`)) {
+        remove.replaceChildren("移除", roomImage(coinIcon, "", "金币"), String(fee));
+        const reason = orders.length <= 1 ? "至少保留一条挑战订单" : profile.wallet < fee ? `余额少 ${fee - profile.wallet} 金币` : "";
+        remove.title = reason || `移除需发 ${fee} 金币红包`;
+        remove.setAttribute("aria-label", `移除，${fee} 金币${reason ? `，${reason}` : ""}`);
+        remove.disabled = busy || sealed || !!reason;
+        remove.onclick = async () => {
+            if (await confirmAction("移除挑战订单", `发 ${fee} 金币红包移除这条候选？`, "发红包并移除")) {
                 send({ type: "remove", revision: profile.revision, id: order.id, seed: crypto.getRandomValues(new Uint32Array(1))[0] });
             }
         };
-        actions.append(accept, remove);
-        if (!contract)
-            row.append(title, details);
-        row.append(actions);
-        return row;
-    }));
+        risk.onclick = () => showCandidateRisk(order, profile);
+    }
+    for (const [index, row] of rows.entries()) {
+        row.firstElementChild.onclick = () => select(orders[index]);
+    }
+    list.replaceChildren(...rows);
+    list.scrollLeft = left;
+    list.hidden = orders.length === 0;
+    select(selected);
+    const chosen = rows.find(row => row.dataset.order === selectedCandidate)?.firstElementChild;
+    if (restoreFocus)
+        chosen?.focus({ preventScroll: true });
+    if (!kept && chosen && list.clientWidth)
+        chosen.scrollIntoView({ block: "nearest", inline: "nearest" });
+    const previous = element("candidate-prev");
+    const next = element("candidate-next");
+    previous.parentElement.hidden = orders.length <= 3;
+    const updateArrows = () => {
+        previous.disabled = list.scrollLeft < 2;
+        next.disabled = list.scrollLeft + list.clientWidth >= list.scrollWidth - 2;
+    };
+    const step = (direction) => list.scrollBy({
+        left: direction * list.clientWidth,
+        behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+    });
+    previous.onclick = () => step(-1);
+    next.onclick = () => step(1);
+    list.onscroll = updateArrows;
+    requestAnimationFrame(updateArrows);
+}
+function totalAvailableMessage(profile, count) {
+    if (rules.themes.every(theme => profile.stock[theme.id] === 0))
+        return "本场卡包已拆完，可从顶部下播。";
+    return count ? "当前候选库存不足，可从顶部下播。" : "暂时没有挑战订单，可从顶部下播。";
 }

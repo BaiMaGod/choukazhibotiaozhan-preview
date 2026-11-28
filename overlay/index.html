@@ -14,13 +14,15 @@
   <script defer src="./libs/laya.webgl_2D.js"></script>
   <script src="./libs/gsap.min.js"></script>
   <script type="importmap">{"imports":{"./js/pack-fx/controller.js":"./js/pack-fx/controller.js?v=show-v3","./js/pack-fx/rarity-effects.js":"./js/pack-fx/rarity-effects.js?v=show-v3","./js/pack-fx/reveal-show.js":"./js/pack-fx/reveal-show.js?v=show-v3","./js/vendor/react-cards-opening/effects.js":"./js/vendor/react-cards-opening/effects.js?v=show-v3"}}</script>
-  <script type="module" src="./js/main.js?v=live-r7-20261125"></script>
+  <script type="module" src="./js/main.js?v=ui-20261128"></script>
   <link rel="stylesheet" href="./talents.css">
   <link rel="stylesheet" href="./pack-fx.css">
   <link rel="stylesheet" href="./rarity-effects.css?v=show-v3">
   <link rel="stylesheet" href="./viewport.css?v=fit-v1">
   <link rel="stylesheet" href="./live-restoration.css?v=live-v3">
   <link rel="stylesheet" href="./live-elements.css?v=live-r7">
+  <link rel="stylesheet" href="./interface-polish.css?v=20261126-r7">
+  <link rel="stylesheet" href="./live-play.css?v=20261128">
 </head>
 <body>
   <main class="shell">
@@ -33,12 +35,13 @@
       <dl id="profile" class="profile" hidden>
         <div><dt>金币</dt><dd id="coins">—</dd><button id="live-coin-info" class="live-balance-more" type="button" aria-label="金币说明"><img src="./assets/ui/live-r7/balance-plus.webp" alt=""></button></div>
         <div><dt>粉丝</dt><dd id="fans">—</dd><button id="live-fan-info" class="live-balance-more" type="button" aria-label="粉丝说明"><img src="./assets/ui/live-r7/balance-plus.webp" alt=""></button></div>
-        <div><dt>体力</dt><dd id="stamina">—</dd></div>
-        <div><dt>未拆库存</dt><dd id="inventory">—</dd></div>
+        <div class="profile-stamina"><dt>体力</dt><dd id="stamina">—</dd></div>
+        <div class="profile-stock"><dt>未拆库存<button id="live-inventory" type="button" aria-label="查看本场库存"></button></dt><dd id="inventory">—</dd></div>
       </dl>
       <button class="quiet home-mail" type="button" aria-label="邮件暂未开放" disabled><img src="./assets/ui/home-mail.webp" alt=""></button>
       <button id="open-settings" class="quiet" type="button" aria-label="设置"><span aria-hidden="true">⚙</span><img class="home-settings-art" src="./assets/ui/home-settings.webp" alt=""></button>
       <button id="sound" class="quiet sound" type="button" aria-pressed="true">音效开</button>
+      <button id="live-end" class="quiet" type="button" hidden>下播</button>
     </header>
     <nav class="home-shortcuts" aria-label="首页快捷入口">
       <button id="open-check-in" class="quiet" type="button" disabled><img src="./assets/ui/home-check.webp" alt="">签到</button>
@@ -72,11 +75,11 @@
         <div class="live-indicator"><b>● LIVE</b><span id="live-audience"></span></div>
         <div class="live-meters"><span aria-hidden="true">🔥</span><span id="live-heat"></span></div>
         <div class="live-gift-ledger">
-          <b>本场礼物 ›</b>
+          <button id="live-gifts" type="button">本场礼物 ›</button>
           <dl>
             <div><dt><img src="./assets/ui/summary-reward-gift-v2.webp" alt="">已收</dt><dd id="live-gift-count"></dd></div>
             <div><dt><img src="./assets/ui/summary-reward-coins-v2.webp" alt="">估值</dt><dd id="live-gift-total"></dd></div>
-            <div><dt><img src="./assets/ui/summary-reward-coins-v2.webp" alt="">均值</dt><dd id="live-gift-average"></dd></div>
+            <div><dt><img src="./assets/ui/summary-reward-coins-v2.webp" alt="">预计到账</dt><dd id="live-gift-net"></dd></div>
           </dl>
         </div>
       </div>
@@ -103,35 +106,38 @@
       <p id="live-stats" class="muted"></p>
     </section>
     <section id="business-live" class="lesson" aria-label="正式直播" hidden>
-      <p class="kicker">当前订单<span class="order-tab">挑战任务</span></p>
+      <p class="kicker"><span id="business-kind">当前任务</span></p>
       <div class="live-order-card"><img id="business-pack-art" alt="" hidden><h2 id="business-title"></h2></div>
-      <progress id="business-pack-progress" aria-label="订单已结算卡包"></progress>
-      <output id="business-progress-number" class="order-progress-number"></output>
+      <div class="live-task-meter">
+        <progress id="business-pack-progress" aria-label="订单已结算卡包"></progress>
+        <output id="business-progress-number" class="order-progress-number"></output>
+      </div>
       <p id="business-order-reward" class="business-order-reward"></p>
+      <p id="business-terms"></p>
       <p id="business-stock"></p>
       <p id="business-stats" class="muted"></p>
       <details><summary>热度和来访明细</summary><p id="live-source-list"></p></details>
-      <p id="challenge-progress" hidden></p>
-      <p id="challenge-result" role="status" hidden></p>
     </section>
     <section id="live-interactions" class="lesson" aria-label="直播互动" hidden>
       <div class="live-interaction-tabs" role="group" aria-label="直播间动态">
-        <button class="quiet" type="button" aria-pressed="true" aria-controls="live-activity">直播动态</button>
+        <button class="quiet" type="button" aria-pressed="true" aria-controls="live-activity">实时弹幕</button>
         <button class="quiet" type="button" aria-pressed="false" aria-controls="live-moments">高能时刻</button>
         <button class="quiet" type="button" aria-pressed="false" aria-controls="live-data">数据</button>
       </div>
       <div id="live-activity" class="live-activity">
-        <p><span class="feed-icon" aria-hidden="true"><img src="./assets/ui/home-cat.webp" alt=""></span><em>本场</em><span>观众评论 <b id="live-comments"></b></span></p>
-        <p><span class="feed-icon" aria-hidden="true"><img src="./assets/ui/summary-reward-fans-v2.webp" alt=""></span><em>来访</em><span>累计 <b id="live-visits"></b></span></p>
-        <p><span class="feed-icon" aria-hidden="true"><img src="./assets/ui/summary-reward-fans-v2.webp" alt=""></span><em>粉丝</em><span>本场变化 <b id="live-fan-change"></b></span></p>
-        <p><span class="feed-icon" aria-hidden="true"><img src="./assets/ui/summary-reward-gift-v2.webp" alt=""></span><em>礼物</em><span>已收 <b id="live-gift-activity"></b></span></p>
-        <div id="live-event-feed"></div>
+        <p id="live-no-comments">还没有观众发弹幕</p>
+        <ul id="live-comment-feed" aria-label="观众弹幕" aria-live="polite" aria-relevant="additions"></ul>
       </div>
       <div id="live-moments" class="live-moments" hidden></div>
       <dl id="live-data" class="interaction-stats" hidden>
         <div><dt>在线</dt><dd id="live-online"></dd></div>
         <div><dt>热度</dt><dd id="live-heat-data"></dd></div>
+        <div><dt>礼物件数</dt><dd id="live-gift-activity"></dd></div>
         <div><dt>礼物毛额</dt><dd id="live-gross"></dd></div>
+        <div><dt>已接订单</dt><dd id="live-order-count"></dd></div>
+        <div><dt>订单总额</dt><dd id="live-order-total"></dd></div>
+        <div><dt>已到账货款</dt><dd id="live-order-paid"></dd></div>
+        <div><dt>来访 / 涨粉</dt><dd><span id="live-visits"></span> / <span id="live-fan-change"></span></dd></div>
       </dl>
     </section>
     </div>
@@ -155,7 +161,10 @@
         <li><span>05</span><strong>?</strong></li>
       </ol>
     </section>
-    <section id="live-shipment-display" class="live-shipment-display" aria-label="发货结果" hidden><img id="shipment-pack-art" alt=""><div><b>本单已发货</b><p id="shipment-copy"></p></div></section>
+    <section id="live-shipment-display" class="live-shipment-display" aria-label="教学订单结果" hidden>
+      <img id="shipment-pack-art" alt="">
+      <div><b>教学订单已发货</b><p id="shipment-copy"></p><button id="continue-live" type="button" class="primary" hidden>选择下一单</button></div>
+    </section>
     <section id="receipt" class="lesson receipt" aria-label="结算账本" hidden>
       <div class="receipt-ledger">
         <header class="receipt-heading">
@@ -168,17 +177,41 @@
       <section id="receipt-highlights" class="receipt-highlights" aria-label="本场收益" hidden></section>
       <section id="receipt-cards" class="receipt-cards" aria-label="本场稀有卡与套组" hidden></section>
       <p class="muted" id="receipt-note"></p>
-      <button id="continue-live" type="button" class="quiet" hidden>继续接单</button>
     </section>
-    <section id="candidate-panel" class="lesson" aria-label="正式订单候选" hidden>
-      <h2>订单与挑战</h2>
-      <p id="candidate-message"></p>
-      <div id="candidate-list" class="shop-list"></div>
+    <section id="candidate-panel" class="lesson" aria-labelledby="candidate-title" hidden>
+      <div class="candidate-heading">
+        <h2 id="candidate-title">挑战订单 <span id="candidate-count" aria-live="polite">0</span></h2>
+        <button id="candidate-risk" type="button" aria-haspopup="dialog">成功率与风险 ›</button>
+        <div class="candidate-arrows" hidden>
+          <button id="candidate-prev" type="button" aria-label="上一条候选">‹</button>
+          <button id="candidate-next" type="button" aria-label="下一条候选">›</button>
+        </div>
+      </div>
+      <p id="candidate-message" role="status" hidden></p>
+      <div id="candidate-list" role="group" aria-label="可选挑战订单"></div>
+      <div class="candidate-actions">
+        <button id="candidate-accept" type="button">接单</button>
+        <button id="candidate-remove" type="button">移除</button>
+      </div>
     </section>
+    <dialog id="candidate-risk-dialog" class="market" aria-labelledby="candidate-risk-title">
+      <header><h2 id="candidate-risk-title">成功率与风险</h2></header>
+      <div id="candidate-risk-body"></div>
+      <form method="dialog" class="dialog-actions"><button class="quiet" type="submit" autofocus>返回挑战订单</button></form>
+    </dialog>
     <section class="controls" aria-label="直播操作">
       <section id="live-currency-info" class="panel live-currency-info">
         <p>当前金币 <b id="live-currency-coins"></b> · 当前粉丝 <b id="live-currency-fans"></b></p>
         <p>金币可在下播后的卡包商店购买卡包；粉丝可解锁卡包与天赋。</p>
+      </section>
+      <section id="live-stock-info" class="panel live-room-detail" aria-label="本场库存">
+        <p>可接库存可以用于下一单。预留卡包在撕开时才扣除。</p>
+        <ul id="live-stock-list"></ul>
+      </section>
+      <section id="live-gift-info" class="panel live-room-detail" aria-label="礼物明细">
+        <p id="live-gift-totals"></p>
+        <p id="live-no-gifts">暂无近期礼物记录</p>
+        <ul id="live-gift-history"></ul>
       </section>
       <div id="play-controls" class="shop-controls" hidden>
         <button id="auto-pack" class="quiet" type="button" aria-pressed="false">自动拆卡</button>
@@ -205,7 +238,8 @@
       <button id="live-items" class="quiet" type="button"><span aria-hidden="true"></span>道具</button>
       <button id="live-effects" class="quiet" type="button"><span aria-hidden="true"></span>增益</button>
       <button id="live-odds" class="quiet" type="button"><span aria-hidden="true"></span>概率</button>
-      <button id="live-settings" class="quiet" type="button"><span aria-hidden="true"></span>设置</button>
+      <button id="live-archive" class="quiet" type="button">图鉴</button>
+      <button id="live-pause" class="quiet" type="button">暂停</button>
     </nav>
     <div id="action-bar" class="action-bar">
       <div id="live-pack-overview" hidden>
@@ -347,6 +381,7 @@
   </main>
 </body>
 </html>
+
 
 
 

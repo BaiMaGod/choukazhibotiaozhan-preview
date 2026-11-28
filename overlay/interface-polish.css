@@ -1,0 +1,274 @@
+/* Shared presentation for secondary surfaces. Business state and handlers stay native. */
+:root { --portrait-width: min(100vw, 941px, calc(100dvh * 941 / 1672)); }
+dialog:not(.room-page) {
+    --modal-pad: clamp(22px, 4vw, 34px);
+    position: fixed; isolation: isolate; box-sizing: border-box;
+    width: min(540px, calc(var(--portrait-width) - 18px));
+    max-width: calc(100vw - 18px); max-height: calc(100dvh - 28px);
+    margin: auto; padding: 58px var(--modal-pad) 35px;
+    border: 0; border-radius: 24px; background: transparent;
+    color: #fff1dd; box-shadow: none; overflow-x: hidden; overflow-y: auto;
+    scrollbar-width: thin; scrollbar-color: #c79765 #362029;
+}
+dialog:not(.room-page)::before {
+    content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    border-style: solid; border-width: 104px 28px 45px;
+    border-image-source: url('./assets/ui/dialog-v1/rose-glass-panel.webp');
+    border-image-slice: 320 90 140 fill; border-image-repeat: stretch;
+}
+dialog:not(.room-page)::backdrop { background: #1b0c1ca8; backdrop-filter: blur(5px); }
+dialog:not(.room-page) > :is(header, .market-header) {
+    display: flex; flex-direction: column; align-items: center; gap: 7px;
+    min-height: 58px; margin: 0 0 19px; padding: 0; text-align: center;
+}
+dialog:not(.room-page) :is(header, .market-header) h2,
+#play-pause > h2 {
+    margin: 0; color: #fff3d8; font-size: clamp(19px, 3vw, 27px); line-height: 1.3;
+    letter-spacing: .09em; text-align: center;
+    text-shadow: 0 2px 2px #7a3434, 0 0 12px #ffc37665;
+}
+dialog:not(.room-page) :is(header, .market-header) :is(button, form) { align-self: center; }
+dialog:not(.room-page) .quiet,
+.room-page:not([data-room='talents']):not([data-room='shop']) :is(.market-header, .dialog-actions) .quiet {
+    min-height: 38px; border-radius: 999px; border: 1px solid #f0bc77;
+    background: linear-gradient(#83523ec7, #321b25ed), url('./assets/ui/live-r7/secondary.webp') center / 100% 100%;
+    color: #fff0d8; box-shadow: inset 0 0 0 2px #f7ca7b22, inset 0 2px 8px #ffc06a30, 0 2px 5px #130a1880;
+    font-size: 12px; padding: 7px 15px;
+}
+dialog:not(.room-page) :is(header, .market-header) button { min-height: 32px; padding: 4px 18px; font-size: 11px; }
+dialog:not(.room-page) .primary,
+.room-page:not([data-room='talents']):not([data-room='shop']) .primary {
+    background: url('./assets/ui/home-start-skin.webp') center / 100% 100% no-repeat;
+    border: 0; box-shadow: none; min-height: 48px; color: #fff8e9;
+    font-size: clamp(15px, 2.8vw, 22px); letter-spacing: .05em;
+    text-shadow: 0 2px 2px #9c2753;
+}
+dialog:not(.room-page) :is(.lesson, .panel, .shop-row) {
+    background: linear-gradient(125deg, #74443870, #251721ce 70%);
+    border: 1px solid #b98956; box-shadow: inset 0 0 14px #d7933520;
+    border-radius: 12px;
+}
+dialog:not(.room-page) p { line-height: 1.65; }
+dialog:not(.room-page) h3 { color: #ffe0a0; font-size: 15px; margin: 8px 0; }
+dialog :is(button, input, select):focus-visible { outline: 2px solid #ffe4a0; outline-offset: 3px; }
+dialog:not(.room-page) :is(select, input[type='number']) {
+    min-height: 38px; max-width: 100%; border: 1px solid #bb8b60; border-radius: 8px;
+    background-color: #321e2b; color: #ffe6bc; font: inherit; padding: 6px 10px;
+}
+dialog:not(.room-page) select { font-size: 12px; }
+/* Real checkbox inputs remain label-clickable, keyboard operable and saved as before. */
+#play-settings .settings-list { display: flex; flex-direction: column; gap: 0; }
+#play-settings .settings-list > p {
+    background: #1b111c66; border: 1px solid #b7844f66; padding: 8px 12px;
+    margin: 0 0 8px; border-radius: 9px; color: #eac891; text-align: center; font-size: 12px;
+}
+#play-settings .settings-list > label {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    min-height: 44px; padding: 8px 2px; border-bottom: 1px solid #c2976838;
+    font-size: 13px; line-height: 1.4; cursor: pointer;
+}
+#play-settings input[type='checkbox'] {
+    appearance: none; -webkit-appearance: none; position: relative; flex: 0 0 44px;
+    width: 44px; height: 25px; border-radius: 99px; border: 1px solid #b48567;
+    background: #221822; box-shadow: inset 0 2px 6px #08040db0; margin: 0; cursor: pointer;
+}
+#play-settings input[type='checkbox']::before {
+    content: ''; position: absolute; width: 19px; height: 19px; left: 2px; top: 2px;
+    background: linear-gradient(#ffefd0, #ce9c62); border-radius: 50%; box-shadow: 0 1px 3px #1b0a16;
+    transition: transform .16s ease;
+}
+#play-settings input[type='checkbox']:checked { background: linear-gradient(#fa8ba5, #ce356b); border-color: #f3c58a; }
+#play-settings input[type='checkbox']:checked::before { transform: translateX(19px); }
+/* Shared drawer scrolls its contents, while its heading and return action stay visible. */
+#live-detail-dialog[open] {
+    display: flex; flex-direction: column; gap: 0; overflow: hidden;
+    width: min(540px, calc(var(--portrait-width) - 18px));
+    padding: 58px var(--modal-pad) 44px;
+}
+#live-detail-dialog > header { flex: 0 0 auto; }
+#live-detail-dialog .live-detail-content { min-height: 0; overflow-y: auto; padding: 2px; scrollbar-width: thin; }
+#live-detail-dialog .live-detail-content > :is(.lesson, .panel) { padding: 14px; margin: 0 0 10px; }
+#live-detail-dialog #lesson { position: relative; min-height: 150px; padding-left: 95px; }
+#live-detail-dialog #lesson::before {
+    content: ''; position: absolute; width: 65px; height: 96px; left: 14px; top: 30px;
+    background: url('./assets/art/packs/pack-mcj-heal-01.webp') center / cover; border: 1px solid #d4a86d; border-radius: 7px;
+}
+#live-detail-dialog #lesson .kicker { font-size: 12px; margin: 0 0 14px; color: #f3cd8b; }
+#live-detail-dialog #lesson h2 { font-size: 18px; margin: 0 0 12px; }
+#live-detail-dialog progress { width: 100%; height: 7px; accent-color: #f6b55f; }
+#live-detail-dialog :is(.shop-controls, .options) { gap: 8px; }
+#live-detail-dialog .options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+#live-detail-dialog .shop-row { padding: 12px; }
+#live-detail-dialog .shop-row p { font-size: 13px; }
+#live-detail-dialog .shop-row img.challenge-card-art { max-height: 115px; object-fit: contain; }
+/* Actual probability snapshots, split into five readable rarity cells. */
+#odds-list { display: grid; gap: 12px; }
+.odds-stage { border: 1px solid #ba8f5b88; border-radius: 11px; padding: 9px; background: #25172575; }
+.odds-stage h3 { margin: 0 0 8px !important; font-size: 13px !important; }
+.odds-stage-rates { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
+.odds-stage-rates > div { text-align: center; min-width: 0; }
+.odds-stage-rates span { display: block; border: 1px solid #ffe3ae70; border-radius: 7px; padding: 5px 0; color: var(--grade-ink); background: var(--grade-fill); font-size: 12px; font-weight: 800; }
+.odds-stage-rates b { display: block; font-size: 11px; margin-top: 6px; color: #ffe6bc; }
+#card-detail .prism-detail { width: min(62%, 230px); margin: 8px auto 18px; }
+#card-detail-status { text-align: center; color: #ffe0a7; }
+#card-detail-copies { padding-left: 22px; max-height: 19dvh; overflow: auto; font-size: 12px; }
+#play-pause > h2 { margin: 0 0 25px; }
+#play-pause > p { text-align: center; }
+#play-pause .shop-controls { display: grid; gap: 10px; margin-top: 18px; }
+#play-pause form button { width: 100%; }
+#home-check-in #sign-in { display: block; margin: 14px auto; width: 70%; min-height: 48px; background: var(--pink); }
+#home-daily .shop-controls { gap: 10px; }
+/* Full-page room illustrations belong to the dialog, independent of the page behind it. */
+.room-page:not([data-room='talents']):not([data-room='shop']) {
+    width: var(--portrait-width); max-height: 100dvh;
+    background-attachment: scroll; background-size: 100% 100%, 100% auto;
+    background-position: center top; background-repeat: no-repeat;
+}
+#archive-dialog { background-image: linear-gradient(#28172315, #26132340), url('./assets/ui/archive.webp'); }
+#start-confirm { background-image: linear-gradient(#28172310, #26132345), url('./assets/ui/prep.webp'); }
+#growth[data-room='collection'] { background-image: linear-gradient(#28172315, #26132350), url('./assets/ui/shop-room.webp'); }
+#growth[data-room='free'] { background-image: linear-gradient(#28172315, #26132345), url('./assets/ui/free.webp'); }
+#archive-dialog .market-header { min-height: calc(var(--u) * 48); }
+#archive-dialog #archive-heading {
+    align-self: flex-start; margin: 0 8% 0 auto; transform: rotate(-5deg); padding: 5px 14px;
+    font-size: calc(var(--u) * 10); color: #fff9ff;
+    text-shadow: 0 0 3px #fff, 3px 3px #d942ec, -3px -2px #9a53e2, 0 0 15px #d341ff;
+}
+#archive-dialog #archive-filters { padding: 6px; border: 1px solid #d7ab66; background: #2c1725d9; border-radius: 12px; }
+#archive-dialog .room-tabs { scrollbar-width: none; gap: 5px; }
+#archive-dialog .room-tabs > button { min-height: 32px; padding: 5px 11px; font-size: 11px; }
+#archive-dialog [aria-label='稀有度'] > button[data-rarity] { background: var(--grade-fill); color: var(--grade-ink); }
+#archive-cards { padding: 6px 4px; background: #281725b0; border-radius: 8px; border-inline: 1px solid #c99a6580; }
+#archive-cards .locked-card { background: url('./assets/fx/card-back.webp') center / cover; color: #d7c2df; }
+#archive-dialog .archive-note { padding: 6px 10px; margin: 0; background: #311c27c7; font-size: 12px; }
+#archive-empty { margin: 0; padding: 7px; background: #321b29c9; font-size: 12px; }
+#archive-preview { flex: 0 0 auto; border-radius: 14px; background: #452438e8; border-color: #e2b96d; }
+#archive-preview img { max-height: 100%; object-fit: contain; }
+#start-confirm .inventory-panel { background: #372031e3; padding: 10px; }
+#start-confirm .inventory-grid { scrollbar-width: thin; }
+#start-confirm .inventory-item { background: #2d1c2ce6; border-radius: 9px; }
+#start-confirm .dialog-actions { grid-template-columns: 1fr 4fr; gap: 10px; padding-bottom: 5px; }
+#start-confirm .dialog-actions .primary { font-size: calc(var(--u) * 5.2); height: calc(var(--u) * 15.5); }
+#growth[data-room='collection'] .collection-shelf { border-radius: 13px; }
+#growth[data-room='collection'] .collection-progress { background: #392435eb; border-color: #d8af71; }
+#growth[data-room='free'] .free-tiers button[aria-pressed='true'] { border-color: #ffe1a6; background: var(--pink); box-shadow: 0 0 12px #ff97d078; }
+/* Card artwork has a rectangular frame; it never inherits the pill action skin. */
+#archive-cards .known-card button, .shelf-board .collection-grid button {
+    width: 100%; padding: 0; min-height: 0; border: 0; border-radius: 3px;
+    background: #30202a; box-shadow: none; color: #fff0dc; font-size: inherit;
+}
+#archive-cards .known-card img, .shelf-board .collection-grid img {
+    display: block; width: 100%; margin: 0; border-radius: 2px; aspect-ratio: 3 / 4; object-fit: cover;
+}
+#archive-cards li { overflow: hidden; font-size: clamp(9px, calc(var(--u) * 1.9), 18px); line-height: 1.3; }
+#archive-cards .known-card button { text-wrap: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#archive-cards .known-card button[aria-pressed='true'] { outline: 2px solid #ffe4a1; outline-offset: -2px; }
+#archive-preview { padding: 8px; overflow: hidden; align-items: stretch; grid-template-columns: 34% 1fr; gap: 12px; }
+#archive-preview > div { align-self: center; min-width: 0; }
+#archive-preview h3 { font-size: clamp(14px, calc(var(--u) * 3.4), 30px); }
+#archive-preview p { font-size: 11px; }
+#archive-preview .primary { min-height: 44px; font-size: 14px; }
+#growth[data-room='collection'] .shelf-board { border: 8px ridge #bd864e; background: #321b25e8; padding: 8px; }
+#growth[data-room='collection'] .shelf-board .room-tabs { scrollbar-width: none; }
+#growth[data-room='collection'] .shelf-board .collection-grid li { font-size: 10px; line-height: 1.4; }
+#growth[data-room='collection'] .other-shelves button { border-radius: 10px; }
+#growth[data-room='free'] .free-tiers button { border-radius: 12px; min-height: 64px; padding-left: 38%; font-size: 18px; }
+#growth[data-room='free'] .free-tiers small { font-size: 11px; }
+#growth[data-room='free'] .free-picker select { background: #351d2be8; border: 1px solid #b58b60; padding: 5px; color: #ffe4c2; }
+#growth[data-room='free'] .free-start { width: 70%; min-height: 58px; font-size: clamp(18px, calc(var(--u) * 5), 40px); }
+#growth[data-room='free'] .free-results { border-color: #d5ad71; background: #40252be8; }
+#growth[data-room='free'] .free-results h3 { font-size: 17px; }
+/* Independent transparent title sprites derived from the formal page references. */
+#archive-dialog #archive-heading,
+#start-confirm #start-title,
+#growth:is([data-room='collection'], [data-room='free']) #growth-title {
+    position: absolute; display: block; padding: 0; margin: 0;
+    color: transparent; font-size: 0; text-shadow: none; transform: none;
+    background-position: center; background-size: contain; background-repeat: no-repeat;
+    pointer-events: none;
+}
+#archive-dialog #archive-heading {
+    background-image: url('./assets/ui/dialog-v1/archive-title.webp');
+    width: 47%; height: calc(var(--u) * 25); left: 39%; top: calc(var(--u) * 14);
+}
+#archive-dialog .market-header form { top: auto; bottom: 8px; }
+#start-confirm #start-title {
+    background-image: url('./assets/ui/dialog-v1/prep-title.webp');
+    width: 78%; height: calc(var(--u) * 27); left: 11%; top: calc(var(--u) * 11.5);
+}
+#start-confirm .page-hero > p { display: none; }
+#growth[data-room='collection'] #growth-title {
+    background-image: url('./assets/ui/dialog-v1/collection-title.webp');
+    width: 78%; height: calc(var(--u) * 24); left: 11%; top: calc(var(--u) * 12);
+}
+#growth[data-room='collection'] .market-header form { position: absolute; right: 3%; bottom: 2px; }
+#growth[data-room='collection'] .market-header::before { bottom: -10%; width: 25%; right: 18%; }
+#growth[data-room='free'] #growth-title {
+    background-image: url('./assets/ui/dialog-v1/free-title.webp');
+    width: 76%; height: calc(var(--u) * 25); left: 12%; top: calc(var(--u) * 12);
+}
+#growth[data-room='free'] .market-header form { top: calc(var(--u) * 37); }
+#start-confirm .inventory-item img { object-fit: contain; width: 90%; height: calc(var(--u) * 20); filter: drop-shadow(0 3px 7px #ffc27050); }
+#start-confirm .inventory-item { box-shadow: inset 0 0 10px #f4b65330; }
+#start-confirm .inventory-item strong { font-size: clamp(10px, calc(var(--u) * 2.65), 22px); }
+#start-confirm .inventory-item span { border: 1px solid #d2ad7370; padding: 3px; border-radius: 6px; background: #321c2780; }
+#archive-cards .known-card { box-shadow: inset 0 0 0 1px #ffe5a352, 0 0 5px #ffa63a50; }
+/* Bottom ornament keeps clear of the final settings row. */
+#play-settings { padding-inline: clamp(32px, 5vw, 42px); padding-bottom: 48px; }
+#archive-cards { grid-auto-rows: calc(var(--u) * 24); min-height: 0; max-height: none; }
+#growth[data-room='collection'] .collection-shelf { min-height: 0; height: auto; align-items: stretch; }
+#growth[data-room='collection'] .shelf-board .collection-grid { grid-auto-rows: calc(var(--u) * 27); }
+#growth[data-room='collection'] .shelf-board .collection-grid li { overflow: hidden; }
+#growth:is([data-room='collection'], [data-room='free']) #growth-list { display: block; overflow-y: auto; padding-bottom: 8px; }
+#growth[data-room='collection'] .collection-progress { margin: 10px 0; }
+#growth[data-room='free'] .free-start { display: block; margin: 10px auto; }
+#growth[data-room='free'] .free-results { margin-top: 8px; }
+#growth[data-room='collection'] .shelf-board {
+    border: 0; border-radius: 0; box-shadow: none;
+    padding: calc(var(--u) * 7.5) calc(var(--u) * 4) calc(var(--u) * 4);
+    background: url('./assets/ui/dialog-v1/cabinet.webp') center / 100% 100% no-repeat;
+}
+#growth[data-room='collection'] .shelf-board .collection-grid li { background-color: #2d1c2570; border-color: #c3996380; }
+#growth[data-room='collection'] .market-header::before { display: none; }
+#growth[data-room='collection'] .collection-progress,
+#growth[data-room='free'] :is(.free-picker, .free-results),
+#archive-preview {
+    border-style: solid; border-width: 18px 13px 14px; border-radius: 0; box-shadow: none; background: transparent;
+    border-image-source: url('./assets/ui/dialog-v1/inset.webp');
+    border-image-slice: 100 100 80 fill; border-image-repeat: stretch;
+    padding: 2px 4px 6px;
+}
+#growth[data-room='collection'] .collection-progress { padding: 4px 8px 9px; }
+#archive-preview { max-height: 23dvh; }
+#growth[data-room='free'] .market-header { min-height: calc(var(--u) * 105); }
+#growth[data-room='free'] .free-picker { display: grid; grid-template-columns: 1fr 1.5fr; align-items: center; gap: 5px; }
+#growth[data-room='free'] .free-picker h3 { font-size: 13px; margin: 0; }
+#growth[data-room='free'] .free-tiers { grid-column: 1 / -1; }
+#odds-dialog[open] { display: flex; flex-direction: column; overflow: hidden; }
+#odds-list { overflow: auto; min-height: 0; padding: 2px; scrollbar-width: thin; }
+#action-confirm #action-confirm-message { text-align: center; margin: 14px 4px 22px; font-size: 14px; }
+#action-confirm .dialog-actions { grid-template-columns: 1fr 1.7fr; gap: 10px; }
+#action-confirm .primary { font-size: 14px; min-height: 44px; }
+.shell[data-screen='free'] .stage-title { inset: calc(var(--u) * 12) 9% auto; height: calc(var(--u) * 25); background: url('./assets/ui/dialog-v1/free-title.webp') center / contain no-repeat; }
+.shell[data-screen='free'] .stage-title > * { visibility: hidden; }
+.shell[data-screen='free'] > .action-bar { width: 80%; }
+.shell[data-screen='free'] #primary { min-height: 48px; font-size: clamp(13px, calc(var(--u) * 3.9), 29px); background: url('./assets/ui/home-start-skin.webp') center / 100% 100% no-repeat; border: 0; box-shadow: none; }
+.shell[data-screen='free'] #free-session { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.shell[data-screen='free'] #free-session p { font-size: 11px; }
+.shell[data-screen='free'] #free-session .quiet { min-height: 36px; white-space: nowrap; border-radius: 999px; font-size: 11px; }
+.shell[data-screen='free'] .controls { background: #3a222bd9; border-color: #d4a366; }
+@media (max-width: 380px), (max-height: 700px) {
+    #play-settings { padding-inline: 34px; padding-bottom: 60px; }
+    #live-detail-dialog[open] { padding: 52px 25px 44px; }
+    #start-confirm .inventory-panel { max-height: 30dvh; }
+    #odds-dialog { padding-bottom: 48px; }
+}
+@media (max-width: 380px), (max-height: 700px) {
+    dialog:not(.room-page) { padding: 52px 23px 30px; }
+    dialog:not(.room-page) > :is(header, .market-header) { min-height: 48px; margin-bottom: 14px; gap: 4px; }
+    #play-settings .settings-list > label { min-height: 40px; font-size: 12px; }
+    #live-detail-dialog #lesson { padding-left: 78px; }
+    #live-detail-dialog #lesson::before { width: 51px; height: 80px; left: 10px; }
+    #archive-preview { max-height: 22dvh; }
+}
+@media (prefers-reduced-motion: reduce) { #play-settings input::before { transition: none; } }

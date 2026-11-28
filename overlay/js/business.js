@@ -6,6 +6,7 @@ import { generateOrders, lockDraw, starterStock, themeFor, totalStock } from "./
 import { isUnsigned, spendStamina, teachingView } from "./teaching.js";
 import { giftValueMilli, isTeachingReward, randomReward, seededRandom, teachingBuff, weightedIndex } from "./teaching-rules.js";
 import { canUpgrade, finalCards, goalProgress, guaranteeFor, heldCoupons, quoteChallenge, resolveOrderPack, updateChallengeEstimate } from "./challenges.js";
+import { appendLiveEvents, glassesEvent, liveEventLimit, packEvents, validInteractionGroups } from "./audience-events.js";
 import { collectCopies, effectiveRank, hasSet, nativeCard, rank, recordSeen, refundedCoupon, signInAmounts, talentNode, talentOffer } from "./growth.js";
 function createProfile(state) {
     const view = teachingView(state);
@@ -15,11 +16,19 @@ function createProfile(state) {
     };
 }
 export function prepareBusiness(state) {
-    return !state.business && state.broadcast?.acknowledged
-        ? { ...state, business: createProfile(state) }
-        : state;
+    const profile = state.business;
+    if (!profile)
+        return state.broadcast?.acknowledged ? { ...state, business: createProfile(state) } : state;
+    const live = profile.live;
+    if (!live || live.report || live.challengeOrdersOnly)
+        return state;
+    const candidates = live.candidates.filter(order => order.challenge && !order.selfOpen);
+    const migrated = { ...live, candidates, challengeOrdersOnly: true };
+    const next = !live.task && candidates.length === 0
+        ? refresh(migrated, profile, 3, seededRandom(Math.imul(live.round + 1, 0x531a))) : migrated;
+    return { ...state, business: { ...profile, live: next } };
 }
-function refresh(live, profile, count, random, afterTeaching = false) {
+function refresh(live, profile, count, random) {
     const round = live.round + 1;
     const slots = Math.min(count, rules.orders.limit - live.candidates.length);
     const drafts = generateOrders(live.id, round, slots, profile.stock, profile.peakFans, live.rewards, random, profile.ranks);
@@ -27,13 +36,12 @@ function refresh(live, profile, count, random, afterTeaching = false) {
         ranks: profile.ranks, owned: profile.owned, seen: Object.fromEntries(profile.seen.map(card => [card.id, 1])) };
     const spent = live.spentCoupons ?? [];
     const retained = live.candidates.map((order, index) => updateChallengeEstimate(order, themeFor(order.themeId), context, spent, Math.imul(round, 0x531a) ^ index));
-    let hasEasy = retained.some(order => !order.challenge || order.challenge.band === 0);
-    const next = drafts.map((order, index) => {
-        const type = !hasEasy ? 0 : afterTeaching ? index : weightedIndex(rules.challenges.types, random);
-        const candidate = type === 0 ? order : quoteChallenge(order, themeFor(order.themeId), type === 2, context, spent, random);
-        hasEasy || (hasEasy = !candidate.challenge || candidate.challenge.band === 0);
+    let hasEasy = retained.some(order => order.challenge?.band === 0);
+    const next = drafts.map(order => {
+        const candidate = quoteChallenge(order, themeFor(order.themeId), false, context, spent, random, hasEasy ? undefined : 0);
+        hasEasy || (hasEasy = candidate.challenge?.band === 0);
         return candidate;
-    });
+    }).filter(order => !!order.challenge);
     return { ...live, round, candidates: [...retained, ...next] };
 }
 export function recentRareCards(cards) {
@@ -41,7 +49,7 @@ export function recentRareCards(cards) {
 }
 function newLive(id, startingStock, openingFans) {
     return {
-        id, startingStock: { ...startingStock }, openingFans, candidates: [], round: 0, task: null, rewards: [], audience: null,
+        id, startingStock: { ...startingStock }, openingFans, candidates: [], challengeOrdersOnly: true, round: 0, task: null, rewards: [], audience: null,
         grossMilli: 0, giftCount: 0, heat: 0, comments: 0, visits: rules.audience.opening_new_visitors +
             Math.floor(openingFans * rules.audience.opening_follower_ratio), shipped: 0, saleGold: 0, removedGold: 0, report: null,
     };
@@ -58,10 +66,14 @@ function continueTeaching(state, command) {
         featuredCards: recentRareCards(b.packs.flatMap(pack => pack.cards)),
         grossMilli: view.giftGrossMilli, giftCount: view.giftCount, heat: view.heat, comments: view.comments,
         shipped: 1, saleGold: b.shipment.saleGold,
+        activity: appendLiveEvents(undefined, [
+            ...b.packs.flatMap(pack => packEvents(pack.id, pack.interaction)),
+            ...(b.shipment.sunglasses ? [glassesEvent(b.id, "customer", b.shipment.sunglasses, b.shipment.giftMilli)] : []),
+        ]),
         visits: rules.audience.opening_new_visitors + b.packs.reduce((sum, pack) => sum + (pack.interaction.arrivals ?? 0), 0),
         heatSources: b.packs.reduce((sources, pack) => addHeatSources(sources, pack.interaction.heatSources, 0n, heatInteger(pack.interaction.heat, pack.interaction.heatExact)), undefined),
     };
-    return { ...state, business: { ...profile, live: refresh(live, profile, 3, seededRandom(command.seed), true) } };
+    return { ...state, business: { ...profile, live: refresh(live, profile, 3, seededRandom(command.seed)) } };
 }
 export function availableStock(profile, themeId) {
     const task = profile.live?.task;
@@ -70,8 +82,11 @@ export function availableStock(profile, themeId) {
     const locked = task.pack && (task.pack.pending || task.pack.revealed < task.pack.cards.length) ? 1 : 0;
     return profile.stock[themeId] - (task.order.quantity - task.completed - locked);
 }
+export function normalGiftNet(grossMilli) {
+    return Math.floor(grossMilli * rules.giftShareBps / 10000000);
+}
 function finishLive(profile, live) {
-    const giftNet = Math.floor(live.grossMilli * rules.giftShareBps / 10000000);
+    const giftNet = normalGiftNet(live.grossMilli);
     return { ...profile, wallet: profile.wallet + giftNet, live: { ...live, candidates: [], report: { giftNet } } };
 }
 export function removalFee(order) {
@@ -108,9 +123,11 @@ function settleChallenge(profile, live, task, seed) {
         result.glasses = contract.glasses;
         const gained = Math.min(order.quantity * rules.caps.challenge_fans_per_pack, Math.floor(order.quantity * (2 + effective("base") + extra + teachingBuff(rewards, "fans_flat")) * multiplier));
         const fans = profile.fans + gained;
+        const giftMilli = result.glasses * giftValueMilli(1, rewards, profile.ranks);
         return [{ ...profile, wallet: profile.wallet + result.gold, fans, peakFans: Math.max(fans, profile.peakFans) },
             { ...live, giftCount: live.giftCount + result.glasses,
-                grossMilli: live.grossMilli + result.glasses * giftValueMilli(1, rewards, profile.ranks), challengeResult: result }];
+                grossMilli: live.grossMilli + giftMilli, challengeResult: result,
+                activity: appendLiveEvents(live.activity, result.glasses ? [glassesEvent(order.id, "challenge", result.glasses, giftMilli)] : []) }];
     }
     if (profile.wallet >= contract.fine) {
         result.fine = contract.fine;
@@ -291,6 +308,7 @@ export function applyBusiness(state, action, now) {
         return save({ ...profile, wallet: profile.wallet - fee, live: {
                 ...live, candidates: live.candidates.filter(item => item.id !== order.id), removedGold: live.removedGold + fee,
                 comments: live.comments + comments, heat: heatNumber(heat), heatExact: String(heat),
+                activity: appendLiveEvents(live.activity, comments ? [{ id: `${order.id}/removed`, kind: "comment", rarity: "redpacket", count: comments }] : []),
                 heatSources: addHeatSources(live.heatSources, { removal: String(heat - heatInteger(live.heat, live.heatExact)) }, heatInteger(live.heat, live.heatExact), 0n),
             } });
     }
@@ -352,6 +370,7 @@ export function applyBusiness(state, action, now) {
                 audience: interaction, rewards: [...live.rewards, ...rewards], heat: heatNumber(heat), heatExact: String(heat),
                 comments: live.comments + interaction.comments, grossMilli: live.grossMilli + interaction.giftMilli,
                 giftCount: live.giftCount + interaction.gifts,
+                activity: appendLiveEvents(live.activity, packEvents(pack.id, interaction)),
                 featuredCards: featured.length ? featured : undefined,
                 completedSets: completedSet ? [...(live.completedSets ?? []), theme.id] : live.completedSets,
                 heatSources: addHeatSources(live.heatSources, interaction.heatSources, heatInteger(live.heat, live.heatExact), heatInteger(interaction.heat, interaction.heatExact)),
@@ -391,6 +410,7 @@ export function applyBusiness(state, action, now) {
         const shipped = live.shipped + Number(!order.selfOpen);
         const [settled, finished] = settleChallenge(paid, {
             ...live, task: null, shipped, saleGold: live.saleGold + order.payment, challengeResult: undefined,
+            latestTask: { selfOpen: !!order.selfOpen, payment: order.payment, quantity: order.quantity },
         }, task, action.seed);
         if (finished.report)
             return save({ ...settled, live: finished });
@@ -468,7 +488,15 @@ function validOdds(odds) {
 function validInteraction(item) {
     return !!item && (item.heatExact === undefined || /^\d+$/.test(item.heatExact)) && ["oldFans", "visitors", "newFans", "comments", "gifts", "giftMilli", "heat"]
         .every(key => isUnsigned(item[key])) && (item.arrivals === undefined || isUnsigned(item.arrivals)) &&
-        validSources(item.heatSources, heatInteger(item.heat, item.heatExact));
+        validSources(item.heatSources, heatInteger(item.heat, item.heatExact)) && validInteractionGroups(item);
+}
+function validLiveEvent(event) {
+    if (!event || typeof event.id !== "string" || !event.id || !isUnsigned(event.count) || !event.count)
+        return false;
+    if (event.kind === "comment")
+        return event.rarity === "redpacket" || RARITIES.includes(event.rarity);
+    return event.kind === "gift" && ["viewer", "challenge", "customer"].includes(event.source) &&
+        isUnsigned(event.face) && isUnsigned(event.givers) && event.givers > 0 && event.givers <= event.count && isUnsigned(event.milli);
 }
 function validPack(pack, order, completed) {
     const theme = themeFor(order.themeId);
@@ -526,12 +554,17 @@ export function validateBusiness(state) {
     if (live === null)
         return;
     if (!live || typeof live.id !== "string" || !validStock(live.startingStock) ||
+        (live.challengeOrdersOnly !== undefined && live.challengeOrdersOnly !== true) ||
         (live.heatExact !== undefined && !/^\d+$/.test(live.heatExact)) ||
         !rules.themes.every(theme => b.stock[theme.id] <= live.startingStock[theme.id]) ||
         !["openingFans", "round", "grossMilli", "giftCount", "heat", "comments", "shipped", "saleGold", "removedGold"]
             .every(key => isUnsigned(live[key])) ||
         !validSources(live.heatSources, heatInteger(live.heat, live.heatExact)) ||
         (live.visits !== undefined && !isUnsigned(live.visits)) ||
+        (live.activity !== undefined && (!Array.isArray(live.activity) || live.activity.length > liveEventLimit ||
+            !live.activity.every(validLiveEvent) || new Set(live.activity.map(event => event.id)).size !== live.activity.length)) ||
+        (live.latestTask !== undefined && (!live.latestTask || typeof live.latestTask.selfOpen !== "boolean" ||
+            !isUnsigned(live.latestTask.payment) || !isUnsigned(live.latestTask.quantity) || !live.latestTask.quantity)) ||
         !Array.isArray(live.candidates) || live.candidates.length > rules.orders.limit || !live.candidates.every(validOrder) ||
         new Set(live.candidates.map(item => item.id)).size !== live.candidates.length ||
         !Array.isArray(live.rewards) || !live.rewards.every(isTeachingReward) ||

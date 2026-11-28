@@ -211,7 +211,6 @@
 .shell[data-screen="live"] #live-items { --badge: url('./assets/ui/live-r7/nav-items.webp'); }
 .shell[data-screen="live"] #live-effects { --badge: url('./assets/ui/live-r7/nav-effects.webp'); }
 .shell[data-screen="live"] #live-odds { --badge: url('./assets/ui/live-r7/nav-odds.webp'); }
-.shell[data-screen="live"] #live-settings { --badge: url('./assets/ui/live-r7/nav-settings.webp'); }
 .shell[data-screen="live"] #live-tools-bar button[data-notice]::after { content: ''; position: absolute; width: 12%; aspect-ratio: 1; top: 4%; right: 14%; border-radius: 50%; background: #ff6659; border: 1px solid #fff3c6; }
 .shell[data-screen="live"] #pack-table[data-fx-phase="results"] #slots li[data-featured]::before {
     content: ''; position: absolute; z-index: 5; inset: -3%; pointer-events: none;
@@ -356,3 +355,4 @@
 .shell[data-screen="live"] #live-interactions > .live-interaction-tabs > button[aria-pressed="true"] {
     background-size: 100% var(--live-tab-height); background-repeat: no-repeat;
 }
+

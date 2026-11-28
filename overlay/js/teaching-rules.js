@@ -207,9 +207,13 @@ export function audienceForPack(cards, seed, prior, last, fans, heat, openingFan
     let comments = 0;
     let newFans = 0;
     let gifts = 0;
+    const commentGroups = [];
     for (const card of cards) {
         const grade = RARITIES.indexOf(card.rarity);
-        comments += sampleCount(online - comments, a.comment_by_grade[grade], random);
+        const commented = sampleCount(online - comments, a.comment_by_grade[grade], random);
+        comments += commented;
+        if (commented)
+            commentGroups.push({ rarity: card.rarity, count: commented });
         const followChance = 1 - (1 - a.follow_by_grade[grade]) ** (1 + .1 * teachingBuff(prior, "fans_flat"));
         const followed = sampleCount(visitors, followChance, random);
         visitors -= followed;
@@ -227,6 +231,7 @@ export function audienceForPack(cards, seed, prior, last, fans, heat, openingFan
     let giftFace = 0;
     const extraChance = .05 * effectiveRank(ranks, "gift", "synergy");
     const giftUnits = new Map();
+    const giftGroups = new Map();
     for (let i = 0; i < gifts; i++) {
         const face = rules.audienceGrowth.gift_values[weightedIndex(mix.weights, random)];
         let unit = giftUnits.get(face);
@@ -236,10 +241,17 @@ export function audienceForPack(cards, seed, prior, last, fans, heat, openingFan
         }
         giftMilli += unit;
         giftFace += face;
+        const group = giftGroups.get(face) ?? { face, givers: 0, count: 0, milli: 0 };
+        group.givers++;
+        group.count++;
+        group.milli += unit;
+        giftGroups.set(face, group);
         if (extraChance && random() < extraChance) {
             giftCount++;
             giftMilli += unit;
             giftFace += face;
+            group.count++;
+            group.milli += unit;
         }
     }
     const total = heatInteger(heat, exactHeat);
@@ -247,6 +259,8 @@ export function audienceForPack(cards, seed, prior, last, fans, heat, openingFan
     const giftHeat = Math.floor(giftFace * .02 * rank(ranks, "heat", 2, "value"));
     const heatGain = delta + BigInt(interactionHeat + giftHeat);
     return { oldFans, visitors, newFans, comments, gifts: giftCount, giftMilli,
+        ...(commentGroups.length ? { commentGroups } : {}),
+        ...(giftGroups.size ? { giftGroups: [...giftGroups.values()] } : {}),
         heat: heatNumber(heatGain), heatExact: String(heatGain), streak, arrivals: returning + newVisitors,
         heatSources: { cards: String(packRaw), combo: String(packBonus), recommendation: String(recommendation),
             interaction: String(interactionHeat), gifts: String(giftHeat) } };

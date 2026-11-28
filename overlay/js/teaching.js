@@ -1,6 +1,7 @@
 import { rules } from "./generated-rules.js";
 import { revealNext } from "./pack.js";
 import { isTeachingReward, lockTeachingPack, teachingOrder, teachingRarities, teachingShipment } from "./teaching-rules.js";
+import { validInteractionGroups } from "./audience-events.js";
 export function beijingDay(now) {
     return new Date(now + 8 * 3600000).toISOString().slice(0, 10);
 }
@@ -122,7 +123,7 @@ function validPack(pack, id, index, last) {
         (pack.revealed === pack.cards.length ? isUnsigned(pack.settledAt ?? -1) : last && pack.settledAt === null) &&
         isTeachingReward(pack.reward) && pack.reward.id === `${pack.id}/4/reward` && pack.reward.rarity === teachingRarities[index] &&
         !!pack.interaction && ["oldFans", "visitors", "newFans", "comments", "gifts", "giftMilli", "heat"]
-        .every(key => isUnsigned(pack.interaction[key]));
+        .every(key => isUnsigned(pack.interaction[key])) && validInteractionGroups(pack.interaction);
 }
 function validShipment(shipment) {
     return !!shipment && ["saleGold", "sunglasses", "giftMilli", "systemGold", "fans"]
