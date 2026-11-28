@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="./live-restoration.css?v=live-v3">
   <link rel="stylesheet" href="./live-elements.css?v=live-r7">
   <link rel="stylesheet" href="./interface-polish.css?v=20261126-r7">
-  <link rel="stylesheet" href="./live-play.css?v=20261128-order-fit">
+  <link rel="stylesheet" href="./live-play.css?v=20261128-live-header">
 </head>
 <body>
   <main class="shell">
@@ -30,7 +30,11 @@
     <header class="masthead">
       <div class="host-chip">
         <img src="./assets/ui/avatar.webp" width="104" height="104" alt="">
-        <div><b>猫猫主播</b><span class="live-host-status" aria-label="正在直播">● LIVE</span><dl id="live-player-assets" aria-label="玩家资产" hidden></dl><small id="mode-label">首次教学</small><small id="edition"></small></div>
+        <div class="host-identity">
+          <div class="host-title"><b>猫猫主播</b><span class="live-host-status" aria-label="正在直播">LIVE</span></div>
+          <dl id="live-player-assets" aria-label="玩家资产" hidden></dl>
+          <small id="mode-label">首次教学</small><small id="edition"></small>
+        </div>
       </div>
       <dl id="profile" class="profile" hidden>
         <div id="profile-coins"><dt>金币</dt><dd id="coins">—</dd><button id="live-coin-info" class="live-balance-more" type="button" aria-label="金币说明"><img src="./assets/ui/live-r7/balance-plus.webp" alt=""></button></div>

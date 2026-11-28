@@ -1,5 +1,5 @@
 {
-  "source_commit": "4f72f25df1945e84b14ac15db97bc4c5cd4d915f",
+  "source_commit": "68e00d0b3769d948c0440d057cf4649126a617fe",
   "files": {
     "PRISM-LICENSE.txt": "03fbba168057f4c3a78945985d0e62fa701e6056c486b668a721abf7f6658b64",
     "CARD-PACK-ANIMATIONS-LICENSE.txt": "cbb791bcd2a185e22f7470681cedc0a2696c81a3736ea50e2c78b8b9f6f24d35",
@@ -9,9 +9,9 @@
     "pack-fx.css": "b80078c5105266d18384893c323236fafbc42f37b4e5300262ac250daa2ead16",
     "rarity-effects.css": "dfe9ccd77a157278b7a9e5409b48fcbd76ed066891673d385fae4aa16ad823fa",
     "room.css": "51e71cca2ce82ce8bdb37adddcf0a7ea9281f061a2cb8b4a9fc16a7d0a70b2fb",
-    "live-play.css": "c0d8e3561ba4fdb600c0c479c1d749974b3b7c072a0493449f2a16ee7a64b156",
+    "live-play.css": "9e54911504c1a94953f33bad13f09a68700b5c9cdcf18eff5a769fa4de4abf69",
     "style.css": "1171478300e0e29d8e047f400008f1632835e6b7c621ae82322c4cba7de4af4e",
-    "index.html": "d23684812e1779a41c51c3f5b7ab0831f4f204499b8c2dffaaf24c2397a6e0a3",
+    "index.html": "03854786aa2e6c3e2568a68eaad7443392911120b308d793528cbcaa3328f31f",
     "live-restoration.css": "4464295243aaf132a598e8cea8c959ef722693085d88c69daf6efa588257bf50",
     "show-review.html": "3654bc403d8c137f381c2df9b8d3999b7c1d120e617813ef05e25a7ca55d8388",
     "REACT-CARDS-OPENING-LICENSE.txt": "71b72dd29b25ec63c279b8a8f00d0aa46510729efbb3da7e9866423b2c266a1b",
@@ -177,6 +177,10 @@
     "assets/ui/live-orders/ledger-gold.webp": "7e4ae937471e42c9da51db6493fc7d59ae8f1fa1e2667c960019437a1e89eb65",
     "assets/ui/live-orders/frame-pearl-finish.webp": "e3dca7c55e41c874d8fa839879bab3223bf744abe3d4aec545a53b48e07bd816",
     "assets/ui/live-orders/frame-sapphire-finish.webp": "5830104070a714e0ec98b21e38eea3066848ca4a5809a7258037d76a6b988fc6",
-    "assets/ui/live-orders/frame-rose-finish.webp": "8be1ecaf9490a436f0b00f1ee3438d27695148375b9ffe47f3622db42694611e"
+    "assets/ui/live-orders/frame-rose-finish.webp": "8be1ecaf9490a436f0b00f1ee3438d27695148375b9ffe47f3622db42694611e",
+    "assets/ui/live-orders/host-plaque.webp": "ea919d34749f6df2d26f73dba8de5f23af32308b1535149426918501f28b9fb6",
+    "assets/ui/live-orders/live-chip.webp": "358761dcec692a143be5d73fd0196d3a20c77fddf89e3a1012818f4b2f6986aa",
+    "assets/ui/live-orders/online-gold.webp": "389cd4aaa60ca6c956b477adef0a9cdfbda712464181d4fcd229f93037c1012c",
+    "assets/ui/live-orders/heat-flame.webp": "bfefba6076929121edc8b279b8191997e4d0504a33cea6b65655647601b4d2bd"
   }
 }
